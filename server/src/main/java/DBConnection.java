@@ -6,7 +6,7 @@ public class DBConnection {
      static Connection getConnection() {
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:8889/job",
+                    "jdbc:mysql://192.168.2.85:8889/job",
                     "Tigran",
                     "tigran94"
             );

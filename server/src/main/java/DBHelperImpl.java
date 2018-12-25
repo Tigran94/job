@@ -20,10 +20,10 @@ public class DBHelperImpl extends UnicastRemoteObject implements DBHelper {
     public int registerUser(String firstName, String lastName, String userName, String email, String password) throws RemoteException{
         connection = setDBConnection();
 
-        String sql2 = "insert into users (firstName,lastName,userName,email,password) values (?,?,?,?,?);";
+        String sql = "insert into users (firstName,lastName,userName,email,password) values (?,?,?,?,?);";
 
         try {
-            PreparedStatement stat = connection.prepareStatement(sql2);
+            PreparedStatement stat = connection.prepareStatement(sql);
             stat.setString(1,firstName);
             stat.setString(2,lastName);
             stat.setString(3,userName);

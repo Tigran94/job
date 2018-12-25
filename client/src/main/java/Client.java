@@ -55,7 +55,7 @@ public class Client {
         int userId = 0;
 
         try {
-            dbHelper = (DBHelper) Naming.lookup("rmi://localhost/unknown");
+            dbHelper = (DBHelper) Naming.lookup("rmi://192.168.2.85/unknown");
             userId = dbHelper.registerUser(firstName,lastName,userName,email,password);
 
         } catch (NotBoundException e) {

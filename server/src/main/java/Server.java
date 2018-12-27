@@ -1,4 +1,4 @@
-import DB.DBHelperImpl;
+import db.DBHelperImpl;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;

@@ -1,4 +1,4 @@
-package DB;
+package db;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;

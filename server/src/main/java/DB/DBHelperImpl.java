@@ -1,3 +1,5 @@
+package DB;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
@@ -6,7 +8,7 @@ public class DBHelperImpl extends UnicastRemoteObject implements DBHelper {
 
     private Connection connection = null;
 
-    protected DBHelperImpl() throws RemoteException {
+    public DBHelperImpl() throws RemoteException {
     }
 
 

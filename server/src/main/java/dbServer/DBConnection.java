@@ -1,4 +1,6 @@
-package DB;
+package dbServer;
+
+import utilities.DBProperties;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,9 +10,9 @@ public class DBConnection {
      static Connection getConnection() {
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://192.168.2.85:8889/job",
-                    "Tigran",
-                    "tigran94"
+                    DBProperties.getDBUrl(),
+                    DBProperties.getDBUsername(),
+                    DBProperties.getDBPassword()
             );
             System.out.println("Connection successful");
             return connection;

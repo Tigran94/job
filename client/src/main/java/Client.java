@@ -1,4 +1,4 @@
-import DB.DBHelper;
+import db.DBHelper;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;

@@ -1,4 +1,6 @@
-package DB;
+package dbServer;
+
+import db.DBHelper;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -9,6 +11,12 @@ public class DBHelperImpl extends UnicastRemoteObject implements DBHelper {
     private Connection connection = null;
 
     public DBHelperImpl() throws RemoteException {
+    }
+
+    public static void main(String[] args) throws RemoteException {
+        DBHelperImpl dbHelper = new DBHelperImpl();
+
+        dbHelper.registerUser("hel","dwj","wdd","wwqad","awd");
     }
 
 

@@ -1,13 +1,19 @@
-import DB.DBHelperImpl;
+import dbServer.DBHelperImpl;
+import utilities.DBProperties;
 
-import java.rmi.RemoteException;
+import java.io.IOException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class Server{
-    public static void main(String[] args) throws RemoteException {
+
+
+
+    public static void main(String[] args) throws IOException {
+
         System.out.println("Server has started");
-        Registry registry = LocateRegistry.createRegistry(1099);
+        int port = Integer.parseInt(DBProperties.getRMiPort());
+        Registry registry = LocateRegistry.createRegistry(port);
         registry.rebind("unknown", new DBHelperImpl());
     }
 }

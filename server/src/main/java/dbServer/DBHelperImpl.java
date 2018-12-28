@@ -10,7 +10,6 @@ import org.hibernate.cfg.Configuration;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.sql.*;
 
 public class DBHelperImpl extends UnicastRemoteObject implements DBHelper {
 
@@ -25,24 +24,12 @@ public class DBHelperImpl extends UnicastRemoteObject implements DBHelper {
         DBHelperImpl dbHelper = new DBHelperImpl();
         dbHelper.registerUser("hel1a","d2wja","wdda3","ww4qada","aa5wd");
     }
-
-
     static Session getConnection() {
         return sessionFactory.openSession();
     }
 
-//    private Session setDBConnection() {
-//        if (session == null) {
-//            session = DBConnection.getConnection();
-//            return session;
-//        } else return session;
-//    }
-
     public void registerUser(String firstName, String lastName, String userName, String email, String password) throws RemoteException {
         session = getConnection();
-
-      //  String sql = "insert into users (firstName,lastName,userName,email,password) values (?,?,?,?,?);";
-
         Users users = new Users();
 
         users.setFirstName(firstName);

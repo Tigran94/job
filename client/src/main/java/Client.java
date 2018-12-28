@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.text.MessageFormat;
 import java.util.Scanner;
 
 public class Client {
@@ -54,11 +53,11 @@ public class Client {
         String password = scanner.nextLine();
 
         DBHelper dbHelper = null;
-        int userId = 0;
+       // int userId = 0;
 
         try {
-            dbHelper = (DBHelper) Naming.lookup("rmi://192.168.2.85/unknown");
-            userId = dbHelper.registerUser(firstName,lastName,userName,email,password);
+            dbHelper = (DBHelper) Naming.lookup("rmi://localhost:1098/unknown");
+            dbHelper.registerUser(firstName,lastName,userName,email,password);
 
         } catch (NotBoundException e) {
             e.printStackTrace();
@@ -67,18 +66,18 @@ public class Client {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        if (userId != -1) {
-            System.out.println(
-                    MessageFormat.format(
-                            "Phone Number: {0} created successfully",
-                            userId
-                    )
-            );
-        } else {
-            System.out.println(
-                    "Error while creating the user"
-            );
-        }
+//        if (userId != -1) {
+//            System.out.println(
+//                    MessageFormat.format(
+//                            "Phone Number: {0} created successfully",
+//                            userId
+//                    )
+//            );
+//        } else {
+//            System.out.println(
+//                    "Error while creating the user"
+//            );
+//        }
     }
 
     private static void guestLogin() {

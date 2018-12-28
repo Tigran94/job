@@ -1,10 +1,12 @@
-<<<<<<< HEAD:server/src/main/java/DB/DBHelperImpl.java
-package db;
-=======
+
 package dbServer;
 
 import db.DBHelper;
->>>>>>> 2561ba7e2f8d52459f82e11ecf4c640cb775caf8:server/src/main/java/dbServer/DBHelperImpl.java
+import entities.Users;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -12,48 +14,49 @@ import java.sql.*;
 
 public class DBHelperImpl extends UnicastRemoteObject implements DBHelper {
 
-    private Connection connection = null;
+    private static Session session = null;
+    private static final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 
     public DBHelperImpl() throws RemoteException {
     }
 
     public static void main(String[] args) throws RemoteException {
+
         DBHelperImpl dbHelper = new DBHelperImpl();
-
-        dbHelper.registerUser("hel","dwj","wdd","wwqad","awd");
+        dbHelper.registerUser("hel1a","d2wja","wdda3","ww4qada","aa5wd");
     }
 
 
-    private Connection setDBConnection(){
-        if(connection==null){
-            connection =  DBConnection.getConnection();
-            return connection;
-        }else return connection;
+    static Session getConnection() {
+        return sessionFactory.openSession();
     }
 
-    public int registerUser(String firstName, String lastName, String userName, String email, String password) throws RemoteException{
-        connection = setDBConnection();
+//    private Session setDBConnection() {
+//        if (session == null) {
+//            session = DBConnection.getConnection();
+//            return session;
+//        } else return session;
+//    }
 
-        String sql = "insert into users (firstName,lastName,userName,email,password) values (?,?,?,?,?);";
+    public void registerUser(String firstName, String lastName, String userName, String email, String password) throws RemoteException {
+        session = getConnection();
 
-        try {
-            PreparedStatement stat = connection.prepareStatement(sql);
-            stat.setString(1,firstName);
-            stat.setString(2,lastName);
-            stat.setString(3,userName);
-            stat.setString(4,email);
-            stat.setString(5,password);
+      //  String sql = "insert into users (firstName,lastName,userName,email,password) values (?,?,?,?,?);";
 
-            stat.execute();
+        Users users = new Users();
 
-            String idSql = "select max(id) from users";
-            Statement idStatement = connection.createStatement();
-            ResultSet resultSet = idStatement.executeQuery(idSql);
-            resultSet.next();
-            return resultSet.getInt(1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
-        }
+        users.setFirstName(firstName);
+        users.setLastName(lastName);
+        users.setUserName(lastName);
+        users.setEmail(lastName);
+        users.setPassword(lastName);
+
+        Transaction transaction = session.beginTransaction();
+        session.save(users);
+        transaction.commit();
+        if(transaction.isActive()){
+           session.flush();}
+        session.close();
+        System.out.println("User is registered");
     }
 }

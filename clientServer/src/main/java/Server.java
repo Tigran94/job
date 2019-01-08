@@ -4,6 +4,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -27,7 +29,7 @@ class ClientProcessor implements Runnable{
     private static Session session = null;
     private String[] data;
     private static final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-
+    private static Users loggedInUser = null;
 
     public ClientProcessor(Socket socket){
         this.socket = socket;
@@ -58,7 +60,7 @@ class ClientProcessor implements Runnable{
                     registerUser(writer);
                     break;
                 case "L":
-                 //   login();
+                    login(writer);
                     break;
                 case "G":
                  //   guestLogin();
@@ -69,6 +71,34 @@ class ClientProcessor implements Runnable{
 
         }
     }
+
+    private void login(PrintWriter writer) {
+        session = getConnection();
+        Users users = new Users();
+        users.setUserName(data[1]);
+        users.setPassword(data[2]);
+        Transaction transaction = session.beginTransaction();
+        //session.createQuery("SELECT userName,password FROM Users WHERE userName=? AND password=?");
+        TypedQuery<Users> query = session.createQuery("from Users h where h.userName = :userName and h.password = :password", Users.class);
+        query.setParameter("userName", users.getUserName());
+        query.setParameter("password", users.getPassword());
+
+        transaction.commit();
+        try {
+            loggedInUser = query.getSingleResult();
+            writer.println("You have successfully login");
+
+        }catch (NoResultException e){
+            writer.println(false);
+        }
+        if(transaction.isActive()){
+            session.flush();
+        }
+        session.close();
+
+
+    }
+
     private String readSymbol(String clientData){
         data = clientData.split(",");
         return data[0];
@@ -78,18 +108,20 @@ class ClientProcessor implements Runnable{
         session = getConnection();
         Users users = new Users();
 
-        users.setFirstName(data[0]);
-        users.setLastName(data[1]);
-        users.setUserName(data[2]);
-        users.setEmail(data[3]);
-        users.setPassword(data[4]);
+        users.setFirstName(data[1]);
+        users.setLastName(data[2]);
+        users.setUserName(data[3]);
+        users.setEmail(data[4]);
+        users.setPassword(data[5]);
 
         Transaction transaction = session.beginTransaction();
         session.save(users);
         transaction.commit();
         if(transaction.isActive()){
-            session.flush();}
+            session.flush();
+        }
         session.close();
-        writer.println("successful");
+
+        writer.println("Successful");
     }
 }

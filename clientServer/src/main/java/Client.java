@@ -1,6 +1,8 @@
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Client {
     private static final String ip = "192.168.2.85";
@@ -23,9 +25,8 @@ public class Client {
                     registerUser(start);
                     break;
                 case "L":
-                    sendServerSymbol(start);
-
-                    //  login();
+                    //sendServerSymbol(start);
+                    login(start);
                     break;
                 case "G":
                     sendServerSymbol(start);
@@ -53,6 +54,29 @@ public class Client {
 
        // String v2 = scanner.nextLine();
     }
+
+    private static void login(String start) throws IOException {
+        System.out.println("Please Insert Your User Name: ");
+        String userName = scanner.nextLine();
+        System.out.println("Please Insert Your Password: ");
+        String password = scanner.nextLine();
+
+        socket=new Socket(ip,port);
+        InputStream is = socket.getInputStream();
+        OutputStream os = socket.getOutputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        PrintWriter writer = new PrintWriter(os,true);
+
+        StringBuffer stringBuffer = new StringBuffer(start+","+userName+","+password);
+        writer.println(stringBuffer);
+
+        String result = reader.readLine();
+        if(result.equals("false")){
+            System.out.println("Please input correct values");
+            login(start);
+        }
+    }
+
     private static void sendServerSymbol(String symbol) throws IOException {
         socket=new Socket(ip,port);
         InputStream is = socket.getInputStream();
@@ -75,6 +99,16 @@ public class Client {
         String userName = scanner.nextLine();
         System.out.println("Please Insert Your Email: ");
         String email = scanner.nextLine();
+
+        String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        while (!matcher.matches()){
+            System.out.println("Please Insert Correct Email: ");
+            email = scanner.nextLine();
+            matcher = pattern.matcher(email);
+        }
+
         System.out.println("Please Insert Your Password: ");
         String password = scanner.nextLine();
 
@@ -90,6 +124,5 @@ public class Client {
         String result = reader.readLine();
 
         System.out.println(result);
-       // System.out.println(v1 + " + "+ v2 + " = "+ result);
     }
 }

@@ -1,8 +1,9 @@
-package entities;
+package serverSide.entities;
 
 import javax.persistence.*;
 
 @Entity
+@Table(name = "posts")
 public class Posts {
 
     @Id
@@ -18,8 +19,8 @@ public class Posts {
     @Column(name = "type",nullable = false)
     private String type;
 
-    @Column(name = "sallary")
-    private String sallary;
+    @Column(name = "salary")
+    private String salary;
 
     @Column(name = "workTime",nullable = false)
     private String workTime;
@@ -63,12 +64,12 @@ public class Posts {
         this.type = type;
     }
 
-    public String getSallary() {
-        return sallary;
+    public String getSalary() {
+        return salary;
     }
 
-    public void setSallary(String sallary) {
-        this.sallary = sallary;
+    public void setSalary(String sallary) {
+        this.salary = sallary;
     }
 
     public String getWorkTime() {
@@ -94,7 +95,7 @@ public class Posts {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", type='" + type + '\'' +
-                ", sallary='" + sallary + '\'' +
+                ", salary='" + salary + '\'' +
                 ", workTime='" + workTime + '\'' +
                 ", email='" + email + '\'' +
                 '}';

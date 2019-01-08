@@ -1,29 +1,16 @@
-import entities.Users;
+package serverSide;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import serverSide.entities.Users;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
-    public static void  main(String ...args) throws IOException {
-
-        ServerSocket ss = new ServerSocket(8080);
-
-        while(true){
-            System.out.println("Waiting for a connection ... ");
-            Socket s = ss.accept();
-            System.out.println("Connected " + ss);
-            new Thread(new ClientProcessor(s)).start();
-
-        }
-    }
-}
 class ClientProcessor implements Runnable{
     private Socket socket;
     private static Session session = null;
@@ -63,13 +50,18 @@ class ClientProcessor implements Runnable{
                     login(writer);
                     break;
                 case "G":
-                 //   guestLogin();
+                    guestLogin();
                     break;
                     default:return;
             }
         }catch(IOException e){
 
         }
+    }
+
+    private void guestLogin() {
+        session = getConnection();
+
     }
 
     private void login(PrintWriter writer) {
@@ -122,6 +114,6 @@ class ClientProcessor implements Runnable{
         }
         session.close();
 
-        writer.println("Successful");
+        writer.println("Successfully registered");
     }
 }

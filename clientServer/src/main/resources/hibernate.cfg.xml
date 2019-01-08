@@ -12,7 +12,7 @@
 
         <property name="show_sql">true</property>
 
-        <mapping class="entities.Users"/>
+        <mapping class="serverSide.entities.Users"/>
 
     </session-factory>
 </hibernate-configuration>

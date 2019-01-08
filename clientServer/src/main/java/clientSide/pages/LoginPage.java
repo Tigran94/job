@@ -1,16 +1,31 @@
+package clientSide.pages;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Client {
+public class LoginPage {
+    private static Scanner scanner = new Scanner(System.in);
+    private static Socket socket=null;
     private static final String ip = "192.168.2.85";
     private static final int port  = 8080;
-    private static Socket socket=null;
-    private static Scanner scanner = new Scanner(System.in);
+    private static InputStream is=null;
+    private static OutputStream os=null;
+    private static BufferedReader reader=null;
+    private static StringBuffer stringBuffer=null;
+    private static PrintWriter writer = null;
 
-    public static void main(String args[]) throws IOException {
+    public LoginPage(){
+        try {
+            start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void start() throws IOException {
         loop:
         while (true) {
             System.out.println("Welcome to job.am");
@@ -21,20 +36,16 @@ public class Client {
             String start = scanner.nextLine();
             switch (start) {
                 case "R":
-                   // sendServerSymbol(start);
                     registerUser(start);
                     break;
                 case "L":
-                    //sendServerSymbol(start);
                     login(start);
                     break;
                 case "G":
-                    sendServerSymbol(start);
 
-                    //guestLogin();
+                    guestLogin(start);
                     break;
                 case "E":
-                    sendServerSymbol(start);
 
                     System.out.println("We'll be waiting you");
                     return;
@@ -42,17 +53,8 @@ public class Client {
                     System.out.println("Please type correct value");
                     System.out.println();
                     continue loop;
-
-
             }
         }
-
-       // socket = new Socket(ip,port);
-      //  Scanner scanner = new Scanner(System.in);
-
-      //  String v1 = scanner.nextLine();
-
-       // String v2 = scanner.nextLine();
     }
 
     private static void login(String start) throws IOException {
@@ -62,12 +64,12 @@ public class Client {
         String password = scanner.nextLine();
 
         socket=new Socket(ip,port);
-        InputStream is = socket.getInputStream();
-        OutputStream os = socket.getOutputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        is = socket.getInputStream();
+        os= socket.getOutputStream();
+        reader = new BufferedReader(new InputStreamReader(is));
         PrintWriter writer = new PrintWriter(os,true);
 
-        StringBuffer stringBuffer = new StringBuffer(start+","+userName+","+password);
+        stringBuffer = new StringBuffer(start+","+userName+","+password);
         writer.println(stringBuffer);
 
         String result = reader.readLine();
@@ -77,17 +79,7 @@ public class Client {
         }
     }
 
-    private static void sendServerSymbol(String symbol) throws IOException {
-        socket=new Socket(ip,port);
-        InputStream is = socket.getInputStream();
-        OutputStream os = socket.getOutputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        PrintWriter writer = new PrintWriter(os,true);
-        writer.println(symbol);
-
-      //  String result = reader.readLine();
-
-        System.out.println("Please wait, server is working...");
+    private static void guestLogin(String start) throws IOException {
 
     }
     private static void registerUser(String start) throws IOException {
@@ -113,16 +105,19 @@ public class Client {
         String password = scanner.nextLine();
 
         socket=new Socket(ip,port);
-        InputStream is = socket.getInputStream();
-        OutputStream os = socket.getOutputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        PrintWriter writer = new PrintWriter(os,true);
+        is = socket.getInputStream();
+        os = socket.getOutputStream();
+        reader = new BufferedReader(new InputStreamReader(is));
+        writer = new PrintWriter(os,true);
 
-        StringBuffer stringBuffer = new StringBuffer(start+","+firstName+","+lastName+","+userName+","+email+","+password);
+        stringBuffer = new StringBuffer(start+","+firstName+","+lastName+","+userName+","+email+","+password);
         writer.println(stringBuffer);
 
         String result = reader.readLine();
 
         System.out.println(result);
+        System.out.println("Please login");
+        login("L");
     }
+
 }

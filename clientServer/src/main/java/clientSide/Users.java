@@ -1,4 +1,4 @@
-package serverSide.entities;
+package clientSide;
 
 import javax.persistence.*;
 

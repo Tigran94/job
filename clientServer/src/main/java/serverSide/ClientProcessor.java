@@ -4,7 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import serverSide.entities.Users;
+import clientSide.Users;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;

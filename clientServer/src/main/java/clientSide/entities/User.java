@@ -1,10 +1,10 @@
-package clientSide;
+package clientSide.entities;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class Users {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class Users {
     @Column(name = "password", nullable = false)
     private String password;
 
-    public Users(){
+    public User(){
 
     }
 
@@ -79,7 +79,7 @@ public class Users {
 
     @Override
     public String toString() {
-        return "Users{" +
+        return "User{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

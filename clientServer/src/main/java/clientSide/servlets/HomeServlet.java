@@ -1,4 +1,4 @@
-package clientSide;
+package clientSide.servlets;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

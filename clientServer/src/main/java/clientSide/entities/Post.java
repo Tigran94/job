@@ -1,10 +1,10 @@
-package serverSide.entities;
+package clientSide.entities;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "posts")
-public class Posts {
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ public class Posts {
     @Column(name = "email",unique = true,nullable = false)
     private String email;
 
-    public Posts(){
+    public Post(){
 
     }
 
@@ -90,7 +90,7 @@ public class Posts {
 
     @Override
     public String toString() {
-        return "Posts{" +
+        return "Post{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +

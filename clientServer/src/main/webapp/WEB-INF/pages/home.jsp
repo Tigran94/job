@@ -1,4 +1,4 @@
-<%@ page import="clientSide.Users" %>
+<%@ page import="clientSide.entities.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -6,6 +6,6 @@
 </head>
 <body>
 Welcome
-<%=((Users) request.getSession().getAttribute("user")).getUserName()%>
+<%=((User) request.getSession().getAttribute("user")).getUserName()%>
 </body>
 </html>

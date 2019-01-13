@@ -1,4 +1,7 @@
-package clientSide;
+package clientSide.servlets;
+
+import clientSide.Security;
+import clientSide.entities.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -6,17 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class SignUpServlet extends HttpServlet {
+
+public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-        String firstName = req.getParameter("firstName");
-        String lastName = req.getParameter("lastName");
-        String email = req.getParameter("email");
 
-        Users user = Security.registerUser(username,firstName,lastName,email, password);
+        User user = Security.login(username, password);
         if (user == null) {
             resp.setStatus(401);
             return;
@@ -26,9 +27,4 @@ public class SignUpServlet extends HttpServlet {
         resp.sendRedirect("/home");
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("WEB-INF/pages/signup.jsp")
-                .forward(req, resp);
-    }
 }

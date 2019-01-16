@@ -53,4 +53,24 @@
         <url-pattern>/pass</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>profileServlet</servlet-name>
+        <servlet-class>clientSide.servlets.ProfileServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>profileServlet</servlet-name>
+        <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>addPostServlet</servlet-name>
+        <servlet-class>clientSide.servlets.PostServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>addPostServlet</servlet-name>
+        <url-pattern>/addPost</url-pattern>
+    </servlet-mapping>
+
 </web-app>

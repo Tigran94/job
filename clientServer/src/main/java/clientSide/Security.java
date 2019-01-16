@@ -1,10 +1,13 @@
 package clientSide;
 
+import clientSide.entities.Post;
 import clientSide.entities.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
+
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
@@ -32,7 +35,6 @@ public class Security {
             loggedInUser = query.getSingleResult();
 
         }catch (NoResultException e){
-            //  writer.println(false);
         }
         if(transaction.isActive()){
             session.flush();
@@ -42,6 +44,7 @@ public class Security {
     }
 
     public static User registerUser(String username, String firstname, String lastname, String email, String password){
+
         session = getConnection();
         User user = new User();
 
@@ -59,6 +62,43 @@ public class Security {
         }
         session.close();
         return user;
+    }
+
+    public static void changePassword(User user,String newPassword){
+        session = getConnection();
+
+        user.setPassword(newPassword);
+
+        Transaction transaction = session.beginTransaction();
+        session.update(user);
+        transaction.commit();
+
+        if(transaction.isActive()){
+            session.flush();
+        }
+        session.close();
+    }
+
+
+    public static Post addPost(String title, String description, String type, String salary, String email, String workTime) {
+        session = getConnection();
+        Post post = new Post();
+
+        post.setTitle(title);
+        post.setDescription(description);
+        post.setType(type);
+        post.setSalary(salary);
+        post.setEmail(email);
+        post.setWorkTime(workTime);
+
+        Transaction transaction = session.beginTransaction();
+        session.save(post);
+        transaction.commit();
+        if(transaction.isActive()){
+            session.flush();
+        }
+        session.close();
+        return post;
     }
 }
 

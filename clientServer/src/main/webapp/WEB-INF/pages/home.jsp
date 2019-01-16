@@ -7,5 +7,8 @@
 <body>
 Welcome
 <%=((User) request.getSession().getAttribute("user")).getUserName()%>
+<form action="/profile" method="get">
+    <input type="submit" value="My Profile"/>
+</form>
 </body>
 </html>

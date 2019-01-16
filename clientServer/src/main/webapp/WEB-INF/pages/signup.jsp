@@ -19,7 +19,7 @@
         FirstName: <input type="text" name="firstName"required/>
     </label>
     <label>
-        LastName: <input type="password" name="lastName" required/>
+        LastName: <input type="text" name="lastName" required/>
     </label>
     <label>
         Email: <input type="email" name="email" required/>

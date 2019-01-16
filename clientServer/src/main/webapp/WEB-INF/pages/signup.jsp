@@ -13,21 +13,24 @@
 <body>
 <form action="/signup" method="post">
     <label>
-        Username: <input type="text" name="username"/>
+        Username: <input type="text" name="username" required/>
     </label>
     <label>
-        FirstName: <input type="text" name="firstName"/>
+        FirstName: <input type="text" name="firstName"required/>
     </label>
     <label>
-        LastName: <input type="password" name="lastName"/>
+        LastName: <input type="password" name="lastName" required/>
     </label>
     <label>
-        Email: <input type="email" name="email"/>
+        Email: <input type="email" name="email" required/>
     </label>
     <label>
-        Password: <input type="password" name="password"/>
+        Password: <input type="password" name="password" required/>
     </label>
-    <input type="submit" value="Login"/>
+    <label>
+        Confirm Password: <input type="password" name="confirmPassword" required/>
+    </label>
+    <input type="submit" value="Submit"/>
 </form>
 </body>
 </html>

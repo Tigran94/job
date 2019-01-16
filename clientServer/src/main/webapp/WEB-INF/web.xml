@@ -33,4 +33,24 @@
         <url-pattern>/signup</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>guestServlet</servlet-name>
+        <servlet-class>clientSide.servlets.GuestServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>guestServlet</servlet-name>
+        <url-pattern>/guest</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>passServlet</servlet-name>
+        <servlet-class>clientSide.servlets.GuestServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>passServlet</servlet-name>
+        <url-pattern>/pass</url-pattern>
+    </servlet-mapping>
+
 </web-app>

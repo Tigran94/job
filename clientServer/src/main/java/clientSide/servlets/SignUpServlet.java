@@ -18,14 +18,25 @@ public class SignUpServlet extends HttpServlet {
         String firstName = req.getParameter("firstName");
         String lastName = req.getParameter("lastName");
         String email = req.getParameter("email");
+        String confirmPass = req.getParameter("confirmPassword");
+
+
+
+        if(!password.equals(confirmPass)){
+            req.getRequestDispatcher("WEB-INF/pages/pass.jsp")
+                    .forward(req, resp);
+            return;
+        }
 
         User user = Security.registerUser(username,firstName,lastName,email, password);
+        req.getSession().setAttribute("user", user);
+
         if (user == null) {
             resp.setStatus(401);
             return;
         }
 
-        req.getSession().setAttribute("user", user);
+      //  req.getSession().setAttribute("user", user);
         resp.sendRedirect("/home");
     }
 

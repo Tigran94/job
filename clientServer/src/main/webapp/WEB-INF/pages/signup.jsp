@@ -32,5 +32,6 @@
     </label>
     <input type="submit" value="Submit"/>
 </form>
+${passwordConfirmed}
 </body>
 </html>

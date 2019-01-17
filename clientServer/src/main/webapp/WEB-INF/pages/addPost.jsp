@@ -27,7 +27,7 @@
         Email: <input type="email" name="email" required/>
     </label>
     <label>
-        Salary: <input type="text" name="salary"/>
+        Salary: <input type="number" name="salary"/>
     </label>
     <select name="workTime">
         Work Time:

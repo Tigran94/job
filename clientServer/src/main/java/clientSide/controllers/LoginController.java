@@ -26,6 +26,7 @@ public class LoginController {
     public String signUpString(){
         return "signup";
     }
+
     @RequestMapping(value = "/home",method = RequestMethod.GET)
     public ModelAndView guestString(){
         User user = new User();
@@ -34,6 +35,7 @@ public class LoginController {
         modelAndView.addObject("parameter", user.getUserName());
         return modelAndView;
     }
+
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public String loginString(@RequestParam("username") String username,
                               @RequestParam("password") String password,

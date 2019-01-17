@@ -34,7 +34,8 @@ public class ProfileController {
         if(!user.getPassword().equals(currentPassword)){
             modelAndView.addObject("passwordChanged","Wrong password");
             return modelAndView;
-        }else{
+        }
+        else{
             Security.changePassword(user,newPassword);
             modelAndView.addObject("passwordChanged","Password is changed successfully");
             return modelAndView;

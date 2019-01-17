@@ -34,8 +34,9 @@ public class ProfileServlet extends HttpServlet {
 
         Security.changePassword(user,newPassword);
 
-        resp.getWriter().println("Password is changed");
+        req.getSession().setAttribute("changedPassword","asdasd");
 
+        resp.sendRedirect("/profile");
 
     }
 }

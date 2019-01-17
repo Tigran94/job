@@ -19,17 +19,17 @@ Hello To JOB.AM
 <%--</form>--%>
 <form action="/login" method="post">
     <label>
-        Username: <input type="text" name="username"/>
+        Username: <input type="text" name="username" required/>
     </label>
     <label>
-        Password: <input type="password" name="password"/>
+        Password: <input type="password" name="password" required/>
     </label>
     <input type="submit" value="Login"/>
 </form>
 <form action="/signup" method="get">
-    <input type="submit" value="Sign In">
+    <input type="submit" value="Sign Up">
 </form>
-<form action="/guest" method="get">
+<form action="/home" method="get">
     <input type="submit" value="Guest">
 </form>
 </body>

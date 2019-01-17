@@ -28,5 +28,6 @@ My Profile
     </label>
     <input type="submit" value="Submit"/>
 </form>
+${passwordChanged}
 </body>
 </html>

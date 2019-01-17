@@ -5,8 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-Welcome
-<%=((User) request.getSession().getAttribute("user")).getUserName()%>
+Welcome ${parameter}
 <form action="/profile" method="get">
     <input type="submit" value="My Profile"/>
 </form>

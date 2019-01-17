@@ -25,7 +25,7 @@ public class SignUpController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String doPost(@RequestParam("username") String username, @RequestParam("password") String password,
+    public String userRegistration(@RequestParam("username") String username, @RequestParam("password") String password,
                                @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("email") String email,
                                @RequestParam("confirmPassword") String confirmPass,
                                HttpServletRequest req, HttpServletResponse resp, ModelMap modelMap){

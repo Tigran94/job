@@ -7,9 +7,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.springframework.ui.ModelMap;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 
 public class Security {
     private static Session session = null;
@@ -62,6 +64,29 @@ public class Security {
         }
         session.close();
         return user;
+    }
+
+    public static ArrayList<String> checkIfUserExists(String username, String email){
+        session = getConnection();
+
+        ArrayList<String> messages = new ArrayList<String>();
+
+        Transaction transaction = session.beginTransaction();
+        TypedQuery<User> query1 = session.createQuery("from User h where h.userName = :userName", User.class);
+        query1.setParameter("userName", username);
+        TypedQuery<User> query2 = session.createQuery("from User h where h.email = :email",User.class);
+        query2.setParameter("email",email);
+        transaction.commit();
+
+        if(query1.getResultList().size()!=0){
+            messages.add("This username is already taken");
+        }
+        if(query2.getResultList().size()!=0){
+            messages.add("This email is already taken");
+        }
+
+
+        return messages;
     }
 
     public static void changePassword(User user,String newPassword){

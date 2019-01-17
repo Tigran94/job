@@ -33,5 +33,6 @@
     <input type="submit" value="Submit"/>
 </form>
 ${passwordConfirmed}
+${registrationFailed}
 </body>
 </html>

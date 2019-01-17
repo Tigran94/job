@@ -22,11 +22,6 @@ public class LoginController {
         return "index";
     }
 
-    @RequestMapping(value = "/signup",method = RequestMethod.GET)
-    public String signUpString(){
-        return "signup";
-    }
-
     @RequestMapping(value = "/home",method = RequestMethod.GET)
     public ModelAndView guestString(){
         User user = new User();

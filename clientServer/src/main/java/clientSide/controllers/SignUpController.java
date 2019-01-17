@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/signup")
@@ -19,6 +20,7 @@ public class SignUpController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String signupString(){
+
         return "signup";
     }
 
@@ -28,13 +30,24 @@ public class SignUpController {
                                @RequestParam("confirmPassword") String confirmPass,
                                HttpServletRequest req, HttpServletResponse resp, ModelMap modelMap){
 
+
+        modelMap.addAttribute("passwordConfirmed","");
+        modelMap.addAttribute("registrationFailed","");
+
         if(!(password.equals(confirmPass))){
            modelMap.addAttribute("passwordConfirmed","Wrong confirmation password");
            return "signup";
         }
-        User user = Security.registerUser(username,firstName,lastName,email, password);
-        req.getSession().setAttribute("user",user);
-        return "home";
+        ArrayList<String> messages = Security.checkIfUserExists(username,email);
+        if(messages.size()!=0){
+            modelMap.addAttribute("registrationFailed",messages);
+            return "signup";
+        }else{
+            User user = Security.registerUser(username,firstName,lastName,email, password);
+            req.getSession().setAttribute("user",user);
+            return "home";
+        }
+
 
     }
 

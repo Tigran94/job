@@ -7,7 +7,7 @@
 <body>
 Welcome ${parameter}
 <form action="/profile" method="get">
-    <input type="submit" value="My Profile"/>
+    <input type="submit" value="My Profile" ${hiddenButton}/>
 </form>
 </body>
 </html>

@@ -29,8 +29,10 @@ Hello To JOB.AM
 <form action="/signup" method="get">
     <input type="submit" value="Sign Up">
 </form>
-<form action="/home" method="get">
+<form action="/guest" method="get">
     <input type="submit" value="Guest">
 </form>
+${loginConfirmedMain}
+
 </body>
 </html>

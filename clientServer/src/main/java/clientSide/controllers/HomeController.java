@@ -22,6 +22,7 @@ public class HomeController{
         if(user==null) {
             user = new User();
             user.setUserName("Anonymous");
+            return "redirect:/guest";
         }else{
             user.setUserName(user.getUserName());
         }

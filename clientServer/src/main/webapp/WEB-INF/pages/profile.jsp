@@ -28,6 +28,9 @@ My Profile
     </label>
     <input type="submit" value="Submit"/>
 </form>
+<form action="/profile/" method="get">
+    <input type="submit" value="Log Out"/>
+</form>
 ${passwordChanged}
 </body>
 </html>

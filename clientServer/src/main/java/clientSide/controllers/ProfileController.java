@@ -23,7 +23,11 @@ public class ProfileController {
         }
         return "profile";
     }
-
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String logOutString(HttpServletRequest req){
+        req.getSession().setAttribute("user",null);
+        return "redirect:/";
+    }
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView changePassword(
             @RequestParam("currentPassword") String currentPassword,

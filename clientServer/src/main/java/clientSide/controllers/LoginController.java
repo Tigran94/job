@@ -22,15 +22,6 @@ public class LoginController {
         return "index";
     }
 
-    @RequestMapping(value = "/home",method = RequestMethod.GET)
-    public ModelAndView guestString(){
-        User user = new User();
-        user.setUserName("Anonymous");
-        ModelAndView modelAndView = new ModelAndView("home");
-        modelAndView.addObject("parameter", user.getUserName());
-        return modelAndView;
-    }
-
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public String loginString(@RequestParam("username") String username,
                               @RequestParam("password") String password,
@@ -43,7 +34,7 @@ public class LoginController {
             return null;
         }
         req.getSession().setAttribute("user",user);
-        modelMap.addAttribute("parameter",user.getUserName());
-        return "home";
+//        modelMap.addAttribute("parameter",user.getUserName());
+        return "redirect:/home";
     }
 }

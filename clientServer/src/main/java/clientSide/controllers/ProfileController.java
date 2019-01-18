@@ -17,7 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 public class ProfileController {
 
     @RequestMapping(method = RequestMethod.GET)
-    public String profileString(){
+    public String profileString(HttpServletRequest req){
+        if(req.getSession().getAttribute("user") == null){
+            return "redirect:/home";
+        }
         return "profile";
     }
 

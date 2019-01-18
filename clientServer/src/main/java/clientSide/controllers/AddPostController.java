@@ -26,6 +26,6 @@ public class AddPostController {
 
         Security.addPost(title,description,type,salary,email, workTime);
 
-        return "home";
+        return "redirect:/home";
     }
 }

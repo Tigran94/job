@@ -18,34 +18,39 @@ import java.util.ArrayList;
 public class SignUpController {
 
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String signupString(){
+    public ArrayList<String> messages = new ArrayList<String>();
+    public String passwordConfirmMessage = "";
 
+    @RequestMapping(method = RequestMethod.GET)
+    public String signupString(ModelMap modelMap){
+        ArrayList<String> tempMessages =(ArrayList<String>) messages.clone();
+        String tempPasswordConfirmedMessage = new String(passwordConfirmMessage);
+
+        modelMap.addAttribute("registrationFailed",tempMessages);
+        modelMap.addAttribute("passwordConfirmed",tempPasswordConfirmedMessage);
+
+        messages.clear();
+        passwordConfirmMessage = "";
         return "signup";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value="/registerUser",method = RequestMethod.POST)
     public String userRegistration(@RequestParam("username") String username, @RequestParam("password") String password,
                                @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("email") String email,
                                @RequestParam("confirmPassword") String confirmPass,
-                               HttpServletRequest req, HttpServletResponse resp, ModelMap modelMap){
-
-
-        modelMap.addAttribute("passwordConfirmed","");
-        modelMap.addAttribute("registrationFailed","");
+                               HttpServletRequest req){
 
         if(!(password.equals(confirmPass))){
-           modelMap.addAttribute("passwordConfirmed","Wrong confirmation password");
-           return "signup";
+            passwordConfirmMessage = "Wrong confirm password";
+           return "redirect:/signup";
         }
-        ArrayList<String> messages = Security.checkIfUserExists(username,email);
+        messages = Security.checkIfUserExists(username,email);
         if(messages.size()!=0){
-            modelMap.addAttribute("registrationFailed",messages);
-            return "signup";
+            return "redirect:/signup";
         }else{
             User user = Security.registerUser(username,firstName,lastName,email, password);
             req.getSession().setAttribute("user",user);
-            return "home";
+            return "redirect:/home";
         }
 
 

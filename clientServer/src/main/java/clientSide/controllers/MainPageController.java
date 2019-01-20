@@ -20,13 +20,17 @@ public class MainPageController {
     String message = "";
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView homePageString(ModelMap modelMap) {
-        ModelAndView modelAndView = new ModelAndView("index");
+    public String homePageString(ModelMap modelMap,HttpServletRequest req) {
         String temp = new String(message);
-        modelAndView.addObject("loginConfirmedMain",temp);
+        modelMap.addAttribute("loginConfirmedMain",temp);
+
+        if(req.getSession().getAttribute("user")!=null){
+            modelMap.addAttribute("loginConfirmedMain",null);
+            return "redirect:/home";
+        }
         message="";
 
-        return modelAndView;
+        return "index";
     }
     @RequestMapping(value = "/guest",method = RequestMethod.GET)
     public String guestString(ModelMap modelMap){

@@ -21,12 +21,12 @@ public class HomeController{
         User user = (User) req.getSession().getAttribute("user");
         if(user==null) {
             user = new User();
-            user.setUserName("Anonymous");
+            user.setUsername("Anonymous");
             return "redirect:/guest";
         }else{
-            user.setUserName(user.getUserName());
+            user.setUsername(user.getUsername());
         }
-        modelMap.addAttribute("parameter", user.getUserName());
+        modelMap.addAttribute("parameter", user.getUsername());
         return "home";
     }
 }

@@ -1,6 +1,6 @@
 package clientSide.controllers;
 
-import clientSide.Security;
+import clientSide.dao.UserDao;
 import clientSide.entities.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,14 +10,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/profile")
 public class ProfileController {
 
+    String message = "";
+
+    private final UserDao userDao;
+
+    public ProfileController(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
     @RequestMapping(method = RequestMethod.GET)
-    public String profileString(HttpServletRequest req){
+    public String profileString(HttpServletRequest req , ModelMap modelMap){
+        String temp = new String(message);
+        modelMap.addAttribute("passwordChanged",temp);
+        message="";
         if(req.getSession().getAttribute("user") == null){
             return "redirect:/home";
         }
@@ -28,24 +38,27 @@ public class ProfileController {
         req.getSession().setAttribute("user",null);
         return "redirect:/";
     }
+
+
     @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView changePassword(
+    public String changePassword(
             @RequestParam("currentPassword") String currentPassword,
             @RequestParam("newPassword") String newPassword,
             HttpServletRequest req){
 
-        ModelAndView modelAndView = new ModelAndView("profile");
         User user= (User)req.getSession().getAttribute("user");
 
 
         if(!user.getPassword().equals(currentPassword)){
-            modelAndView.addObject("passwordChanged","Wrong password");
-            return modelAndView;
+            message="Wrong password";
+
+            return "redirect:/profile";
         }
         else{
-            Security.changePassword(user,newPassword);
-            modelAndView.addObject("passwordChanged","Password is changed successfully");
-            return modelAndView;
+            userDao.changePassword(user,newPassword);
+            message="Password is changed successfully";
+
+            return "redirect:/profile";
         }
     }
 }

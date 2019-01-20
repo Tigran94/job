@@ -1,22 +1,26 @@
 package clientSide.controllers;
 
-import clientSide.Security;
+import clientSide.dao.UserDao;
 import clientSide.entities.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/signup")
 public class SignUpController {
 
+
+    private final UserDao userDao;
+
+    public SignUpController(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     public ArrayList<String> messages = new ArrayList<String>();
     public String passwordConfirmMessage = "";
@@ -35,20 +39,18 @@ public class SignUpController {
     }
 
     @RequestMapping(value="/registerUser",method = RequestMethod.POST)
-    public String userRegistration(@RequestParam("username") String username, @RequestParam("password") String password,
-                               @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("email") String email,
-                               @RequestParam("confirmPassword") String confirmPass,
-                               HttpServletRequest req){
+    public String userRegistration(@RequestParam("confirmPassword") String confirmPass,
+                               HttpServletRequest req,User user){
 
-        if(!(password.equals(confirmPass))){
+        if(!(user.getPassword().equals(confirmPass))){
             passwordConfirmMessage = "Wrong confirm password";
            return "redirect:/signup";
         }
-        messages = Security.checkIfUserExists(username,email);
+        messages = userDao.checkIfUserExists(user.getUsername(),user.getEmail());
         if(messages.size()!=0){
             return "redirect:/signup";
         }else{
-            User user = Security.registerUser(username,firstName,lastName,email, password);
+            userDao.registerUser(user);
             req.getSession().setAttribute("user",user);
             return "redirect:/home";
         }

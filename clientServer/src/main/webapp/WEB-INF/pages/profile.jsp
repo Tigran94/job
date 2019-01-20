@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: user
-  Date: 2019-01-16
-  Time: 13:55
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -28,9 +21,14 @@ My Profile
     </label>
     <input type="submit" value="Submit"/>
 </form>
+${passwordChanged}
+
+<form action="/home" method="get">
+    <input type="submit" value="Back"/>
+</form>
 <form action="/profile/" method="get">
     <input type="submit" value="Log Out"/>
 </form>
-${passwordChanged}
+
 </body>
 </html>

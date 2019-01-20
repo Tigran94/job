@@ -1,6 +1,7 @@
 package clientSide.controllers;
 
-import clientSide.Security;
+import clientSide.dao.Security;
+import clientSide.dao.UserDao;
 import clientSide.entities.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,6 +18,12 @@ public class LoginController {
 
     String message = "";
 
+    private final UserDao userDao;
+
+    public LoginController(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public String homePageString(ModelMap modelMap) {
         String temp = new String(message);
@@ -31,7 +38,7 @@ public class LoginController {
                               HttpServletResponse resp,
                               HttpServletRequest req, ModelMap modelMap){
 
-        User user = Security.login(username, password);
+        User user = userDao.login(username, password);
         if (user == null) {
             message="User not found";
             //modelMap.addAttribute("loginConfirmedLogin","User not found");

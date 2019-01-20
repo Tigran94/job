@@ -1,14 +1,20 @@
 package clientSide.controllers;
 
-import clientSide.Security;
+import clientSide.dao.PostDao;
+import clientSide.entities.Post;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/addPost")
 public class AddPostController {
+
+    private final PostDao postDao;
+
+    public AddPostController(PostDao postDao) {
+        this.postDao = postDao;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public String addPostString(){
@@ -16,15 +22,9 @@ public class AddPostController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String addPostString2(@RequestParam("title") String title,
-                                 @RequestParam("description") String description,
-                                 @RequestParam("type") String type,
-                                 @RequestParam("salary") String salary,
-                                 @RequestParam("email") String email,
-                                 @RequestParam("workTime") String workTime){
+    public String addPost(Post post){
 
-
-        Security.addPost(title,description,type,salary,email, workTime);
+        postDao.addPost(post);
 
         return "redirect:/home";
     }

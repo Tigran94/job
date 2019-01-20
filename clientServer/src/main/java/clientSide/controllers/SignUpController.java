@@ -23,7 +23,7 @@ public class SignUpController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String signupString(ModelMap modelMap){
-        ArrayList<String> tempMessages =(ArrayList<String>) messages.clone();
+        String tempMessages = messages.toString().substring(1,messages.toString().length()-1);
         String tempPasswordConfirmedMessage = new String(passwordConfirmMessage);
 
         modelMap.addAttribute("registrationFailed",tempMessages);

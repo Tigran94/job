@@ -49,7 +49,7 @@ public class UserDao extends Security {
         return user;
     }
 
-    public ArrayList<String> checkIfUserExists(String username, String email){
+    public String checkIfUserExists(String username, String email){
         Session session = sessionFactory.openSession();
 
         ArrayList<String> messages = new ArrayList<String>();
@@ -69,7 +69,7 @@ public class UserDao extends Security {
         }
 
 
-        return messages;
+        return messages.toString().substring(1,messages.toString().length()-1);
     }
 
     public  void changePassword(User user,String newPassword){

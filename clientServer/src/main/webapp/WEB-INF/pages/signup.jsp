@@ -11,7 +11,7 @@
     <title>Title</title>
 </head>
 <body>
-<form action="/signup/registerUser" method="post">
+<form action="/signup" method="post">
     <label>
         Username: <input type="text" name="username" required/>
     </label>

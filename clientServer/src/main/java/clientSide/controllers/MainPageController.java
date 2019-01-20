@@ -7,6 +7,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,18 +22,12 @@ public class MainPageController {
     public MainPageController(UserDao userDao) {
         this.userDao = userDao;
     }
-    String message = "";
 
     @RequestMapping(method = RequestMethod.GET)
     public String homePageString(ModelMap modelMap,HttpServletRequest req) {
-        String temp = new String(message);
-        modelMap.addAttribute("loginConfirmedMain",temp);
-
         if(req.getSession().getAttribute("user")!=null){
-            modelMap.addAttribute("loginConfirmedMain",null);
             return "redirect:/home";
         }
-        message="";
 
         return "index";
     }
@@ -48,12 +43,11 @@ public class MainPageController {
     @RequestMapping(method = RequestMethod.POST)
     public String loginString(@RequestParam("username") String username,
                               @RequestParam("password") String password,
-                              HttpServletResponse resp,
-                              HttpServletRequest req, ModelMap modelMap){
+                              HttpServletRequest req, RedirectAttributes red){
 
         User user = userDao.login(username, password);
         if (user == null) {
-            message="User not found";
+            red.addFlashAttribute("loginConfirmedMain","User not found");
             return "redirect:/";
         }else {
             req.getSession().setAttribute("user",user);

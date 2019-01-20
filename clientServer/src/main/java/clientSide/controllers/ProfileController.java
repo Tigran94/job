@@ -8,14 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/profile")
 public class ProfileController {
-
-    String message = "";
 
     private final UserDao userDao;
 
@@ -25,9 +24,7 @@ public class ProfileController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String profileString(HttpServletRequest req , ModelMap modelMap){
-        String temp = new String(message);
-        modelMap.addAttribute("passwordChanged",temp);
-        message="";
+
         if(req.getSession().getAttribute("user") == null){
             return "redirect:/home";
         }
@@ -44,20 +41,18 @@ public class ProfileController {
     public String changePassword(
             @RequestParam("currentPassword") String currentPassword,
             @RequestParam("newPassword") String newPassword,
-            HttpServletRequest req){
+            HttpServletRequest req, RedirectAttributes red){
 
         User user= (User)req.getSession().getAttribute("user");
 
 
         if(!user.getPassword().equals(currentPassword)){
-            message="Wrong password";
-
+            red.addFlashAttribute("passwordChanged","Wrong password");
             return "redirect:/profile";
         }
         else{
             userDao.changePassword(user,newPassword);
-            message="Password is changed successfully";
-
+            red.addFlashAttribute("passwordChanged","Password changed sucessfully");
             return "redirect:/profile";
         }
     }

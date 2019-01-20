@@ -17,11 +17,17 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/")
 public class MainPageController {
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String homePageString() {
-        return "index";
-    }
+    String message = "";
 
+    @RequestMapping(method = RequestMethod.GET)
+    public ModelAndView homePageString(ModelMap modelMap) {
+        ModelAndView modelAndView = new ModelAndView("index");
+        String temp = new String(message);
+        modelAndView.addObject("loginConfirmedMain",temp);
+        message="";
+
+        return modelAndView;
+    }
     @RequestMapping(value = "/guest",method = RequestMethod.GET)
     public String guestString(ModelMap modelMap){
         User user = new User();
@@ -31,5 +37,21 @@ public class MainPageController {
         return "home";
     }
 
+    @RequestMapping(method = RequestMethod.POST)
+    public String loginString(@RequestParam("username") String username,
+                              @RequestParam("password") String password,
+                              HttpServletResponse resp,
+                              HttpServletRequest req, ModelMap modelMap){
+
+        User user = Security.login(username, password);
+        if (user == null) {
+            message="User not found";
+            return "redirect:/";
+        }else {
+            req.getSession().setAttribute("user",user);
+            return "redirect:/home";
+        }
+
+    }
 
 }

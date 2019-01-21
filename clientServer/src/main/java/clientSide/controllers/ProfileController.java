@@ -52,7 +52,7 @@ public class ProfileController {
         }
         else{
             userDao.changePassword(user,newPassword);
-            red.addFlashAttribute("passwordChanged","Password changed sucessfully");
+            red.addFlashAttribute("passwordChanged","Password changed successfully");
             return "redirect:/profile";
         }
     }

@@ -161,7 +161,8 @@
 <body>
 <div class="header">
     <span>Welcome ${parameter} </span>
-    <a href="/profile">My Profile</a>
+    <a href="/profile" ${hiddenButton}>My Profile</a>
+
 </div>
 <div class="main">
     <div class="titles">

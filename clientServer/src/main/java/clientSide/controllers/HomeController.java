@@ -35,13 +35,14 @@ public class HomeController{
     @RequestMapping(method = RequestMethod.GET)
     public String homeString(ModelMap modelMap,HttpServletRequest req){
         User user = (User) req.getSession().getAttribute("user");
-        if(user==null) {
+        if(user==null || user.getUsername().equals("Anonymous")) {
             user = new User();
             user.setUsername("Anonymous");
-            return "redirect:/guest";
+            modelMap.addAttribute("hiddenButton","hidden");
         }else{
             user.setUsername(user.getUsername());
         }
+
         modelMap.addAttribute("parameter", user.getUsername());
         modelMap.addAttribute("jobTitles",postDao.getJobTitlesStream());
         return "home";
@@ -50,12 +51,21 @@ public class HomeController{
     @RequestMapping(value = "/{jobId}", method = RequestMethod.GET)
     public ModelAndView getJobById(@PathVariable("jobId") long id,HttpServletRequest req) {
         ModelAndView modelAndView = new ModelAndView("posts");
+        User user = (User) req.getSession().getAttribute("user");
         List<JobTitle> jobTitles;
         if( req.getSession().getAttribute("jobTitles")==null){
             jobTitles= postDao.getJobTitlesStream();
         }else {
             jobTitles = (List<JobTitle>) req.getSession().getAttribute("jobTitles");
         }
+        if(user==null || user.getUsername().equals("Anonymous")) {
+            user = new User();
+            user.setUsername("Anonymous");
+            modelAndView.addObject("hiddenButton","hidden");
+        }else{
+            user.setUsername(user.getUsername());
+        }
+        modelAndView.addObject("parameter", user.getUsername());
         modelAndView.addObject("jobTitles", jobTitles);
         modelAndView.addObject("post", postDao.getJobAnnouncementByIdWithStream(id));
         return modelAndView;
@@ -68,6 +78,13 @@ public class HomeController{
                              @RequestParam("salary") String salary){
         User user = (User) req.getSession().getAttribute("user");
         ModelAndView modelAndView = new ModelAndView("home");
+        if(user==null || user.getUsername().equals("Anonymous")) {
+            user = new User();
+            user.setUsername("Anonymous");
+            modelAndView.addObject("hiddenButton","hidden");
+        }else{
+            user.setUsername(user.getUsername());
+        }
         modelAndView.addObject("parameter", user.getUsername());
         modelAndView.addObject("jobTitles",postDao.getJobTitlesStream(type,salary,workTime));
         req.getSession().setAttribute("jobTitles",postDao.getJobTitlesStream(type,salary,workTime));

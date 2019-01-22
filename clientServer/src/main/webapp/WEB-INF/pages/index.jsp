@@ -63,7 +63,7 @@
             color: #fff;
             cursor: pointer;
             font-family: sans-serif;
-            font-size: 13.5px;
+            /*font-size: 13.5px;*/
             border-radius: 6px;
         }
         .guest:hover{
@@ -103,15 +103,15 @@
         </div>
         <div class="row">
             <div class="labels">
-                <input class="log" type="submit" value="Login"/>
+                <a class="log sign" href="/signup">Sign Up</a>
             </div>
             <div class="inputs">
-                <a class="log sign" href="/signup">Sign Up</a>
+                <input class="log" type="submit" value="Login"/>
             </div>
         </div>
         <div class="row">
             <div class="labels">
-                <a class="guest" href="/guest">Guest</a>
+                <a class="guest" href="/home">Guest</a>
             </div>
             <div class="inputs">
                 <span id="err">${loginConfirmedMain}</span>

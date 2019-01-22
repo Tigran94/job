@@ -54,7 +54,7 @@
         }
         .titles ul li{
             list-style-type: none;
-            border-bottom: 2px solid #fff;
+            border-bottom: 2px solid #ced2d4;
         }
         .titles ul li a{
             text-transform: capitalize;
@@ -135,7 +135,7 @@
         ::-webkit-scrollbar-thumb {
             background: #1f4545;
             border-radius: 10px;
-            border: 2px solid #fff;
+            border: 2px solid #ced2d4;
         }
         ::-webkit-scrollbar-track {
             box-shadow: inset 0 0 5px #fff;

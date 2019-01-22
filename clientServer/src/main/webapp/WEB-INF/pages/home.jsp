@@ -10,33 +10,47 @@
             margin: 0;
             box-sizing: border-box;
         }
+        body{
+            background-color: #19504b;
+        }
         .header{
-            background-color: darkcyan;
+            background-color: #1f4545;
             padding: 20px 15px;
             color: #fff;
             text-transform: uppercase;
-            max-width: 100%;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            box-shadow: 0px 5px 2px #000;
         }
         .header a{
             padding: 5px 10px;
             color: #fff;
-            background-color: lightgreen;
+            background-color: #3e8484;
             text-transform: uppercase;
             border: none;
+            border-radius: 6px;
             text-decoration: none;
+            font-size: 14px;
         }
         .header a:hover{
-            background-color: green;
+            background-color: #265353;
             cursor: pointer;
+            border: 1px solid #fff;
+            padding: 4px 10px;
         }
         .main{
             max-width: 100%;
             display: flex;
+            margin-top: 62px;
         }
         .titles {
-            background-color: lightgreen;
+            background-color: #19504b;
             width: 20%;
             height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+
         }
         .titles ul li{
             list-style-type: none;
@@ -45,29 +59,27 @@
         .titles ul li a{
             text-transform: capitalize;
             text-decoration: none;
-            color: green;
+            color: #a9c1bf;
             padding: 5px 10px;
             line-height: 28px;
             display: block;
             width: 100%;
+            font-weight: bold;
+            word-wrap: break-word;
         }
         .titles li:hover{
-            background-color: green;
+            background-color: #1a3131;
             cursor: pointer;
         }
         .titles li:hover a{
             color: #fff;
-            font-weight: bold;
         }
         .content {
-            background-color: #d0d0d0;
-            width: 60%;
+            background-color: #ced2d4;
+            width: 80%;
             height: 100vh;
-        }
-        .filter{
-            background-color: brown;
-            width: 20%;
-            height: 100vh;
+            padding: 5px;
+            margin-left: 20%;
         }
         .formdiv{
             display: flex;
@@ -92,14 +104,46 @@
         #filter{
             padding: 5px 10px;
             color: #fff;
-            font-weight: bold;
+            background-color: #3e8484;
             text-transform: uppercase;
             border: none;
-            background-color: #cd5b5b;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
         }
         #filter:hover{
-            background-color: #6e2a2a;
+            background-color: #265353;
             cursor: pointer;
+            border: 1px solid #fff;
+            padding: 4px 10px;
+        }
+        #form{
+            position: fixed;
+            top: 62px;
+            background-color: #19504b;
+            width: 20%;
+            box-shadow: 0px 2px 2px #000;
+        }
+        #list{
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar {
+            width: 10px;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f4545;
+            border-radius: 10px;
+            border: 2px solid #fff;
+        }
+        ::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px #fff;
+            border-radius: 10px;
+        }
+        .mrg{
+            padding-top: 125px;
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -109,8 +153,8 @@
     <a href="/profile">My Profile</a>
 </div>
 <div class="main">
-    <div class="filter">
-        <form action="/home" method="post">
+    <div class="titles">
+        <form id="form" action="/home" method="post">
             <div class="formdiv">
                 <div class="labels">
                     <label for="typename">Type: </label>
@@ -148,17 +192,18 @@
                 <input id="filter" type="submit" value="Filter"/>
             </div>
         </form>
-    </div>
-    <div class="titles">
-        <c:forEach var="jobTitle" items="${jobTitles}">
-            <ul>
-                <li>
-                    <a href="/home/${jobTitle.id}">${jobTitle.title}</a>
-                </li>
-            </ul>
-        </c:forEach>
+        <div class="mrg">
+            <c:forEach var="jobTitle" items="${jobTitles}">
+                <ul id="list">
+                    <li>
+                        <a href="/home/${jobTitle.id}">${jobTitle.title}</a>
+                    </li>
+                </ul>
+            </c:forEach>
+        </div>
     </div>
     <div class="content">
+
     </div>
 </div>
 </body>

@@ -10,116 +10,260 @@
             margin: 0;
             box-sizing: border-box;
         }
-        .titles {
-            background-color: #FFFAA9;
-            width: 30%;
-            height: 100%;
-            float: left;
+        body{
+            background-color: #19504b;
         }
-        .filter{
-            background-color: brown;
+        .header{
+            background-color: #1f4545;
+            padding: 20px 15px;
+            color: #fff;
+            text-transform: uppercase;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            box-shadow: 0px 5px 2px #000;
+        }
+        .header a{
+            padding: 5px 10px;
+            color: #fff;
+            background-color: #3e8484;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .header a:hover{
+            background-color: #265353;
+            cursor: pointer;
+            border: 1px solid #fff;
+            padding: 4px 10px;
+        }
+        .main{
+            max-width: 100%;
+            display: flex;
+            margin-top: 62px;
+        }
+        .titles {
+            background-color: #19504b;
             width: 20%;
-            height: 100%;
-            float: left;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+
+        }
+        .titles ul li{
+            list-style-type: none;
+            border-bottom: 2px solid #fff;
+
+        }
+        .titles ul li a{
+            text-transform: capitalize;
+            text-decoration: none;
+            color: #a9c1bf;
+            padding: 5px 10px;
+            line-height: 28px;
+            display: block;
+            width: 100%;
+            font-weight: bold;
+            word-wrap: break-word;
+
+
+        }
+        .titles li:hover{
+            background-color: #1a3131;
+            cursor: pointer;
+        }
+        .titles li:hover a{
+            color: #fff;
         }
         .content {
-            background-color: bisque;
+            background-color: #ced2d4;
+            width: 80%;
+            height: 100vh;
+            padding: 5px;
+            margin-left: 20%;
+        }
+        .formdiv{
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 5px;
+            max-height: 40px;
+        }
+        .formdiv input, select{
+            width: 100px;
+        }
+        .labels{
+            color: #fff;
             width: 50%;
-            height: 100%;
-            float: left;
         }
-
-        .header{
-            background-color: darkcyan;
-        }
-        .type {
-            margin: 13px;
+        #salarytype{
             width: 100px;
-            height: 20px;
-            margin-top: 10px;
         }
-        .workTime {
-            margin: 0 2px;
-            width: 100px;
-            height: 20px;
-            margin-top: 10px;
+        .vals{
+            width: 50%;
         }
-        .salary{
-            margin-top: 0px;
-            display: block;
+        #filter{
+            padding: 5px 10px;
+            color: #fff;
+            background-color: #3e8484;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
         }
-        .salary_textarea{
-            margin: 3px;
+        #filter:hover{
+            background-color: #265353;
+            cursor: pointer;
+            border: 1px solid #fff;
+            padding: 4px 10px;
         }
-        .clear {
-            clear: both;
+        .tablerow{
+            display: flex;
+            padding: 5px;
+            width: 40%;
+            justify-content: space-between;
+        }
+        #form{
+            position: fixed;
+            top: 62px;
+            background-color: #19504b;
+            width: 20%;
+            box-shadow: 0px 2px 2px #000;
+        }
+        #list{
+            overflow-y: auto;
+            overflow-x: fragments;
+        }
+        .left{
+            font-weight: bold;
+        }
+        ::-webkit-scrollbar {
+            width: 10px;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f4545;
+            border-radius: 10px;
+            border: 2px solid #fff;
+        }
+        ::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px #fff;
+            border-radius: 10px;
+        }
+        .mrg{
+            padding-top: 125px;
         }
     </style>
 </head>
 <body>
 <div class="header">
-<form action="/profile" method="get">
-    Welcome ${parameter} <input type="submit" value="My Profile" ${hiddenButton}/>
-</form>
+    <span>Welcome ${parameter} </span>
+    <a href="/profile">My Profile</a>
 </div>
+<div class="main">
+    <div class="titles">
+        <form id="form" action="/home" method="post">
+            <div class="formdiv">
+                <div class="labels">
+                    <label for="typename">Type: </label>
+                </div>
+                <div class="vals">
+                    <select name="type" id="typename">
+                        <option></option>
+                        <option value="IT">IT</option>
+                        <option value="Marketing">Marketing</option>
+                    </select>
+                </div>
+            </div>
+            <div class="formdiv">
+                <div class="labels">
+                    <label for="salarytype">Salary: </label>
+                </div>
+                <div class="vals">
+                    <input id="salarytype" type="number" name="salary"/>
+                </div>
+            </div>
+            <div class="formdiv">
+                <div class="labels">
+                    <label for="worktime">Work Time: </label>
+                </div>
+                <div class="vals">
+                    <select id="worktime" name="workTime">
+                        <option></option>
+                        <option value="Half Time">Half Time</option>
+                        <option value="Full Time">Full Time</option>
+                        <option value="Remote">Remote</option>
+                    </select>
+                </div>
+            </div>
+            <div class="formdiv">
+                <input id="filter" type="submit" value="Filter"/>
+            </div>
+        </form>
 
-<div class="filter">
-    <form action="/home" method="post">
-        Type:
-        <select name="type" class="type">
-            <option></option>
-            <option value="IT">IT</option>
-            <option value="Marketing">Marketing</option>
-        </select>
-
-        <label class="salary">
-            Salary: <input class="salary_textarea" type="number" name="salary"/>
-        </label>
-
-        Work Time:
-        <select name="workTime" class="workTime">
-            <option></option>
-            <option value="Half Time">Half Time</option>
-            <option value="Full Time">Full Time</option>
-            <option value="Remote">Remote</option>
-        </select>
-        <br/>
-        <input type="submit" value="Filter"/>
-    </form>
-</div>
-
-<div class="titles">
-    <c:forEach var="jobTitle" items="${jobTitles}">
-        <a href="/home/${jobTitle.id}">
-            <c:if test="${jobTitle.id == post.id}">
-                >>>
-            </c:if>
-                ${jobTitle.title}
-        </a>
-        <br/>
-    </c:forEach>
-</div>
-
-<div class="content">
-    Title: ${post.title}
-    <br/>
-    Description: ${post.description}
-    <br/>
-    Type: ${post.type}
-    <br/>
-    Salary: ${post.salary}
-    <br/>
-    Work Time: ${post.workTime}
-    <br/>
-    Email: ${post.email}
-    <br/>
-    Company: ${post.company}
-    <br/>
-</div>
-<div class="content">
-
-</div>
-<div class="clear">
+        <div class="mrg">
+            <c:forEach var="jobTitle" items="${jobTitles}">
+                <ul id="list">
+                    <li>
+                        <a href="/home/${jobTitle.id}">${jobTitle.title}</a>
+                    </li>
+                </ul>
+            </c:forEach>
+        </div>
+    </div>
+    <div class="content">
+        <div class="tablerow">
+            <div class="left">
+                <p>Title: </p>
+            </div>
+            <div class="right">
+                <p>${post.title}</p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left">
+                <p>Description: </p>
+            </div>
+            <div class="right">
+                <p>${post.description}</p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left">
+                <p>Type: </p>
+            </div>
+            <div class="right">
+                <p>${post.type}</p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left">
+                <p>Salary: </p>
+            </div>
+            <div class="right">
+                <p>${post.salary}</p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left">
+                <p>Work Time: </p>
+            </div>
+            <div class="right">
+                <p>${post.workTime}</p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left">
+                <p>Email: </p>
+            </div>
+            <div class="right">
+                <p>${post.email}</p>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

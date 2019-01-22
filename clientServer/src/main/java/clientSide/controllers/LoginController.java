@@ -8,6 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,8 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/login")
 public class LoginController {
 
-    String message = "";
-
     private final UserDao userDao;
 
     public LoginController(UserDao userDao) {
@@ -25,24 +24,21 @@ public class LoginController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String homePageString(ModelMap modelMap) {
-        String temp = new String(message);
-        modelMap.addAttribute("loginConfirmedLogin",temp);
-        message="";
-        return "login";
+    public String homePageString(HttpServletRequest req) {
+        if(req.getSession().getAttribute("user")!=null){
+            return "redirect:/home";
+        }return "login";
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public String loginString(@RequestParam("username") String username,
                               @RequestParam("password") String password,
                               HttpServletResponse resp,
-                              HttpServletRequest req, ModelMap modelMap){
+                              HttpServletRequest req, RedirectAttributes red){
 
         User user = userDao.login(username, password);
         if (user == null) {
-            message="User not found";
-            //modelMap.addAttribute("loginConfirmedLogin","User not found");
-
+            red.addFlashAttribute("loginConfirmedLogin","*User not found");
             return "redirect:/login";
         }else {
             req.getSession().setAttribute("user",user);

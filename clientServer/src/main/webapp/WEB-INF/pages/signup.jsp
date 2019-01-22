@@ -32,6 +32,9 @@
     </label>
     <input type="submit" value="Submit"/>
 </form>
+<form action="/" method="get">
+    <input type="submit" value="Back"/>
+</form>
 ${passwordConfirmed}
 ${registrationFailed}
 </body>

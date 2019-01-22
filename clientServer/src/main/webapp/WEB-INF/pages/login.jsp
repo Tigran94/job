@@ -16,7 +16,7 @@
             padding: 20px;
             border-radius: 5px;
             margin: 18% auto;
-            background-color: darkcyan;
+            background-color: #1f4545;
             box-shadow: 5px 5px 7px;
         }
         .rows{
@@ -27,11 +27,14 @@
         }
         #login{
             border: none;
-            background-color: #60caa6;
+            background-color: #3e8484;
             padding: 5px 10px;
             text-transform: uppercase;
             color: #fff;
             cursor: pointer;
+            font-family: sans-serif;
+            font-size: 13px;
+            border-radius: 6px;
         }
         #login:hover{
             background-color: #579a9c;

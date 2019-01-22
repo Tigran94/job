@@ -17,7 +17,7 @@
             padding: 20px;
             border-radius: 5px;
             margin: 15% auto;
-            background-color: darkcyan;
+            background-color: #1f4545;
             box-shadow: 5px 5px 7px;
         }
         .row{
@@ -28,13 +28,15 @@
         }
         .log{
             border: none;
-            background-color: #60caa6;
+            background-color: #3e8484;
             padding: 5px 10px;
             text-transform: uppercase;
             color: #fff;
             cursor: pointer;
             font-family: sans-serif;
             font-size: 15px;
+            border-radius: 6px;
+
         }
         .log:hover{
             background-color: #579a9c;
@@ -55,13 +57,14 @@
         .guest{
             text-decoration: none;
             border: none;
-            background-color: #60caa6;
+            background-color: #3e8484;
             padding: 5px 10px;
             text-transform: uppercase;
             color: #fff;
             cursor: pointer;
             font-family: sans-serif;
             font-size: 13.5px;
+            border-radius: 6px;
         }
         .guest:hover{
             background-color: #579a9c;

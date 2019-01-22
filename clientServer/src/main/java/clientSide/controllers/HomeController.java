@@ -65,8 +65,7 @@ public class HomeController{
     public ModelAndView homeString(HttpServletRequest req,
                              @RequestParam("type") String type,
                              @RequestParam("workTime") String workTime,
-                             @RequestParam("salary") String salary,
-                                   @RequestParam("company") String company){
+                             @RequestParam("salary") String salary){
         User user = (User) req.getSession().getAttribute("user");
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("parameter", user.getUsername());

@@ -70,7 +70,7 @@
         <%--Email: <input class="email_textarea" type="email" name="email" required/>--%>
     <%--</label>--%>
     <label class="salary">
-        Salary: <input class="salary_textarea" type="number" name="salary"/>
+        Salary: <input class="salary_textarea" type="text" name="salary"/>
     </label>
 
     Work Time:

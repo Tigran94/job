@@ -66,9 +66,9 @@
         <option value="IT">IT</option>
         <option value="Marketing">Marketing</option>
     </select>
-    <label class="email">
-        Email: <input class="email_textarea" type="email" name="email" required/>
-    </label>
+    <%--<label class="email">--%>
+        <%--Email: <input class="email_textarea" type="email" name="email" required/>--%>
+    <%--</label>--%>
     <label class="salary">
         Salary: <input class="salary_textarea" type="number" name="salary"/>
     </label>
@@ -80,6 +80,12 @@
         <option value="Remote">Remote</option>
     </select>
     <br/>
+    <label class="titles">
+        Company: <input class="title" type="text" name="company" required/>
+    </label>
+    <%--<label class="titles">--%>
+        <%--End Date: <input class="title" type="date" name="endDate" required/>--%>
+    <%--</label>--%>
     <input type="submit" value="Submit" class="titles"/>
 </form>
 

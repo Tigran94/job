@@ -2,6 +2,7 @@ package clientSide.dao;
 
 import clientSide.dto.JobTitle;
 import clientSide.entities.Post;
+import clientSide.entities.User;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -13,7 +14,9 @@ import java.util.stream.Collectors;
 @Repository
 public class PostDao extends Security {
 
-    public Post addPost(Post post) {
+    public Post addPost(Post post, User user) {
+        post.setUser(user);
+        post.setEmail(user.getEmail());
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.save(post);

@@ -47,7 +47,7 @@ public class MainPageController {
 
         User user = userDao.login(username, password);
         if (user == null) {
-            red.addFlashAttribute("loginConfirmedMain","User not found");
+            red.addFlashAttribute("loginConfirmedMain","*User not found");
             return "redirect:/";
         }else {
             req.getSession().setAttribute("user",user);

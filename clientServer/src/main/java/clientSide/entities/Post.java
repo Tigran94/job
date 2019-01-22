@@ -1,6 +1,9 @@
 package clientSide.entities;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "posts")
@@ -25,8 +28,15 @@ public class Post {
     @Column(name = "workTime",nullable = false)
     private String workTime;
 
-    @Column(name = "email",unique = true,nullable = false)
+    @Column(name="email")
     private String email;
+
+    @Column(name = "company")
+    private String company;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Post(){
 
@@ -87,6 +97,20 @@ public class Post {
     public void setEmail(String email) {
         this.email = email;
     }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public String getCompany(){
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
 
     @Override
     public String toString() {
@@ -97,7 +121,10 @@ public class Post {
                 ", type='" + type + '\'' +
                 ", salary='" + salary + '\'' +
                 ", workTime='" + workTime + '\'' +
-                ", email='" + email + '\'' +
+                ", email='" +email+ '\'' +
                 '}';
     }
+
+
+
 }

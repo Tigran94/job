@@ -112,6 +112,9 @@
     Work Time: ${post.workTime}
     <br/>
     Email: ${post.email}
+    <br/>
+    Company: ${post.company}
+    <br/>
 </div>
 <div class="content">
 

@@ -1,6 +1,10 @@
 package clientSide.entities;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -25,8 +29,19 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @OneToMany(targetEntity = Post.class,cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "user_Id")
+    private Set<Post> posts= new HashSet<>();
+
     public User(){
 
+    }
+    public Set<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
     }
 
     public long getId() {

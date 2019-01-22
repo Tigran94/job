@@ -9,11 +9,15 @@ import java.util.Date;
 @Table(name = "posts")
 public class Post {
 
+    @Temporal(TemporalType.DATE)
+    @Column(name = "postDate",nullable = false)
+    private Date postDate;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "title",unique = true,nullable = false)
+    @Column(name = "title",nullable = false)
     private String title;
 
     @Column(name = "description",nullable = false)
@@ -33,6 +37,10 @@ public class Post {
 
     @Column(name = "company")
     private String company;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "expirationDate",nullable = false)
+    private Date expirationDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -110,6 +118,22 @@ public class Post {
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    public void setExpirationDate(Date expirationDate){
+        this.expirationDate = expirationDate;
+    }
+
+    public Date getExpirationDate(){
+        return this.expirationDate;
+    }
+
+    public void setPostDate(Date postDate){
+        this.postDate  = postDate;
+    }
+
+    public Date getPostDate(){
+        return this.postDate;
     }
 
     @Override

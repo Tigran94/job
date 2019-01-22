@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%--
   Created by IntelliJ IDEA.
   User: user
@@ -52,6 +54,7 @@
         }
     </style>
 </head>
+
 <body>
 <form action="/addPost" method="post">
     <label class="titles">
@@ -83,9 +86,11 @@
     <label class="titles">
         Company: <input class="title" type="text" name="company" required/>
     </label>
-    <%--<label class="titles">--%>
-        <%--End Date: <input class="title" type="date" name="endDate" required/>--%>
-    <%--</label>--%>
+
+    <label class="titles">
+    <input type="date" name="endDate" id="currentDate" required min="">
+    </label>
+
     <input type="submit" value="Submit" class="titles"/>
 </form>
 
@@ -96,4 +101,5 @@
     <input type="submit" value="Back" class="titles"/>
 </form>
 </body>
+<script type="text/javascript" src='<c:url value="/resources/scripts/todaysDate.js"/>'></script>
 </html>

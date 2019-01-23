@@ -1,0 +1,88 @@
+package clientSide.controllers;
+
+import clientSide.dao.UserDao;
+import clientSide.entities.User;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+
+@Controller
+@RequestMapping("/settings")
+public class SettingsController {
+
+    private final UserDao userDao;
+
+    public SettingsController(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public String profileString(HttpServletRequest req) {
+
+        if (req.getSession().getAttribute("user") == null) {
+            return "redirect:/home";
+        }
+        return "settings";
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String changePassword(
+            @RequestParam("currentPassword") String currentPassword,
+            @RequestParam("newPassword") String newPassword,
+            HttpServletRequest req, RedirectAttributes red){
+
+        User user= (User)req.getSession().getAttribute("user");
+
+
+        if(!user.getPassword().equals(currentPassword)){
+            red.addFlashAttribute("passwordChanged","Wrong password");
+            return "redirect:/profile";
+        }
+        else{
+            userDao.changePassword(user,newPassword);
+            red.addFlashAttribute("passwordChanged","Password changed successfully");
+            return "redirect:/profile";
+        }
+    }
+
+    @RequestMapping(value = "/fn",method = RequestMethod.POST)
+    public String changeFirstName(
+            @RequestParam("firstName") String firstName,
+            HttpServletRequest req, RedirectAttributes red){
+
+        User user= (User)req.getSession().getAttribute("user");
+
+
+        if(user.getFirstName().equals(firstName)){
+            red.addFlashAttribute("firstNameChanged","Your name is already "+firstName);
+            return "redirect:/settings";
+        }
+        else{
+            userDao.changeFirstName(user,firstName);
+            red.addFlashAttribute("firstNameChanged","First Name changed successfully");
+            return "redirect:/settings";
+        }
+    }
+    @RequestMapping(value = "/ln",method = RequestMethod.POST)
+    public String changeLastName(
+            @RequestParam("lastName") String lastName,
+            HttpServletRequest req, RedirectAttributes red){
+
+        User user= (User)req.getSession().getAttribute("user");
+
+
+        if(user.getLastName().equals(lastName)){
+            red.addFlashAttribute("lastNameChanged","Your last name is already "+lastName);
+            return "redirect:/settings";
+        }
+        else{
+            userDao.changeLastName(user,lastName);
+            red.addFlashAttribute("lastNameChanged","Last Name changed successfully");
+            return "redirect:/settings";
+        }
+    }
+}

@@ -3,8 +3,9 @@ package clientSide.controllers;
 
 import clientSide.dao.PostDao;
 import clientSide.dto.JobTitle;
-import clientSide.entities.Post;
-import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 
@@ -15,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,6 +25,8 @@ import java.util.List;
 public class HomeController{
     private final PostDao postDao;
 
+    @Autowired
+    private JavaMailSender mailSender;
 
     public HomeController(PostDao postDao) {
         this.postDao = postDao;
@@ -41,10 +41,22 @@ public class HomeController{
             modelMap.addAttribute("hiddenButton","hidden");
         }else{
             user.setUsername(user.getUsername());
+            modelMap.addAttribute("hiddenBack","hidden");
+
         }
 
         modelMap.addAttribute("parameter", user.getUsername());
-        modelMap.addAttribute("jobTitles",postDao.getJobTitlesStream());
+        modelMap.addAttribute("jobTitles",postDao.getJobTitles());
+
+        SimpleMailMessage email = new SimpleMailMessage();
+        email.setTo("tiktor19941994@gmail.com");
+        email.setSubject("asdasd");
+        email.setText("asdjasd");
+
+        // sends the e-mail
+        mailSender.send(email);
+
+
         return "home";
     }
 
@@ -54,7 +66,7 @@ public class HomeController{
         User user = (User) req.getSession().getAttribute("user");
         List<JobTitle> jobTitles;
         if( req.getSession().getAttribute("jobTitles")==null){
-            jobTitles= postDao.getJobTitlesStream();
+            jobTitles= postDao.getJobTitles();
         }else {
             jobTitles = (List<JobTitle>) req.getSession().getAttribute("jobTitles");
         }
@@ -64,6 +76,7 @@ public class HomeController{
             modelAndView.addObject("hiddenButton","hidden");
         }else{
             user.setUsername(user.getUsername());
+            modelAndView.addObject("hiddenBack","hidden");
         }
         modelAndView.addObject("parameter", user.getUsername());
         modelAndView.addObject("jobTitles", jobTitles);
@@ -84,11 +97,13 @@ public class HomeController{
             modelAndView.addObject("hiddenButton","hidden");
         }else{
             user.setUsername(user.getUsername());
+            modelAndView.addObject("hiddenBack","hidden");
+
         }
         modelAndView.addObject("parameter", user.getUsername());
-        modelAndView.addObject("jobTitles",postDao.getJobTitlesStream(type,salary,workTime));
-        req.getSession().setAttribute("jobTitles",postDao.getJobTitlesStream(type,salary,workTime));
-        postDao.getJobTitlesStream(type,salary,workTime);
+        modelAndView.addObject("jobTitles",postDao.getJobTitles(type,salary,workTime));
+        req.getSession().setAttribute("jobTitles",postDao.getJobTitles(type,salary,workTime));
+        postDao.getJobTitles(type,salary,workTime);
         return modelAndView;
     }
 }

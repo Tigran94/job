@@ -28,7 +28,19 @@ public class PostDao extends Security {
         return post;
     }
 
-    public List<JobTitle> getJobTitlesStream() {
+    public void deletePost(long id){
+        Session session = sessionFactory.openSession();
+        Post post;
+        Transaction transaction = session.beginTransaction();
+        post = (Post)session.load(Post.class,id);
+        session.delete(post);
+        transaction.commit();
+        if(transaction.isActive()){
+            session.flush();
+        }
+        session.close();
+    }
+    public List<JobTitle> getJobTitles() {
         Session session = sessionFactory.openSession();
         Query<Post> query = session.createQuery("from Post j", Post.class);
         List<Post> posts = query.getResultList();
@@ -39,14 +51,40 @@ public class PostDao extends Security {
                 .collect(Collectors.toList());
     }
 
-    public List<JobTitle> getJobTitlesStream(String type, String salary, String workTime) {
+    public List<JobTitle> getJobTitles(String email) {
+        Session session = sessionFactory.openSession();
+        Query<Post> query = session.createQuery("from Post j where j.email=:email", Post.class);
+        query.setParameter("email",email);
+        List<Post> posts = query.getResultList();
+
+        return posts
+                .stream()
+                .map(j -> new JobTitle(j.getId(), j.getTitle()))
+                .collect(Collectors.toList());
+    }
+
+    public List<JobTitle> getJobTitles(String type, String salary, String workTime,String... email) {
+        if(email.length!=0)
+            return getJobTitlesStream(type,salary,workTime,email[0]);
+        else
+            return getJobTitlesStream(type,salary,workTime);
+    }
+    public Post getJobAnnouncementByIdWithStream(long id) {
+        Session session = sessionFactory.openSession();
+        Query<Post> query = session.createQuery("from Post j where j.id=:id", Post.class);
+        query.setParameter("id", id);
+
+        return query.getSingleResult();
+    }
+
+    private List<JobTitle> getJobTitlesStream(String type, String salary, String workTime) {
         Session session = sessionFactory.openSession();
         String sql;
         Query<Post> query=null;
         if(!type.equals("") && !salary.equals("") && !workTime.equals("")){
-           sql="from Post j where j.type=:type and j.salary=:salary and j.workTime=:workTime";
-           query = session.createQuery(sql, Post.class);
-           query.setParameter("type",type).setParameter("workTime",workTime).setParameter("salary",salary);
+            sql="from Post j where j.type=:type and j.salary=:salary and j.workTime=:workTime";
+            query = session.createQuery(sql, Post.class);
+            query.setParameter("type",type).setParameter("workTime",workTime).setParameter("salary",salary);
         }else if(!type.equals("") && !salary.equals("")){
             sql="from Post j where j.type=:type and j.salary=:salary";
             query = session.createQuery(sql, Post.class);
@@ -73,7 +111,7 @@ public class PostDao extends Security {
             query = session.createQuery(sql, Post.class);
             query.setParameter("type",type);
         }else{
-            return getJobTitlesStream();
+            return getJobTitles();
         }
 
         List<Post> posts = query.getResultList();
@@ -83,11 +121,48 @@ public class PostDao extends Security {
                 .map(j -> new JobTitle(j.getId(), j.getTitle()))
                 .collect(Collectors.toList());
     }
-    public Post getJobAnnouncementByIdWithStream(long id) {
+    private List<JobTitle> getJobTitlesStream(String type, String salary, String workTime,String email) {
         Session session = sessionFactory.openSession();
-        Query<Post> query = session.createQuery("from Post j where j.id=:id", Post.class);
-        query.setParameter("id", id);
+        String sql;
+        Query<Post> query=null;
+        if(!type.equals("") && !salary.equals("") && !workTime.equals("")){
+            sql="from Post j where j.type=:type and j.salary=:salary and j.workTime=:workTime and j.email=:email";
+            query = session.createQuery(sql, Post.class);
+            query.setParameter("type",type).setParameter("workTime",workTime).setParameter("salary",salary).setParameter("email",email);
+        }else if(!type.equals("") && !salary.equals("")){
+            sql="from Post j where j.type=:type and j.salary=:salary and j.email=:email";
+            query = session.createQuery(sql, Post.class);
+            query.setParameter("type",type).setParameter("salary",salary).setParameter("email",email);
+        }
+        else if(!type.equals("") && !workTime.equals("")){
+            sql="from Post j where j.type=:type and j.workTime=:workTime and j.email=:email";
+            query = session.createQuery(sql, Post.class);
+            query.setParameter("type",type).setParameter("workTime",workTime).setParameter("email",email);
+        }else if(!salary.equals("") && !workTime.equals("")){
+            sql="from Post j where j.salary=:salary and j.workTime=:workTime and j.email=:email";
+            query = session.createQuery(sql, Post.class);
+            query.setParameter("salary",salary).setParameter("workTime",workTime).setParameter("email",email);
+        }else if(!salary.equals("")){
+            sql="from Post j where j.salary=:salary and j.email=:email";
+            query = session.createQuery(sql, Post.class);
+            query.setParameter("salary",salary).setParameter("email",email);
+        }else if(!workTime.equals("")){
+            sql="from Post j where j.workTime=:workTime and j.email=:email";
+            query = session.createQuery(sql, Post.class);
+            query.setParameter("workTime",workTime).setParameter("email",email);
+        }else if(!type.equals("")){
+            sql="from Post j where j.type=:type and j.email=:email";
+            query = session.createQuery(sql, Post.class);
+            query.setParameter("type",type).setParameter("email",email);
+        }else{
+            return getJobTitles(email);
+        }
 
-        return query.getSingleResult();
+        List<Post> posts = query.getResultList();
+
+        return posts
+                .stream()
+                .map(j -> new JobTitle(j.getId(), j.getTitle()))
+                .collect(Collectors.toList());
     }
 }

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class UserDao extends Security {
 
     public User login(String username, String password) {
+
         User loggedInUser = null;
         Session session = sessionFactory.openSession();
         User user = new User();
@@ -86,5 +87,32 @@ public class UserDao extends Security {
         }
         session.close();
     }
+    public void changeFirstName(User user,String firstName){
+        Session session = sessionFactory.openSession();
 
+        user.setFirstName(firstName);
+
+        Transaction transaction = session.beginTransaction();
+        session.update(user);
+        transaction.commit();
+
+        if(transaction.isActive()){
+            session.flush();
+        }
+        session.close();
+    }
+    public void changeLastName(User user,String lastName){
+        Session session = sessionFactory.openSession();
+
+        user.setLastName(lastName);
+
+        Transaction transaction = session.beginTransaction();
+        session.update(user);
+        transaction.commit();
+
+        if(transaction.isActive()){
+            session.flush();
+        }
+        session.close();
+    }
 }

@@ -3,14 +3,12 @@ package clientSide.controllers;
 import clientSide.dao.UserDao;
 import clientSide.entities.User;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/signup")
@@ -24,7 +22,7 @@ public class SignUpController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String signupString(ModelMap modelMap){
+    public String signupString(){
         return "signup";
     }
 

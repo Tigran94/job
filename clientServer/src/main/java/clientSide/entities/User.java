@@ -30,6 +30,12 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "roleName", columnDefinition = "VARCHAR(255) default \"ROLE_ADMIN\"",nullable = false)
+    private String roleName;
+
+    @Column(name = "isActive",columnDefinition = "boolean default 1",nullable = false)
+    private boolean isActive;
+
     @OneToMany(targetEntity = Post.class,cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_Id")
     private Set<Post> posts= new HashSet<>();
@@ -93,15 +99,34 @@ public class User {
         this.password = password;
     }
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", userName='" + username + '\'' +
+                ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", roleName='" + roleName + '\'' +
+                ", isActive=" + isActive +
+                ", posts=" + posts +
                 '}';
     }
 }

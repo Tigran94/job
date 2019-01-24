@@ -2,7 +2,9 @@ package clientSide.dao;
 
 import clientSide.entities.User;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
@@ -10,7 +12,10 @@ import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 
 @Repository
-public class UserDao extends Security {
+public class UserDao{
+
+    @Autowired
+    SessionFactory sessionFactory;
 
     public User login(String username, String password) {
 

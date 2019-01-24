@@ -3,6 +3,9 @@ package clientSide.controllers;
 import clientSide.dao.Security;
 import clientSide.dao.UserDao;
 import clientSide.entities.User;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,15 +38,23 @@ public class LoginController {
                               @RequestParam("password") String password,
                               HttpServletResponse resp,
                               HttpServletRequest req, RedirectAttributes red){
-
-        User user = userDao.login(username, password);
-        if (user == null) {
-            red.addFlashAttribute("loginConfirmedLogin","*User not found");
-            return "redirect:/login";
-        }else {
-            req.getSession().setAttribute("user",user);
-            return "redirect:/home";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication != null &&
+                !(authentication instanceof AnonymousAuthenticationToken)) {
+            return "redirect:/";
         }
+
+        return "home";
+
+
+//        User user = userDao.login(username, password);
+//        if (user == null) {
+//            red.addFlashAttribute("loginConfirmedLogin","*User not found");
+//            return "redirect:/login";
+//        }else {
+//            req.getSession().setAttribute("user",user);
+//            return "redirect:/home";
+//        }
 
     }
 }

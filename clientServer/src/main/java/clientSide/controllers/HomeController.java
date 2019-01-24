@@ -50,7 +50,7 @@ public class HomeController{
 
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo("tiktor19941994@gmail.com");
-        email.setSubject("asdasd");
+        email.setSubject("asdasdad");
         email.setText("asdjasd");
 
         // sends the e-mail

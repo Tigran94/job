@@ -4,15 +4,20 @@ import clientSide.dto.JobTitle;
 import clientSide.entities.Post;
 import clientSide.entities.User;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
-public class PostDao extends Security {
+public class PostDao {
+
+    @Autowired
+    SessionFactory sessionFactory;
 
     public Post addPost(Post post, User user) {
         post.setUser(user);

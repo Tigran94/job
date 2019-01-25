@@ -3,6 +3,8 @@ package clientSide.controllers;
 import clientSide.dao.PostDao;
 import clientSide.entities.Post;
 import clientSide.entities.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,10 +30,7 @@ public class AddPostController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String addPost(Post post, HttpServletRequest req){
-        User user=null;
-        if(req.getSession().getAttribute("user") instanceof User){
-            user = (User) req.getSession().getAttribute("user");
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String[] date = req.getParameter("endDate").split("-");
 
@@ -42,8 +41,8 @@ public class AddPostController {
         post.setPostDate(new Date());
         post.setExpirationDate(new GregorianCalendar(year,month,day).getTime());
 
-        postDao.addPost(post,user);
+        postDao.addPost(post,authentication);
 
-        return "redirect:/home";
+        return "redirect:/";
     }
 }

@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,10 +20,13 @@ public class PostDao {
     @Autowired
     SessionFactory sessionFactory;
 
-    public Post addPost(Post post, User user) {
-        post.setUser(user);
-        post.setEmail(user.getEmail());
+    public Post addPost(Post post, Authentication user) {
         Session session = sessionFactory.openSession();
+        Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",user.getName());
+        User user1 = (User) query.getSingleResult();
+
+        post.setUser(user1);
+        post.setEmail(user1.getEmail());
         Transaction transaction = session.beginTransaction();
         session.save(post);
         transaction.commit();
@@ -56,11 +60,14 @@ public class PostDao {
                 .collect(Collectors.toList());
     }
 
-    public List<JobTitle> getJobTitles(String email) {
+    public List<JobTitle> getJobTitles(String username) {
         Session session = sessionFactory.openSession();
-        Query<Post> query = session.createQuery("from Post j where j.email=:email", Post.class);
-        query.setParameter("email",email);
-        List<Post> posts = query.getResultList();
+        Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",username);
+        User user1 = (User) query.getSingleResult();
+
+        Query<Post> query2 = session.createQuery("from Post j where j.email=:email", Post.class);
+        query2.setParameter("email",user1.getEmail());
+        List<Post> posts = query2.getResultList();
 
         return posts
                 .stream()

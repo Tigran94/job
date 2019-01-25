@@ -27,26 +27,23 @@ public class LoginController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String homePageString(HttpServletRequest req) {
-        if(req.getSession().getAttribute("user")!=null){
-            return "redirect:/home";
-        }return "login";
-    }
+    public String login() {
 
-    @RequestMapping(method = RequestMethod.POST)
-    public String loginString(@RequestParam("username") String username,
-                              @RequestParam("password") String password,
-                              HttpServletResponse resp,
-                              HttpServletRequest req, RedirectAttributes red){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication != null &&
                 !(authentication instanceof AnonymousAuthenticationToken)) {
-            return "redirect:/";
+            return "redirect:/index";
         }
 
-        return "home";
+        return "login";
+    }
 
-
+//    @RequestMapping(method = RequestMethod.POST)
+//    public String loginString(@RequestParam("username") String username,
+//                              @RequestParam("password") String password,
+//                              HttpServletResponse resp,
+//                              HttpServletRequest req, RedirectAttributes red){
+//
 //        User user = userDao.login(username, password);
 //        if (user == null) {
 //            red.addFlashAttribute("loginConfirmedLogin","*User not found");
@@ -55,6 +52,6 @@ public class LoginController {
 //            req.getSession().setAttribute("user",user);
 //            return "redirect:/home";
 //        }
-
-    }
+//
+//    }
 }

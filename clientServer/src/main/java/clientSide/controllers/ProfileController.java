@@ -4,6 +4,9 @@ import clientSide.dao.PostDao;
 import clientSide.dto.JobTitle;
 import clientSide.entities.Post;
 import clientSide.entities.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -27,28 +31,27 @@ public class ProfileController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String profileString(HttpServletRequest req, ModelMap modelMap){
-
-        User user =(User)req.getSession().getAttribute("user");
-        if(user == null){
-            return "redirect:/home";
-        }
-        modelMap.addAttribute("jobTitles",postDao.getJobTitles(user.getEmail()));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        modelMap.addAttribute("jobTitles",postDao.getJobTitles(authentication.getName()));
         modelMap.addAttribute("hiddenContent","hidden");
         return "profile";
     }
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String logOutString(HttpServletRequest req){
-        req.getSession().setAttribute("user",null);
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
         return "redirect:/";
     }
 
     @RequestMapping(value = "/{jobId}", method = RequestMethod.GET)
     public ModelAndView getJobById(@PathVariable("jobId") long id, HttpServletRequest req) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ModelAndView modelAndView = new ModelAndView("profile");
-        User user = (User) req.getSession().getAttribute("user");
         List<JobTitle> jobTitles;
         if( req.getSession().getAttribute("jobTitles")==null){
-            jobTitles= postDao.getJobTitles(user.getEmail());
+            jobTitles= postDao.getJobTitles(authentication.getName());
         }else {
             jobTitles = (List<JobTitle>) req.getSession().getAttribute("jobTitles");
         }
@@ -56,7 +59,6 @@ public class ProfileController {
         modelAndView.addObject("post", postDao.getJobAnnouncementByIdWithStream(id));
         return modelAndView;
     }
-
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView homeString(HttpServletRequest req,
                                    @RequestParam("type") String type,

@@ -2,6 +2,8 @@ package clientSide.controllers;
 
 import clientSide.dao.UserDao;
 import clientSide.entities.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,10 +24,6 @@ public class SettingsController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String profileString(HttpServletRequest req) {
-
-        if (req.getSession().getAttribute("user") == null) {
-            return "redirect:/home";
-        }
         return "settings";
     }
 
@@ -35,7 +33,9 @@ public class SettingsController {
             @RequestParam("newPassword") String newPassword,
             HttpServletRequest req, RedirectAttributes red){
 
-        User user= (User)req.getSession().getAttribute("user");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        User user= userDao.getUser(authentication.getName());
 
 
         if(!user.getPassword().equals(currentPassword)){
@@ -54,7 +54,9 @@ public class SettingsController {
             @RequestParam("firstName") String firstName,
             HttpServletRequest req, RedirectAttributes red){
 
-        User user= (User)req.getSession().getAttribute("user");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        User user= userDao.getUser(authentication.getName());
 
 
         if(user.getFirstName().equals(firstName)){
@@ -72,7 +74,9 @@ public class SettingsController {
             @RequestParam("lastName") String lastName,
             HttpServletRequest req, RedirectAttributes red){
 
-        User user= (User)req.getSession().getAttribute("user");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        User user= userDao.getUser(authentication.getName());
 
 
         if(user.getLastName().equals(lastName)){

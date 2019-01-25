@@ -4,7 +4,9 @@ import clientSide.entities.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
@@ -119,5 +121,11 @@ public class UserDao{
             session.flush();
         }
         session.close();
+    }
+
+    public User getUser(String username) {
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",username);
+        return  (User) query.getSingleResult();
     }
 }

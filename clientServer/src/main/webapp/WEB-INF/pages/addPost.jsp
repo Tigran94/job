@@ -160,6 +160,8 @@
                 <input type="submit" value="Submit" id="subm"/>
             </div>
         </div>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
     </form>
 </div>
 </body>

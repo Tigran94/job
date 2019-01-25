@@ -6,6 +6,8 @@ import clientSide.dto.JobTitle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 
@@ -21,7 +23,7 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/home")
+@RequestMapping("/")
 public class HomeController{
     private final PostDao postDao;
 
@@ -34,51 +36,48 @@ public class HomeController{
 
     @RequestMapping(method = RequestMethod.GET)
     public String homeString(ModelMap modelMap,HttpServletRequest req){
-        User user = (User) req.getSession().getAttribute("user");
-        if(user==null || user.getUsername().equals("Anonymous")) {
-            user = new User();
-            user.setUsername("Anonymous");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.getName().equals("anonymousUser")) {
             modelMap.addAttribute("hiddenButton","hidden");
-        }else{
-            user.setUsername(user.getUsername());
-            modelMap.addAttribute("hiddenBack","hidden");
-
+        } else{
+            modelMap.addAttribute("hiddenLogin","hidden");
+            modelMap.addAttribute("hiddenSignUp","hidden");
         }
 
-        modelMap.addAttribute("parameter", user.getUsername());
+        modelMap.addAttribute("parameter", authentication.getName());
         modelMap.addAttribute("jobTitles",postDao.getJobTitles());
 
-        SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo("tiktor19941994@gmail.com");
-        email.setSubject("asdasdad");
-        email.setText("asdjasd");
+//        SimpleMailMessage email = new SimpleMailMessage();
+//        email.setTo("tiktor19941994@gmail.com");
+//        email.setSubject("asdasdad");
+//        email.setText("asdjasd");
+//
+//        // sends the e-mail
+//        mailSender.send(email);
 
-        // sends the e-mail
-        mailSender.send(email);
 
-
-        return "home";
+        return "index";
     }
 
     @RequestMapping(value = "/{jobId}", method = RequestMethod.GET)
     public ModelAndView getJobById(@PathVariable("jobId") long id,HttpServletRequest req) {
         ModelAndView modelAndView = new ModelAndView("posts");
-        User user = (User) req.getSession().getAttribute("user");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         List<JobTitle> jobTitles;
         if( req.getSession().getAttribute("jobTitles")==null){
             jobTitles= postDao.getJobTitles();
         }else {
             jobTitles = (List<JobTitle>) req.getSession().getAttribute("jobTitles");
         }
-        if(user==null || user.getUsername().equals("Anonymous")) {
-            user = new User();
-            user.setUsername("Anonymous");
+        if(authentication.getName().equals("anonymousUser")) {
             modelAndView.addObject("hiddenButton","hidden");
-        }else{
-            user.setUsername(user.getUsername());
-            modelAndView.addObject("hiddenBack","hidden");
+        } else{
+            modelAndView.addObject("hiddenLogin","hidden");
+            modelAndView.addObject("hiddenSignUp","hidden");
+
         }
-        modelAndView.addObject("parameter", user.getUsername());
+        modelAndView.addObject("parameter", authentication.getName());
         modelAndView.addObject("jobTitles", jobTitles);
         modelAndView.addObject("post", postDao.getJobAnnouncementByIdWithStream(id));
         return modelAndView;

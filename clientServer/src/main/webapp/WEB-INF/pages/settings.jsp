@@ -92,7 +92,7 @@
 </head>
 <body>
 <div class="header">
-    <a href="#">Back</a>
+    <a href="/profile">Back</a>
 </div>
 <div class="main">
     <div class="wind">
@@ -118,6 +118,8 @@
                     <span class="err">${firstNameChanged}</span>
                 </div>
             </div>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
         </form>
     </div>
     <div class="wind">
@@ -143,6 +145,8 @@
                     <span class="err">${lastNameChanged}</span>
                 </div>
             </div>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
         </form>
     </div>
     <div class="wind">
@@ -176,6 +180,8 @@
                     <span class="err">${passwordChanged}</span>
                 </div>
             </div>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
         </form>
     </div>
 </div>

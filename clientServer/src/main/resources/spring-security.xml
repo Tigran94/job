@@ -6,10 +6,15 @@
 
     <http >
         <form-login login-page="/login" username-parameter="username" password-parameter="password"/>
-        <intercept-url pattern="/" access="permitAll()"/>
-        <!--<intercept-url pattern="/settings" access="hasRole('ADMIN')"/>-->
-    </http>
 
+        <intercept-url pattern="/" access="permitAll()" />
+        <intercept-url pattern="/login" access="permitAll()"/>
+        <intercept-url pattern="/home" access="permitAll()"/>
+        <intercept-url pattern="/profile" access="permitAll()"/>
+        <intercept-url pattern="/addPost" access="permitAll()"/>
+        <intercept-url pattern="/settings" access="permitAll()"/>
+
+    </http>
 
 
     <authentication-manager>

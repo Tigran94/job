@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.List;
 
 
@@ -34,9 +35,26 @@ public class HomeController{
     @RequestMapping(method = RequestMethod.GET)
     public String homeString(ModelMap modelMap,HttpServletRequest req){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String rootImagePath = System.getProperty("catalina.home") + File.separator + "images";
+
         if(authentication.getName().equals("anonymousUser")) {
             modelMap.addAttribute("hiddenButton","hidden");
+            File file = new File(rootImagePath + File.separator +
+                    "anonymous" + File.separator);
+            if(!file.exists()){
+                file.mkdirs();
+            }
+            modelMap.addAttribute("imageSource","images/anonymous/image.jpg");
         } else{
+            String userName = authentication.getName();
+            File avatarFile = new File(rootImagePath + File.separator + userName);
+            String avatarPath = "images/default/question-mark.jpg";
+
+            if(avatarFile.exists()){
+                avatarPath = "images" + File.separator + userName + File.separator + "image.jpg";
+            }
+            modelMap.addAttribute("imageSource",avatarPath);
             modelMap.addAttribute("hiddenLogin","hidden");
             modelMap.addAttribute("hiddenSignUp","hidden");
         }

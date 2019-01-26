@@ -34,7 +34,7 @@ public class UploadFileController {
                 byte[] bytes = file.getBytes();
                 String rootPath = System.getProperty("catalina.home");
                 String userName = authentication.getName();
-                File dir = new File(rootPath + File.separator + "pictures" + File.separator + userName);
+                File dir = new File(rootPath + File.separator + "images" + File.separator + userName);
 
                 if(!dir.exists()){
                     dir.mkdirs();

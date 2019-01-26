@@ -2,7 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+http://www.springframework.org/schema/tx ">
 
     <mvc:annotation-driven/>
     <context:component-scan base-package="clientSide"/>
@@ -13,22 +14,22 @@
     </bean>
 
     <mvc:resources mapping="/resources/**" location="/resources/" cache-period="61556925"/>
-
+    <mvc:resources mapping="/images/**" location="file:${catalina.home}/images/"/>
 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="smtp.gmail.com" />
-        <property name="port" value="587" />
-        <property name="username" value="jobproject2019" />
-		<property name="password" value="tigran94!" />
+        <property name="host" value="smtp.gmail.com"/>
+        <property name="port" value="587"/>
+        <property name="username" value="jobproject2019"/>
+        <property name="password" value="tigran94!"/>
 
-		<property name="javaMailProperties">
-        <props>
-            <prop key="mail.transport.protocol">smtp</prop>
-            <prop key="mail.smtp.auth">true</prop>
-            <prop key="mail.smtp.starttls.enable">true</prop>
-            <prop key="mail.debug">true</prop>
-        </props>
-    </property>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.debug">true</prop>
+            </props>
+        </property>
     </bean>
 
     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
@@ -41,12 +42,12 @@
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:8889/job"/>
-        <property name="username" value="Tigran"/>
-        <property name="password" value="tigran94"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/job"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
     </bean>
 
-    <bean  id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"></property>
         <property name="packagesToScan" value="clientSide.entities"></property>
         <property name="hibernateProperties">

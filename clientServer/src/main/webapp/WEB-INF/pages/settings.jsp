@@ -185,5 +185,10 @@
         </form>
     </div>
 </div>
+    <form method="POST" action="uploadFile" enctype="multipart/form-data">
+        File to upload: <input type="file" name="image"><br />
+        <input type="submit" value="Upload"> Press here to upload the file!
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </form>
 </body>
 </html>

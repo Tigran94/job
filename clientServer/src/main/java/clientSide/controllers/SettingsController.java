@@ -27,7 +27,7 @@ public class SettingsController {
         return "settings";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/pass",method = RequestMethod.POST)
     public String changePassword(
             @RequestParam("currentPassword") String currentPassword,
             @RequestParam("newPassword") String newPassword,
@@ -35,17 +35,17 @@ public class SettingsController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        User user= userDao.getUser(authentication.getName());
+         User user= userDao.getUser(authentication.getName());
 
 
         if(!user.getPassword().equals(currentPassword)){
             red.addFlashAttribute("passwordChanged","Wrong password");
-            return "redirect:/profile";
+            return "redirect:/settings";
         }
         else{
-            userDao.changePassword(user,newPassword);
+            userDao.changePassword(authentication,newPassword);
             red.addFlashAttribute("passwordChanged","Password changed successfully");
-            return "redirect:/profile";
+            return "redirect:/settings";
         }
     }
 
@@ -64,11 +64,12 @@ public class SettingsController {
             return "redirect:/settings";
         }
         else{
-            userDao.changeFirstName(user,firstName);
+            userDao.changeFirstName(authentication,firstName);
             red.addFlashAttribute("firstNameChanged","First Name changed successfully");
             return "redirect:/settings";
         }
     }
+
     @RequestMapping(value = "/ln",method = RequestMethod.POST)
     public String changeLastName(
             @RequestParam("lastName") String lastName,
@@ -84,7 +85,7 @@ public class SettingsController {
             return "redirect:/settings";
         }
         else{
-            userDao.changeLastName(user,lastName);
+            userDao.changeLastName(authentication,lastName);
             red.addFlashAttribute("lastNameChanged","Last Name changed successfully");
             return "redirect:/settings";
         }

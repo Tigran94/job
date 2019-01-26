@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
@@ -76,17 +77,23 @@ public class UserDao{
             messages.add("This email is already taken");
         }
 
+        session.close();
 
         return messages.toString().substring(1,messages.toString().length()-1);
     }
 
-    public  void changePassword(User user,String newPassword){
+//    @Transactional
+    public  void changePassword(Authentication authUser, String newPassword){
         Session session = sessionFactory.openSession();
 
-        user.setPassword(newPassword);
+        Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",authUser.getName());
+        User user1 = (User) query.getSingleResult();
+
+
+        user1.setPassword(newPassword);
 
         Transaction transaction = session.beginTransaction();
-        session.update(user);
+        session.update(user1);
         transaction.commit();
 
         if(transaction.isActive()){
@@ -94,13 +101,17 @@ public class UserDao{
         }
         session.close();
     }
-    public void changeFirstName(User user,String firstName){
-        Session session = sessionFactory.openSession();
 
-        user.setFirstName(firstName);
+//    @Transactional
+    public void changeFirstName(Authentication authUser,String firstName){
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",authUser.getName());
+        User user1 = (User) query.getSingleResult();
+
+        user1.setFirstName(firstName);
 
         Transaction transaction = session.beginTransaction();
-        session.update(user);
+        session.update(user1);
         transaction.commit();
 
         if(transaction.isActive()){
@@ -108,13 +119,18 @@ public class UserDao{
         }
         session.close();
     }
-    public void changeLastName(User user,String lastName){
-        Session session = sessionFactory.openSession();
 
-        user.setLastName(lastName);
+//    @Transactional
+
+    public void changeLastName(Authentication authUser,String lastName){
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",authUser.getName());
+        User user1 = (User) query.getSingleResult();
+
+        user1.setLastName(lastName);
 
         Transaction transaction = session.beginTransaction();
-        session.update(user);
+        session.update(user1);
         transaction.commit();
 
         if(transaction.isActive()){
@@ -126,6 +142,8 @@ public class UserDao{
     public User getUser(String username) {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",username);
+        session.close();
+
         return  (User) query.getSingleResult();
     }
 }

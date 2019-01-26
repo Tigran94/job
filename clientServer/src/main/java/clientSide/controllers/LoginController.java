@@ -1,6 +1,5 @@
 package clientSide.controllers;
 
-import clientSide.dao.Security;
 import clientSide.dao.UserDao;
 import clientSide.entities.User;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;

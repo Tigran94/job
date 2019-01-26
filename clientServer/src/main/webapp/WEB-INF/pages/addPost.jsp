@@ -86,7 +86,7 @@
 <body>
 <div class="header">
     <a href="/profile">Back</a>
-    <a href="/home">Home</a>
+    <a href="/">Home</a>
 </div>
 <div class="main">
     <form action="/addPost" method="post">

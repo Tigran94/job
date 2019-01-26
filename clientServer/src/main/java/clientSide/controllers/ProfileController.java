@@ -64,13 +64,14 @@ public class ProfileController {
                                    @RequestParam("type") String type,
                                    @RequestParam("workTime") String workTime,
                                    @RequestParam("salary") String salary){
-        User user = (User) req.getSession().getAttribute("user");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         ModelAndView modelAndView = new ModelAndView("profile");
         modelAndView.addObject("hiddenContent","hidden");
 
-        modelAndView.addObject("jobTitles",postDao.getJobTitles(type,salary,workTime,user.getEmail()));
-        req.getSession().setAttribute("jobTitles",postDao.getJobTitles(type,salary,workTime,user.getEmail()));
-        postDao.getJobTitles(type,salary,workTime,user.getEmail());
+        modelAndView.addObject("jobTitles",postDao.getJobTitles(type,salary,workTime,authentication));
+        req.getSession().setAttribute("jobTitles",postDao.getJobTitles(type,salary,workTime,authentication));
+        postDao.getJobTitles(type,salary,workTime,authentication);
         return modelAndView;
     }
 

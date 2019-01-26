@@ -4,14 +4,11 @@ package clientSide.controllers;
 import clientSide.dao.PostDao;
 import clientSide.dto.JobTitle;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-
-import clientSide.entities.User;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,7 +53,7 @@ public class HomeController{
 //        mailSender.send(email);
 
 
-        return "index";
+        return "home";
     }
 
     @RequestMapping(value = "/{jobId}", method = RequestMethod.GET)
@@ -88,18 +85,16 @@ public class HomeController{
                              @RequestParam("type") String type,
                              @RequestParam("workTime") String workTime,
                              @RequestParam("salary") String salary){
-        User user = (User) req.getSession().getAttribute("user");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ModelAndView modelAndView = new ModelAndView("home");
-        if(user==null || user.getUsername().equals("Anonymous")) {
-            user = new User();
-            user.setUsername("Anonymous");
-            modelAndView.addObject("hiddenButton","hidden");
-        }else{
-            user.setUsername(user.getUsername());
-            modelAndView.addObject("hiddenBack","hidden");
 
+        if(authentication.getName().equals("anonymousUser")) {
+            modelAndView.addObject("hiddenButton","hidden");
+        } else{
+            modelAndView.addObject("hiddenLogin","hidden");
+            modelAndView.addObject("hiddenSignUp","hidden");
         }
-        modelAndView.addObject("parameter", user.getUsername());
+        modelAndView.addObject("parameter", authentication.getName());
         modelAndView.addObject("jobTitles",postDao.getJobTitles(type,salary,workTime));
         req.getSession().setAttribute("jobTitles",postDao.getJobTitles(type,salary,workTime));
         postDao.getJobTitles(type,salary,workTime);

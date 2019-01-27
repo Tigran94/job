@@ -142,8 +142,9 @@ public class UserDao{
     public User getUser(String username) {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",username);
-        session.close();
 
-        return  (User) query.getSingleResult();
+        User user =(User) query.getSingleResult();
+        session.close();
+        return  user;
     }
 }

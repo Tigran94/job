@@ -14,7 +14,7 @@
         <intercept-url pattern="/settings" access="hasRole('ADMIN')"/>
         <intercept-url pattern="/settings/*" access="hasRole('ADMIN')"/>
         <intercept-url pattern="/profile/*" access="hasRole('ADMIN')"/>
-        <intercept-url pattern="/uploadFile" access="permitAll()"/>
+        <intercept-url pattern="/uploadFile" access="hasRole('ADMIN')"/>
 
 
     </http>

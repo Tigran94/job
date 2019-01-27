@@ -185,10 +185,21 @@
         </form>
     </div>
 </div>
-    <form method="POST" action="uploadFile" enctype="multipart/form-data">
-        File to upload: <input type="file" name="image"><br />
-        <input type="submit" value="Upload"> Press here to upload the file!
+<div class="wind">
+    <form method="post" action="/uploadFile" enctype="multipart/form-data">
+        <div class="rows">
+            <div class="lab cnt">
+                <p>Change CV</p>
+            </div>
+        </div>
+        <div class="rows">
+            File to upload: <input type="file" name="image"><br />
+        </div>
+        <div class="rows">
+            <input type="submit" value="Upload"> Press here to upload the file!
+        </div>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
+</div>
 </body>
 </html>

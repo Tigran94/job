@@ -40,21 +40,8 @@ public class HomeController{
 
         if(authentication.getName().equals("anonymousUser")) {
             modelMap.addAttribute("hiddenButton","hidden");
-            File file = new File(rootImagePath + File.separator +
-                    "anonymous" + File.separator);
-            if(!file.exists()){
-                file.mkdirs();
-            }
-            modelMap.addAttribute("imageSource","images/anonymous/image.jpg");
         } else{
-            String userName = authentication.getName();
-            File avatarFile = new File(rootImagePath + File.separator + userName);
-            String avatarPath = "images/default/question-mark.jpg";
 
-            if(avatarFile.exists()){
-                avatarPath = "images" + File.separator + userName + File.separator + "image.jpg";
-            }
-            modelMap.addAttribute("imageSource",avatarPath);
             modelMap.addAttribute("hiddenLogin","hidden");
             modelMap.addAttribute("hiddenSignUp","hidden");
         }

@@ -88,6 +88,14 @@
             font-size: 23px;
             box-shadow: 0px 2px 2px #000;
         }
+        .uploadMessage{
+            left: 37%;
+            position:absolute;
+            width:100%;
+            height: 100%;
+            color:red;
+        }
+
     </style>
 </head>
 <body>
@@ -95,6 +103,7 @@
     <a href="/profile">Back</a>
 </div>
 <div class="main">
+    <h1 class = "uploadMessage">${uploadError}</h1>
     <div class="wind">
         <form action="/settings/fn" method="post">
             <div class="rows">
@@ -193,7 +202,7 @@
             </div>
         </div>
         <div class="rows">
-            File to upload: <input type="file" name="image"><br />
+            File to upload: <input type="file" name="image" accept="application/pdf"><br />
         </div>
         <div class="rows">
             <input type="submit" value="Upload"> Press here to upload the file!

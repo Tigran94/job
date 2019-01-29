@@ -82,7 +82,6 @@ public class UserDao{
         return messages.toString().substring(1,messages.toString().length()-1);
     }
 
-//    @Transactional
     public  void changePassword(Authentication authUser, String newPassword){
         Session session = sessionFactory.openSession();
 
@@ -102,7 +101,6 @@ public class UserDao{
         session.close();
     }
 
-//    @Transactional
     public void changeFirstName(Authentication authUser,String firstName){
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",authUser.getName());

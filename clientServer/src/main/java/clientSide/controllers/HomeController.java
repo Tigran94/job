@@ -1,6 +1,7 @@
 package clientSide.controllers;
 
 
+import clientSide.configuration.SecurityConfig;
 import clientSide.dao.PostDao;
 import clientSide.dto.JobTitle;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.security.Principal;
 import java.util.List;
 
 
@@ -26,15 +28,18 @@ public class HomeController{
     private final PostDao postDao;
 
     @Autowired
-    private JavaMailSender mailSender;
+    SecurityConfig securityConfig;
+
+//    @Autowired
+//    private JavaMailSender mailSender;
 
     public HomeController(PostDao postDao) {
         this.postDao = postDao;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String homeString(ModelMap modelMap,HttpServletRequest req){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public String homeString(ModelMap modelMap, HttpServletRequest req, Authentication authentication){
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String rootImagePath = System.getProperty("catalina.home") + File.separator + "images";
 

@@ -1,0 +1,89 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{../cssFiles/style.css}">
+</head>
+<body>
+<div class="main_signup">
+    <form th:action="/signup" method="post" enctype="multipart/form-data">
+        <div class="rows">
+            <div class="lab">
+                <label for="usnname">Username: </label>
+            </div>
+            <div class="inp">
+                <input class="input_settings" id="usnname" type="text" name="username" placeholder="Username" required/>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <label for="frname">FirstName: </label>
+            </div>
+            <div class="inp">
+                <input class="input_settings" id="frname" type="text" name="firstName" placeholder="FirstName" required/>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <label for="lname">LastName: </label>
+            </div>
+            <div class="inp">
+                <input class="input_settings" id="lname" type="text" name="lastName" placeholder="LastName" required/>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <label for="mail">Email: </label>
+            </div>
+            <div class="inp">
+                <input class="input_settings" id="mail" type="email" name="email" placeholder="Email" required/>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <label for="passw">Password: </label>
+            </div>
+            <div class="inp">
+                <input class="input_settings" id="passw" type="password" name="password" placeholder="Password" required/>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <label for="confpass">Confirm Password: </label>
+            </div>
+            <div class="inp">
+                <input class="input_settings" id="confpass" type="password" name="confirmPassword" placeholder="Confirm Password" required/>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <p class="err" th:text="${passwordConfirmed}"></p>
+                <p class="err" th:text="${registrationFailed}"></p>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <label for="file">Upload your CV: </label>
+            </div>
+            <div class="inp">
+                <input type="file" id="file" name="pdfFile" class="fileInpt" accept="application/pdf">
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <p class="err" th:text="${uploadError}"></p>
+            </div>
+        </div>
+        <div class="rows">
+            <div>
+                <input class="sub" type="submit" value="Submit"/>
+            </div>
+            <div>
+                <a th:href="/" class="sub aa">Cancel</a>
+            </div>
+        </div>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </form>
+</div>
+</body>
+</html>

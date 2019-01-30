@@ -1,0 +1,92 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{../cssFiles/style.css}">
+</head>
+<body>
+<div class="header">
+    <div>
+        <a class="header_buttons" href="/profile">Back</a>
+        <a class="header_buttons" href="/">Home</a>
+    </div>
+</div>
+<div class="main_addPost">
+    <form th:action="/addPost" method="post">
+        <div class="tablerow_addPost">
+            <div class="left_addPost">
+                <label for="title">Title: </label>
+            </div>
+            <div class="right">
+                <input class="input_addPost" id="title" type="text" name="title" placeholder="Title" required/>
+            </div>
+        </div>
+        <div class="tablerow_addPost">
+            <div class="left_addPost">
+                <label for="textarea">Description: </label>
+            </div>
+            <div class="right">
+                <textarea class="input_addPost" id="textarea" name="description" cols="40" rows="4" placeholder="Description" required></textarea>
+            </div>
+        </div>
+        <div class="tablerow_addPost">
+            <div class="left_addPost">
+                <label for="select">Type: </label>
+            </div>
+            <div class="right">
+                <select class="input_addPost" id="select" name="type" class="type">
+                    <option value="" disabled selected>Select your option</option>
+                    <option value="IT">IT</option>
+                    <option value="Marketing">Marketing</option>
+                </select>
+            </div>
+        </div>
+        <div class="tablerow_addPost">
+            <div class="left_addPost">
+                <label for="salary">Salary: </label>
+            </div>
+            <div class="right">
+                <input class="input_addPost" id="salary" type="text" name="salary" placeholder="Salary" required/>
+            </div>
+        </div>
+        <div class="tablerow_addPost">
+            <div class="left_addPost">
+                <label for="time">Work Time: </label>
+            </div>
+            <div class="right">
+                <select class="input_addPost" id="time" name="workTime" class="workTime">
+                    <option value="" disabled selected>Select your option</option>
+                    <option value="Half Time">Half Time</option>
+                    <option value="Full Time">Full Time</option>
+                    <option value="Remote">Remote</option>
+                </select>
+            </div>
+        </div>
+        <div class="tablerow_addPost">
+            <div class="left_addPost">
+                <label for="comp">Company: </label>
+            </div>
+            <div class="right">
+                <input class="input_addPost" id="comp" type="text" name="company" placeholder="Company" required/>
+            </div>
+        </div>
+        <div class="tablerow_addPost">
+            <div class="left_addPost">
+                <label for="currentDate">Date: </label>
+            </div>
+            <div class="right">
+                <input class="input_addPost" type="date" name="endDate" id="currentDate" required min="">
+            </div>
+        </div>
+        <div class="tablerow_addPost">
+            <div class="left_addPost">
+                <input type="submit" value="Submit" id="subm"/>
+            </div>
+        </div>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+    </form>
+</div>
+</body>
+<script type="text/javascript" th:src="@{../jsFiles/todaysDate.js}"/>
+</html>

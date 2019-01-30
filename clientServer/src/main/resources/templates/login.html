@@ -1,0 +1,43 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{../cssFiles/style.css}">
+</head>
+<body>
+<div class="main_login">
+    <form th:action="/login" method="post">
+        <div class="rows">
+            <div class="lab">
+                <label for="usname">Username: </label>
+            </div>
+            <div class="inp">
+                <input id="usname" type="text" name="username" placeholder="Username" required/>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <label for="pass">Password: </label>
+            </div>
+            <div class="inp">
+                <input id="pass" type="password" name="password" placeholder="Password" required/>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <span class="err" th:text="${loginConfirmedLogin}"></span>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <input class="login_login" type="submit" value="Login"/>
+            </div>
+            <div class="inp">
+                <a class="login_login cancel_login" th:href="/">Back</a>
+            </div>
+        </div>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </form>
+</div>
+</body>
+</html>

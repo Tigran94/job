@@ -1,0 +1,78 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{../cssFiles/style.css}">
+</head>
+<body>
+<div class="header">
+    <div>
+        <span>Welcome To Job.am ${parameter} </span>
+        <a class="header_buttons" href="/profile" th:attr="${hiddenButton}"">My Profile</a>
+        
+        <div id="imgdiv">
+            <!-- <img src="<spring:url value='${imageSource}'/>" id="profileImage"> -->
+        </div>
+    </div>
+    <div>
+        <a class="header_buttons" th:href="/login" th:attr="${hiddenLogin}">Login</a>
+        <a class="header_buttons" th:href="/signup" th:attr="${hiddenSignUp}">Sign UP</a>
+        <!-- <a class="header_buttons" href="/" ${hiddenBack}>Back</a> -->
+    </div>
+</div>
+<div class="main_home">
+    <div class="titles">
+        <form id="form" th:action="/" method="post">
+            <div class="formdiv">
+                <div class="labels">
+                    <label for="typename">Type: </label>
+                </div>
+                <div class="vals">
+                    <select name="type" id="typename">
+                        <option></option>
+                        <option value="IT">IT</option>
+                        <option value="Marketing">Marketing</option>
+                    </select>
+                </div>
+            </div>
+            <div class="formdiv">
+                <div class="labels">
+                    <label for="salarytype">Salary: </label>
+                </div>
+                <div class="vals">
+                    <input id="salarytype" type="number" name="salary"/>
+                </div>
+            </div>
+            <div class="formdiv">
+                <div class="labels">
+                    <label for="worktime">Work Time: </label>
+                </div>
+                <div class="vals">
+                    <select id="worktime" name="workTime">
+                        <option></option>
+                        <option value="Half Time">Half Time</option>
+                        <option value="Full Time">Full Time</option>
+                        <option value="Remote">Remote</option>
+                    </select>
+                </div>
+            </div>
+            <div class="formdiv">
+                <input id="filter" type="submit" value="Filter"/>
+            </div>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </form>
+        <div class="mrg">
+            <th:block th:each="jobTitle : ${jobTitles}">
+                <li>
+                    <a th:href="/${jobTitle.id}" th:text="${jobTitle.title}"></a>
+                </li>
+            </th:block>
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+
+    </div>
+</div>
+</body>
+</html>

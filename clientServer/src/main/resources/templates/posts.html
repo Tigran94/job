@@ -1,0 +1,146 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{../cssFiles/style.css}">
+</head>
+<body>
+<div class="header">
+    <div>
+        <span>Welcome To Job.am ${parameter} </span>
+        <a class="header_buttons" th:href="/profile" th:attr="${hiddenButton}"">My Profile</a>
+    </div>
+    <div>
+        <a class="header_buttons" th:href="/login" th:attr="${hiddenLogin}">Login</a>
+        <a class="header_buttons" th:href="/signup" th:attr="${hiddenSignUp}">Sign UP</a>
+        <!-- <a class="header_buttons" href="/" ${hiddenBack}>Back</a> -->
+    </div>
+</div>
+<div class="main_posts">
+    <div class="titles">
+        <form id="form" th:action="/" method="post">
+            <div class="formdiv">
+                <div class="labels">
+                    <label for="typename">Type: </label>
+                </div>
+                <div class="vals">
+                    <select name="type" id="typename">
+                        <option></option>
+                        <option value="IT">IT</option>
+                        <option value="Marketing">Marketing</option>
+                    </select>
+                </div>
+            </div>
+            <div class="formdiv">
+                <div class="labels">
+                    <label for="salarytype">Salary: </label>
+                </div>
+                <div class="vals">
+                    <input id="salarytype" type="number" name="salary"/>
+                </div>
+            </div>
+            <div class="formdiv">
+                <div class="labels">
+                    <label for="worktime">Work Time: </label>
+                </div>
+                <div class="vals">
+                    <select id="worktime" name="workTime">
+                        <option></option>
+                        <option value="Half Time">Half Time</option>
+                        <option value="Full Time">Full Time</option>
+                        <option value="Remote">Remote</option>
+                    </select>
+                </div>
+            </div>
+            <div class="formdiv">
+                <input id="filter" type="submit" value="Filter"/>
+            </div>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </form>
+        <div class="mrg">
+            <ul id="list">
+                <th:block th:each="jobTitle : ${jobTitles}">
+                    <li>
+                        <a th:href="/${jobTitle.id}" th:text="${jobTitle.title}"></a>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+        <div class="tablerow">
+            <div class="left">
+                <p>Title: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.title}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left">
+                <p>Description: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.description}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left">
+                <p>Type: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.type}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left">
+                <p>Salary: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.salary}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left">
+                <p>Work Time: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.workTime}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left">
+                <p>Email: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.email}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left" >
+                <p>Company: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.company}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left" >
+                <p>Expiration Date: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.expirationDate}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left" >
+                <p>Post Date: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.postDate}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

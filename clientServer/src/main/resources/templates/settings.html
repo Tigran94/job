@@ -1,0 +1,128 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{../cssFiles/style.css}">
+</head>
+<body>
+<div class="header">
+    <a class="header_buttons" th:href="/profile">Back</a>
+</div>
+<div class="main_settings">
+    <div class="wind">
+        <form th:action="/settings/fn" method="post">
+            <div class="rows">
+                <div class="cnt">
+                    <p>Change First Name</p>
+                </div>
+            </div>
+            <div class="rows">
+                <div>
+                    <label for="nfname">New First Name: </label>
+                </div>
+                <div class="inp">
+                    <input id="nfname" class="input_settings" placeholder="New First Name" type="text" name="firstName"/>
+                </div>
+            </div>
+            <div class="rows">
+                <div>
+                    <input class="sbmt" type="submit" value="Submit"/>
+                </div>
+                <div class="inp">
+                    <span class="err" th:text="${firstNameChanged}"></span>
+                </div>
+            </div>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+        </form>
+    </div>
+    <div class="wind">
+        <form th:action="/settings/ln" method="post">
+            <div class="rows">
+                <div class="cnt">
+                    <p>Change Last Name</p>
+                </div>
+            </div>
+            <div class="rows">
+                <div>
+                    <label for="nlname">New Last Name: </label>
+                </div>
+                <div class="inp">
+                    <input id="nlname" class="input_settings" placeholder="New Last Name" type="text" name="lastName"/>
+                </div>
+            </div>
+            <div class="rows">
+                <div>
+                    <input class="sbmt" type="submit" value="Submit"/>
+                </div>
+                <div class="inp">
+                    <span class="err" th:attr="${lastNameChanged}"></span>
+                </div>
+            </div>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+        </form>
+    </div>
+    <div class="wind">
+        <form th:action="/settings/pass" method="post">
+            <div class="rows">
+                <div class="cnt">
+                    <p>Change Password</p>
+                </div>
+            </div>
+            <div class="rows">
+                <div>
+                    <label for="cpass">Current Password: </label>
+                </div>
+                <div class="inp">
+                    <input id="cpass" class="input_settings" placeholder="Current Password" type="password" name="currentPassword"/>
+                </div>
+            </div>
+            <div class="rows">
+                <div>
+                    <label for="npass">New Password: </label>
+                </div>
+                <div class="inp">
+                    <input id="npass" class="input_settings" placeholder="New Password" type="password" name="newPassword"/>
+                </div>
+            </div>
+            <div class="rows">
+                <div>
+                    <input class="sbmt" type="submit" value="Submit"/>
+                </div>
+                <div class="inp">
+                    <span class="err" th:text="${passwordChanged}"></span>
+                </div>
+            </div>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+        </form>
+    </div>
+</div>
+<div class="wind">
+    <div class="rows">
+                <div class="cnt">
+                    <p>Change CV</p>
+                </div>
+            </div>
+            <div class="rows">
+                <div>
+                    <label for="cpass">File to upload: </label>
+                </div>
+                <div class="inp">
+                    <input type="file" name="image" accept="application/pdf">
+                </div>
+            </div>
+            <div class="rows">
+                <div>
+                    <input class="sbmt" type="submit" value="Upload">
+                </div>
+                <div class="inp">
+                    <span class="err" th:text="${uploadError}"></span>
+                </div>
+            </div>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </form>
+</div>
+</body>
+</html>

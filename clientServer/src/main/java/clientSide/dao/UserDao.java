@@ -1,60 +1,82 @@
 package clientSide.dao;
 
+import clientSide.dto.UserDTO;
 import clientSide.entities.User;
+import clientSide.repositories.UserRepository;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Optional;
 
 @Repository
-public class UserDao{
+public class UserDao implements UserDetailsService {
 
-    @Autowired
-    SessionFactory sessionFactory;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
-    public User login(String username, String password) {
-
-        User loggedInUser = null;
-        Session session = sessionFactory.openSession();
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        Transaction transaction = session.beginTransaction();
-        TypedQuery<User> query = session.createQuery("from User h where h.username = :userName and h.password = :password", User.class);
-        query.setParameter("userName", user.getUsername());
-        query.setParameter("password", user.getPassword());
-
-        transaction.commit();
-        try {
-            loggedInUser = query.getSingleResult();
-
-        }catch (NoResultException e){
-        }
-        if(transaction.isActive()){
-            session.flush();
-        }
-        session.close();
-        return loggedInUser;
+    public UserDao(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
     }
 
-    public  User registerUser(User user){
+//    public User login(String username, String password) {
+//
+//        User loggedInUser = null;
+//        Session session = sessionFactory.openSession();
+//        User user = new User();
+//        user.setUsername(username);
+//        user.setPassword(password);
+//        Transaction transaction = session.beginTransaction();
+//        TypedQuery<User> query = session.createQuery("from User h where h.username = :userName and h.password = :password", User.class);
+//        query.setParameter("userName", user.getUsername());
+//        query.setParameter("password", user.getPassword());
+//
+//        transaction.commit();
+//        try {
+//            loggedInUser = query.getSingleResult();
+//
+//        }catch (NoResultException e){
+//        }
+//        if(transaction.isActive()){
+//            session.flush();
+//        }
+//        session.close();
+//        return loggedInUser;
+//    }
 
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(user);
-        transaction.commit();
-        if(transaction.isActive()){
-            session.flush();
-        }
-        session.close();
-        return user;
+    public  void registerUser(UserDTO userDao){
+        User user = new User();
+        user.setEmail(userDao.getEmail());
+        user.setFirstName(userDao.getFirstName());
+        user.setLastName(userDao.getLastName());
+        user.setUsername(userDao.getUsername());
+        user.setPassword(passwordEncoder.encode(userDao.getPassword()));
+        userRepository.save(user);
+
+        SecurityContextHolder.getContext()
+                .setAuthentication(
+                        new UsernamePasswordAuthenticationToken(
+                                userDao.getEmail(),
+                                userDao.getPassword(),
+                                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")))
+                );
     }
 
     public String checkIfUserExists(String username, String email){
@@ -81,7 +103,6 @@ public class UserDao{
         return messages.toString().substring(1,messages.toString().length()-1);
     }
 
-//    @Transactional
     public  void changePassword(Authentication authUser, String newPassword){
         Session session = sessionFactory.openSession();
 
@@ -101,7 +122,6 @@ public class UserDao{
         session.close();
     }
 
-//    @Transactional
     public void changeFirstName(Authentication authUser,String firstName){
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",authUser.getName());
@@ -118,8 +138,6 @@ public class UserDao{
         }
         session.close();
     }
-
-//    @Transactional
 
     public void changeLastName(Authentication authUser,String lastName){
         Session session = sessionFactory.openSession();
@@ -139,11 +157,19 @@ public class UserDao{
     }
 
     public User getUser(String username) {
-        Session session = sessionFactory.openSession();
-        Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",username);
-
-        User user =(User) query.getSingleResult();
-        session.close();
+        Optional<User> username1 = userRepository.findByUsername(username);
+        User user =  username1.get();
         return  user;
+    }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username).map(user -> new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"))
+        ))
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 }

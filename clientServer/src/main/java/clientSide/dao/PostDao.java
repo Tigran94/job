@@ -3,11 +3,8 @@ package clientSide.dao;
 import clientSide.dto.JobTitle;
 import clientSide.entities.Post;
 import clientSide.entities.User;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
+import clientSide.repositories.PostRepository;
+import clientSide.repositories.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
 
@@ -17,44 +14,33 @@ import java.util.stream.Collectors;
 @Repository
 public class PostDao {
 
-    @Autowired
-    SessionFactory sessionFactory;
+    private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
-    public Post addPost(Post post, Authentication user) {
-        Session session = sessionFactory.openSession();
-        Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",user.getName());
-        User user1 = (User) query.getSingleResult();
+    public PostDao(UserRepository userRepository,PostRepository postRepository) {
+        this.userRepository = userRepository;
+        this.postRepository = postRepository;
+    }
 
-        post.setUser(user1);
-        post.setEmail(user1.getEmail());
-        Transaction transaction = session.beginTransaction();
-        session.save(post);
-        transaction.commit();
-        if(transaction.isActive()){
-            session.flush();
-        }
-        session.close();
+    public Post addPost(Post post, Authentication authUser) {
+        User user = userRepository.findByUsername(authUser.getName()).orElse(null);
+
+        post.setUser(user);
+        post.setEmail(user.getEmail());
+
+        postRepository.save(post);
+
         return post;
     }
 
     public void deletePost(long id){
-        Session session = sessionFactory.openSession();
-        Post post;
-        Transaction transaction = session.beginTransaction();
-        post = session.load(Post.class,id);
-        session.delete(post);
-        transaction.commit();
-        if(transaction.isActive()){
-            session.flush();
-        }
-        session.close();
+        Post post =  postRepository.findById(id).orElse(null);
+        postRepository.delete(post);
     }
-    public List<JobTitle> getJobTitles() {
-        Session session = sessionFactory.openSession();
-        Query<Post> query = session.createQuery("from Post j", Post.class);
-        List<Post> posts = query.getResultList();
 
-        session.close();
+    public List<JobTitle> getJobTitles() {
+
+        List<Post> posts = (List<Post>)postRepository.findAll();
         return posts
                 .stream()
                 .map(j -> new JobTitle(j.getId(), j.getTitle()))
@@ -62,14 +48,10 @@ public class PostDao {
     }
 
     public List<JobTitle> getJobTitles(String username) {
-        Session session = sessionFactory.openSession();
-        Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",username);
-        User user1 = (User) query.getSingleResult();
+        User user = userRepository.findByUsername(username).orElse(null);
 
-        Query<Post> query2 = session.createQuery("from Post j where j.email=:email", Post.class);
-        query2.setParameter("email",user1.getEmail());
-        List<Post> posts = query2.getResultList();
-        session.close();
+        List<Post> posts = postRepository.findByEmail(user.getEmail());
+
         return posts
                 .stream()
                 .map(j -> new JobTitle(j.getId(), j.getTitle()))
@@ -84,101 +66,69 @@ public class PostDao {
             return getJobTitlesStream(type,salary,workTime);
     }
     public Post getJobAnnouncementByIdWithStream(long id) {
-        Session session = sessionFactory.openSession();
-        Query<Post> query = session.createQuery("from Post j where j.id=:id", Post.class);
-        query.setParameter("id", id);
-
-        Post singleResult = query.getSingleResult();
-        session.close();
-        return singleResult;
+        return postRepository.findById(id).orElse(null);
     }
 
     private List<JobTitle> getJobTitlesStream(String type, String salary, String workTime) {
-        Session session = sessionFactory.openSession();
-        String sql;
-        Query<Post> query=null;
+
+        List<Post> posts;
+
         if(!type.equals("") && !salary.equals("") && !workTime.equals("")){
-            sql="from Post j where j.type=:type and j.salary=:salary and j.workTime=:workTime";
-            query = session.createQuery(sql, Post.class);
-            query.setParameter("type",type).setParameter("workTime",workTime).setParameter("salary",salary);
+             posts = postRepository.findByTypeAndSalaryAndWorkTime(type,salary,workTime);
         }else if(!type.equals("") && !salary.equals("")){
-            sql="from Post j where j.type=:type and j.salary=:salary";
-            query = session.createQuery(sql, Post.class);
-            query.setParameter("type",type).setParameter("salary",salary);
+            posts = postRepository.findByTypeAndSalary(type,salary);
         }
         else if(!type.equals("") && !workTime.equals("")){
-            sql="from Post j where j.type=:type and j.workTime=:workTime";
-            query = session.createQuery(sql, Post.class);
-            query.setParameter("type",type).setParameter("workTime",workTime);
+            posts = postRepository.findByTypeAndWorkTime(type,workTime);
         }else if(!salary.equals("") && !workTime.equals("")){
-            sql="from Post j where j.salary=:salary and j.workTime=:workTime";
-            query = session.createQuery(sql, Post.class);
-            query.setParameter("salary",salary).setParameter("workTime",workTime);
+           posts = postRepository.findBySalaryAndWorkTime(salary,workTime);
         }else if(!salary.equals("")){
-            sql="from Post j where j.salary=:salary";
-            query = session.createQuery(sql, Post.class);
-            query.setParameter("salary",salary);
+            posts = postRepository.findBySalary(salary);
+
         }else if(!workTime.equals("")){
-            sql="from Post j where j.workTime=:workTime";
-            query = session.createQuery(sql, Post.class);
-            query.setParameter("workTime",workTime);
+            posts = postRepository.findByWorkTime(workTime);
+
         }else if(!type.equals("")){
-            sql="from Post j where j.type=:type";
-            query = session.createQuery(sql, Post.class);
-            query.setParameter("type",type);
+            posts = postRepository.findByType(type);
+
         }else{
             return getJobTitles();
         }
-
-        List<Post> posts = query.getResultList();
-        session.close();
         return posts
                 .stream()
                 .map(j -> new JobTitle(j.getId(), j.getTitle()))
                 .collect(Collectors.toList());
     }
     private List<JobTitle> getJobTitlesStream(String type, String salary, String workTime,Authentication authUser) {
-        Session session = sessionFactory.openSession();
-        Query query1 = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",authUser.getName());
-        User user1 = (User) query1.getSingleResult();
+        User user = userRepository.findByUsername(authUser.getName()).orElse(null);
+
 
         String sql;
-        Query<Post> query=null;
+        List<Post> posts;
+
         if(!type.equals("") && !salary.equals("") && !workTime.equals("")){
-            sql="from Post j where j.type=:type and j.salary=:salary and j.workTime=:workTime and j.email=:email";
-            query = session.createQuery(sql, Post.class);
-            query.setParameter("type",type).setParameter("workTime",workTime).setParameter("salary",salary).setParameter("email", user1.getEmail());
+          posts = postRepository.findByTypeAndSalaryAndWorkTimeAndEmail(type,salary,workTime,user.getEmail());
         }else if(!type.equals("") && !salary.equals("")){
-            sql="from Post j where j.type=:type and j.salary=:salary and j.email=:email";
-            query = session.createQuery(sql, Post.class);
-            query.setParameter("type",type).setParameter("salary",salary).setParameter("email",user1.getEmail());
+            posts = postRepository.findByTypeAndSalaryAndEmail(type,salary,user.getEmail());
         }
         else if(!type.equals("") && !workTime.equals("")){
-            sql="from Post j where j.type=:type and j.workTime=:workTime and j.email=:email";
-            query = session.createQuery(sql, Post.class);
-            query.setParameter("type",type).setParameter("workTime",workTime).setParameter("email",user1.getEmail());
+            posts = postRepository.findByTypeAndWorkTimeAndEmail(type,workTime,user.getEmail());
         }else if(!salary.equals("") && !workTime.equals("")){
-            sql="from Post j where j.salary=:salary and j.workTime=:workTime and j.email=:email";
-            query = session.createQuery(sql, Post.class);
-            query.setParameter("salary",salary).setParameter("workTime",workTime).setParameter("email",user1.getEmail());
+            posts = postRepository.findBySalaryAndWorkTimeAndEmail(salary,workTime,user.getEmail());
+
         }else if(!salary.equals("")){
-            sql="from Post j where j.salary=:salary and j.email=:email";
-            query = session.createQuery(sql, Post.class);
-            query.setParameter("salary",salary).setParameter("email",user1.getEmail());
+            posts = postRepository.findBySalaryAndEmail(salary,user.getEmail());
+
         }else if(!workTime.equals("")){
-            sql="from Post j where j.workTime=:workTime and j.email=:email";
-            query = session.createQuery(sql, Post.class);
-            query.setParameter("workTime",workTime).setParameter("email",user1.getEmail());
+            posts = postRepository.findByWorkTimeAndEmail(workTime,user.getEmail());
+
         }else if(!type.equals("")){
-            sql="from Post j where j.type=:type and j.email=:email";
-            query = session.createQuery(sql, Post.class);
-            query.setParameter("type",type).setParameter("email",user1.getEmail());
+            posts = postRepository.findByTypeAndEmail(type,user.getEmail());
+
         }else{
-            return getJobTitles(user1.getUsername());
+            return getJobTitles(user.getUsername());
         }
 
-        List<Post> posts = query.getResultList();
-        session.close();
         return posts
                 .stream()
                 .map(j -> new JobTitle(j.getId(), j.getTitle()))

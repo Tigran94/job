@@ -1,28 +1,28 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" th:href="@{../cssFiles/style.css}">
+    <link rel="stylesheet" th:href="@{/cssFiles/style.css}"/>
 </head>
 <body>
 <div class="header">
     <div>
-        <span>Welcome To Job.am ${parameter} </span>
-        <a class="header_buttons" href="/profile" th:attr="${hiddenButton}"">My Profile</a>
+        <span>Welcome To Job.am </span>
+        <span th:text="${parameter}"/>
+        <a class="header_buttons" href="/profile" th:hidden="${hiddenButton}" >My Profile</a>
         
         <div id="imgdiv">
             <!-- <img src="<spring:url value='${imageSource}'/>" id="profileImage"> -->
         </div>
     </div>
     <div>
-        <a class="header_buttons" th:href="/login" th:attr="${hiddenLogin}">Login</a>
-        <a class="header_buttons" th:href="/signup" th:attr="${hiddenSignUp}">Sign UP</a>
+        <a class="header_buttons" href="/login" th:hidden="${hiddenLogin}">Login</a>
+        <a class="header_buttons" href="/signup" th:hidden="${hiddenSignUp}">Sign UP</a>
         <!-- <a class="header_buttons" href="/" ${hiddenBack}>Back</a> -->
     </div>
 </div>
 <div class="main_home">
     <div class="titles">
-        <form id="form" th:action="/" method="post">
+        <form id="form" action="/" method="post">
             <div class="formdiv">
                 <div class="labels">
                     <label for="typename">Type: </label>
@@ -57,22 +57,21 @@
                 </div>
             </div>
             <div class="formdiv">
-                <input id="filter" type="submit" value="Filter"/>
+                <input id="filter" type="submit" th:value="Filter"/>
             </div>
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         </form>
         <div class="mrg">
+            <ul>
             <th:block th:each="jobTitle : ${jobTitles}">
                 <li>
-                    <a th:href="/${jobTitle.id}" th:text="${jobTitle.title}"></a>
+                    <a th:href="/${jobTitle.id}" th:text="${jobTitle.title}"/>
                 </li>
             </th:block>
             </ul>
         </div>
     </div>
-    <div class="content">
-
-    </div>
+    <div class="content"/>
 </div>
 </body>
 </html>

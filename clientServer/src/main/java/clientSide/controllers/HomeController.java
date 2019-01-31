@@ -3,8 +3,6 @@ package clientSide.controllers;
 
 import clientSide.dao.PostDao;
 import clientSide.dto.JobTitle;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -25,8 +23,8 @@ import java.util.List;
 public class HomeController{
     private final PostDao postDao;
 
-    @Autowired
-    private JavaMailSender mailSender;
+//    @Autowired
+//    private JavaMailSender mailSender;
 
     public HomeController(PostDao postDao) {
         this.postDao = postDao;

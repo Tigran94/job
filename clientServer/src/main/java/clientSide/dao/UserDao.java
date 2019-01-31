@@ -1,14 +1,7 @@
 package clientSide.dao;
 
-import clientSide.dto.UserDTO;
 import clientSide.entities.User;
 import clientSide.repositories.UserRepository;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,9 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
@@ -61,99 +51,64 @@ public class UserDao implements UserDetailsService {
 //        return loggedInUser;
 //    }
 
-    public  void registerUser(UserDTO userDao){
+    public  void registerUser(User userForReg){
         User user = new User();
-        user.setEmail(userDao.getEmail());
-        user.setFirstName(userDao.getFirstName());
-        user.setLastName(userDao.getLastName());
-        user.setUsername(userDao.getUsername());
-        user.setPassword(passwordEncoder.encode(userDao.getPassword()));
+        user.setEmail(userForReg.getEmail());
+        user.setFirstName(userForReg.getFirstName());
+        user.setLastName(userForReg.getLastName());
+        user.setUsername(userForReg.getUsername());
+        user.setPassword(passwordEncoder.encode(userForReg.getPassword()));
+        user.setRoleName("ROLE_ADMIN");
+        user.setActive(true);
         userRepository.save(user);
 
         SecurityContextHolder.getContext()
                 .setAuthentication(
                         new UsernamePasswordAuthenticationToken(
-                                userDao.getEmail(),
-                                userDao.getPassword(),
-                                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")))
+                                userForReg.getUsername(),
+                                userForReg.getPassword(),
+                                Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN")))
                 );
     }
 
     public String checkIfUserExists(String username, String email){
-        Session session = sessionFactory.openSession();
 
         ArrayList<String> messages = new ArrayList<String>();
 
-        Transaction transaction = session.beginTransaction();
-        TypedQuery<User> query1 = session.createQuery("from User h where h.username = :userName", User.class);
-        query1.setParameter("userName", username);
-        TypedQuery<User> query2 = session.createQuery("from User h where h.email = :email",User.class);
-        query2.setParameter("email",email);
-        transaction.commit();
+        User user = userRepository.findByUsername(username).orElse(null);
+        User user2 = userRepository.findByEmail(email).orElse(null);
 
-        if(query1.getResultList().size()!=0){
+        if(user!=null){
             messages.add("This username is already taken");
         }
-        if(query2.getResultList().size()!=0){
+        if(user2!=null){
             messages.add("This email is already taken");
         }
-
-        session.close();
 
         return messages.toString().substring(1,messages.toString().length()-1);
     }
 
     public  void changePassword(Authentication authUser, String newPassword){
-        Session session = sessionFactory.openSession();
 
-        Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",authUser.getName());
-        User user1 = (User) query.getSingleResult();
+        User user = userRepository.findByUsername(authUser.getName()).orElse(null);
 
+        user.setPassword(newPassword);
 
-        user1.setPassword(newPassword);
-
-        Transaction transaction = session.beginTransaction();
-        session.update(user1);
-        transaction.commit();
-
-        if(transaction.isActive()){
-            session.flush();
-        }
-        session.close();
+        userRepository.save(user);
     }
 
     public void changeFirstName(Authentication authUser,String firstName){
-        Session session = sessionFactory.openSession();
-        Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",authUser.getName());
-        User user1 = (User) query.getSingleResult();
+        User user = userRepository.findByUsername(authUser.getName()).orElse(null);
 
-        user1.setFirstName(firstName);
+        user.setFirstName(firstName);
 
-        Transaction transaction = session.beginTransaction();
-        session.update(user1);
-        transaction.commit();
-
-        if(transaction.isActive()){
-            session.flush();
-        }
-        session.close();
+        userRepository.save(user);
     }
 
     public void changeLastName(Authentication authUser,String lastName){
-        Session session = sessionFactory.openSession();
-        Query query = session.createQuery("from User j where j.username=:username", User.class).setParameter("username",authUser.getName());
-        User user1 = (User) query.getSingleResult();
-
-        user1.setLastName(lastName);
-
-        Transaction transaction = session.beginTransaction();
-        session.update(user1);
-        transaction.commit();
-
-        if(transaction.isActive()){
-            session.flush();
-        }
-        session.close();
+        User user = userRepository.findByUsername(authUser.getName()).orElse(null);
+        user.setLastName(lastName);
+        userRepository.save(user);
     }
 
     public User getUser(String username) {

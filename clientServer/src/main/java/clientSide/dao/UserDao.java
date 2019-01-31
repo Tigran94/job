@@ -121,7 +121,7 @@ public class UserDao implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).map(user -> new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
+                user.getUsername(),
                 user.getPassword(),
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"))
         ))

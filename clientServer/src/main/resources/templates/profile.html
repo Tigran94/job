@@ -54,7 +54,7 @@
             <div class="formdiv">
                 <input id="filter" type="submit" value="Filter"/>
             </div>
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         </form>
         <div>
             <div class="pst">
@@ -66,19 +66,18 @@
                         <li>
                             <div class="derow">
                                 <div class="deleft">
-                                    <input type="hidden" name="jobId" value="${jobTitle.id}">
-                                    <input type="image" src="del.png">
+                                    <input type="hidden" name="jobId" th:value="${jobTitle.id}"/>
+                                    <input type="image" th:src="@{/images/del.png}"/>
                                 </div>
                                 <div class="deright">
-                                   <a th:href="/profile/${jobTitle.id}"  th:text="${jobTitle.title}"></a>
+                                   <a th:href="@{/profile + /${jobTitle.id}}"  th:text="${jobTitle.title}"></a>
                                 </div>
                             </div>
                         </li>
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                     </form>
                     </th:block>
-            </ul>
-
+                 </ul>
         </div>
     </div>
     <div class="content">
@@ -87,7 +86,7 @@
                 <p>Title: </p>
             </div>
             <div class="right">
-                <p th:text="${post.title}"></p>
+                <p th:text="${post?.title}"></p>
             </div>
         </div>
         <div class="tablerow">
@@ -95,7 +94,7 @@
                 <p>Description: </p>
             </div>
             <div class="right">
-                <p th:text="${post.description}"></p>
+                <p th:text="${post?.description}"></p>
             </div>
         </div>
         <div class="tablerow">
@@ -103,7 +102,7 @@
                 <p>Type: </p>
             </div>
             <div class="right">
-                <p th:text="${post.type}"></p>
+                <p th:text="${post?.type}"></p>
             </div>
         </div>
         <div class="tablerow">
@@ -111,7 +110,7 @@
                 <p>Salary: </p>
             </div>
             <div class="right">
-                <p th:text="${post.salary}"></p>
+                <p th:text="${post?.salary}"></p>
             </div>
         </div>
         <div class="tablerow">
@@ -119,7 +118,7 @@
                 <p>Work Time: </p>
             </div>
             <div class="right">
-                <p th:text="${post.workTime}"></p>
+                <p th:text="${post?.workTime}"></p>
             </div>
         </div>
         <div class="tablerow">
@@ -127,7 +126,7 @@
                 <p>Email: </p>
             </div>
             <div class="right">
-                <p th:text="${post.email}"></p>
+                <p th:text="${post?.email}"></p>
             </div>
         </div>
         <div class="tablerow">
@@ -135,7 +134,7 @@
                 <p>Company: </p>
             </div>
             <div class="right">
-                <p th:text="${post.company}"></p>
+                <p th:text="${post?.company}"></p>
             </div>
         </div>
         <div class="tablerow">
@@ -143,7 +142,7 @@
                 <p>Expiration Date: </p>
             </div>
             <div class="right">
-                <p th:text="${post.expirationDate}"></p>
+                <p th:text="${post?.expirationDate}"></p>
             </div>
         </div>
         <div class="tablerow">
@@ -151,7 +150,7 @@
                 <p>Post Date: </p>
             </div>
             <div class="right">
-                <p th:text="${post.postDate}"></p>
+                <p th:text="${post?.postDate}"></p>
             </div>
         </div>
     </div>

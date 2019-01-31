@@ -65,7 +65,7 @@
             <ul>
             <th:block th:each="jobTitle : ${jobTitles}">
                 <li>
-                    <a th:href="/${jobTitle.id}" th:text="${jobTitle.title}"/>
+                    <a th:href="@{/ ${jobTitle.id}}" th:text="${jobTitle.title}"/>
                 </li>
             </th:block>
             </ul>

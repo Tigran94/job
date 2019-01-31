@@ -8,15 +8,15 @@
     <div>
         <span>Welcome To Job.am </span>
         <span th:text="${parameter}"/>
-        <a class="header_buttons" href="/profile" th:hidden="${hiddenButton}" >My Profile</a>
+        <a class="header_buttons" href="/profile" th:if="${profileButton==null}" >My Profile</a>
         
         <div id="imgdiv">
             <!-- <img src="<spring:url value='${imageSource}'/>" id="profileImage"> -->
         </div>
     </div>
-    <div>
-        <a class="header_buttons" href="/login" th:hidden="${hiddenLogin}">Login</a>
-        <a class="header_buttons" href="/signup" th:hidden="${hiddenSignUp}">Sign UP</a>
+    <div th:if="${userActive==null}">
+        <a class="header_buttons" href="/login">Login</a>
+        <a class="header_buttons" href="/signup">Sign UP</a>
         <!-- <a class="header_buttons" href="/" ${hiddenBack}>Back</a> -->
     </div>
 </div>
@@ -65,7 +65,7 @@
             <ul>
             <th:block th:each="jobTitle : ${jobTitles}">
                 <li>
-                    <a th:href="@{/ ${jobTitle.id}}" th:text="${jobTitle.title}"/>
+                    <a th:href="${jobTitle.id}" th:text="${jobTitle.title}"/>
                 </li>
             </th:block>
             </ul>

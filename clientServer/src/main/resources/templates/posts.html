@@ -6,18 +6,18 @@
 <body>
 <div class="header">
     <div>
-        <span>Welcome To Job.am ${parameter} </span>
-        <a class="header_buttons" th:href="/profile" th:attr="${hiddenButton}">My Profile</a>
+        <span>Welcome To Job.am <span th:text="${parameter}"></span> </span>
+        <a class="header_buttons" href="/profile" th:if="${profileButton==null}">My Profile</a>
     </div>
-    <div>
-        <a class="header_buttons" th:href="/login" th:attr="${hiddenLogin}">Login</a>
-        <a class="header_buttons" th:href="/signup" th:attr="${hiddenSignUp}">Sign UP</a>
+    <div th:if="${userActive}==null">
+        <a class="header_buttons" href="/login">Login</a>
+        <a class="header_buttons" href="/signup">Sign UP</a>
         <!-- <a class="header_buttons" href="/" ${hiddenBack}>Back</a> -->
     </div>
 </div>
 <div class="main_posts">
     <div class="titles">
-        <form id="form" th:action="/" method="post">
+        <form id="form" action="/" method="post">
             <div class="formdiv">
                 <div class="labels">
                     <label for="typename">Type: </label>
@@ -60,7 +60,7 @@
             <ul id="list">
                 <th:block th:each="jobTitle : ${jobTitles}">
                     <li>
-                        <a th:href="/${jobTitle.id}" th:text="${jobTitle.title}"></a>
+                        <a th:href="${jobTitle.id}" th:text="${jobTitle.title}"></a>
                     </li>
                 </th:block>
             </ul>

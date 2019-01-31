@@ -1,8 +1,7 @@
 package clientSide.controllers;
 
-import clientSide.dao.PostDao;
+import clientSide.services.PostDao;
 import clientSide.entities.Post;
-import clientSide.entities.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;

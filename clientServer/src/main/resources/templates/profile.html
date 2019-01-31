@@ -70,7 +70,7 @@
                                     <input type="image" th:src="@{/images/del.png}"/>
                                 </div>
                                 <div class="deright">
-                                   <a th:href="@{/profile + /${jobTitle.id}}"  th:text="${jobTitle.title}"></a>
+                                   <a th:href="${jobTitle.id}"  th:text="${jobTitle.title}"></a>
                                 </div>
                             </div>
                         </li>

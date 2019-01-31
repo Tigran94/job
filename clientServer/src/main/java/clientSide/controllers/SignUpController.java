@@ -1,6 +1,6 @@
 package clientSide.controllers;
 
-import clientSide.dao.UserDao;
+import clientSide.services.UserDao;
 import clientSide.entities.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

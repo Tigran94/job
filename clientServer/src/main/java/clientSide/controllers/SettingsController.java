@@ -1,6 +1,6 @@
 package clientSide.controllers;
 
-import clientSide.dao.UserDao;
+import clientSide.services.UserDao;
 import clientSide.entities.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

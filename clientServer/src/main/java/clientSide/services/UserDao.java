@@ -1,4 +1,4 @@
-package clientSide.dao;
+package clientSide.services;
 
 import clientSide.entities.User;
 import clientSide.repositories.UserRepository;
@@ -10,12 +10,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
-@Repository
+@Service
 public class UserDao implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
@@ -58,8 +59,8 @@ public class UserDao implements UserDetailsService {
         user.setLastName(userForReg.getLastName());
         user.setUsername(userForReg.getUsername());
         user.setPassword(passwordEncoder.encode(userForReg.getPassword()));
-        user.setRoleName("ROLE_ADMIN");
         user.setActive(true);
+        user.setRoleName("ROLE_ADMIN");
         userRepository.save(user);
 
         SecurityContextHolder.getContext()

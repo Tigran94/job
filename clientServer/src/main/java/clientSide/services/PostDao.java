@@ -1,4 +1,4 @@
-package clientSide.dao;
+package clientSide.services;
 
 import clientSide.dto.JobTitle;
 import clientSide.entities.Post;

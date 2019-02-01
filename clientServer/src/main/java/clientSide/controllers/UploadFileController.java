@@ -2,6 +2,7 @@ package clientSide.controllers;
 
 
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -56,11 +57,12 @@ public class UploadFileController {
         return;
     }
 
+    // helper.addAttachment("attachment-document-name.jpg", new ClassPathResource("memorynotfound-logo.jpg"));
 
     public static void saveFile(MultipartFile file,String userName) throws Exception{
         byte[] bytes = file.getBytes();
         String rootPath = System.getProperty("catalina.home");
-        File dir = new File(rootPath + File.separator + "usersCV" + File.separator + userName);
+        File dir = new File(new ClassPathResource(File.separator+"usersCV"+File.separator + userName).getPath());
 
         if (!dir.exists()) {
             dir.mkdirs();

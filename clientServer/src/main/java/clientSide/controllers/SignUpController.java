@@ -56,7 +56,7 @@ public class SignUpController {
             UploadFileController.saveFile(file, user.getUsername());
         }catch (Exception ignore){}
 
-        return "redirect:/home";
+        return "redirect:/";
 
 
 

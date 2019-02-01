@@ -25,14 +25,16 @@ public class JobsController {
         this.postDao = postDao;
     }
 
-    @RequestMapping(value = "/profile/{jobId}",method = RequestMethod.GET)
-    public ModelAndView getUserJobById(@PathVariable("jobId") long id, HttpServletRequest req){
+    @RequestMapping(value = "/{jobId}", method = RequestMethod.GET)
+    public ModelAndView getUserJobById(@PathVariable("jobId") long id, HttpServletRequest req) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ModelAndView modelAndView = new ModelAndView("profile");
-
-        List<JobTitle> jobTitles = HomePageTool.
-                getJobTitles(req,postDao,modelAndView,authentication.getName());
-
+        List<JobTitle> jobTitles;
+        if( req.getSession().getAttribute("jobTitles")==null){
+            jobTitles= postDao.getJobTitles(authentication.getName());
+        }else {
+            jobTitles = (List<JobTitle>) req.getSession().getAttribute("jobTitles");
+        }
         modelAndView.addObject("jobTitles", jobTitles);
         modelAndView.addObject("post", postDao.getJobAnnouncementByIdWithStream(id));
         return modelAndView;

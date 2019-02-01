@@ -46,20 +46,20 @@ public class ProfileController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/{jobId}", method = RequestMethod.GET)
-    public ModelAndView getJobById(@PathVariable("jobId") long id, HttpServletRequest req) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ModelAndView modelAndView = new ModelAndView("profile");
-        List<JobTitle> jobTitles;
-        if( req.getSession().getAttribute("jobTitles")==null){
-            jobTitles= postDao.getJobTitles(authentication.getName());
-        }else {
-            jobTitles = (List<JobTitle>) req.getSession().getAttribute("jobTitles");
-        }
-        modelAndView.addObject("jobTitles", jobTitles);
-        modelAndView.addObject("post", postDao.getJobAnnouncementByIdWithStream(id));
-        return modelAndView;
-    }
+//    @RequestMapping(value = "/{jobId}", method = RequestMethod.GET)
+//    public ModelAndView getJobById(@PathVariable("jobId") long id, HttpServletRequest req) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        ModelAndView modelAndView = new ModelAndView("profile");
+//        List<JobTitle> jobTitles;
+//        if( req.getSession().getAttribute("jobTitles")==null){
+//            jobTitles= postDao.getJobTitles(authentication.getName());
+//        }else {
+//            jobTitles = (List<JobTitle>) req.getSession().getAttribute("jobTitles");
+//        }
+//        modelAndView.addObject("jobTitles", jobTitles);
+//        modelAndView.addObject("post", postDao.getJobAnnouncementByIdWithStream(id));
+//        return modelAndView;
+//    }
 
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView homeString(HttpServletRequest req,

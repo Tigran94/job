@@ -6,11 +6,11 @@
 </head>
 <body>
 <div class="header">
-    <a class="header_buttons" th:href="/profile">Back</a>
+    <a class="header_buttons" href="/profile">Back</a>
 </div>
 <div class="main_settings">
     <div class="wind">
-        <form th:action="/settings/fn" method="post">
+        <form action="/settings/fn" method="post">
             <div class="rows">
                 <div class="cnt">
                     <p>Change First Name</p>
@@ -32,12 +32,12 @@
                     <span class="err" th:text="${firstNameChanged}"></span>
                 </div>
             </div>
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
         </form>
     </div>
     <div class="wind">
-        <form th:action="/settings/ln" method="post">
+        <form action="/settings/ln" method="post">
             <div class="rows">
                 <div class="cnt">
                     <p>Change Last Name</p>
@@ -56,15 +56,15 @@
                     <input class="sbmt" type="submit" value="Submit"/>
                 </div>
                 <div class="inp">
-                    <span class="err" th:attr="${lastNameChanged}"></span>
+                    <span class="err" th:text="${lastNameChanged}"></span>
                 </div>
             </div>
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
         </form>
     </div>
     <div class="wind">
-        <form th:action="/settings/pass" method="post">
+        <form action="/settings/pass" method="post">
             <div class="rows">
                 <div class="cnt">
                     <p>Change Password</p>
@@ -94,35 +94,36 @@
                     <span class="err" th:text="${passwordChanged}"></span>
                 </div>
             </div>
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
         </form>
     </div>
 </div>
-<div class="wind">
-    <div class="rows">
-                <div class="cnt">
-                    <p>Change CV</p>
-                </div>
-            </div>
-            <div class="rows">
-                <div>
-                    <label for="cpass">File to upload: </label>
-                </div>
-                <div class="inp">
-                    <input type="file" name="image" accept="application/pdf">
-                </div>
-            </div>
-            <div class="rows">
-                <div>
-                    <input class="sbmt" type="submit" value="Upload">
-                </div>
-                <div class="inp">
-                    <span class="err" th:text="${uploadError}"></span>
-                </div>
-            </div>
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    </form>
-</div>
+<!--<div class="wind">-->
+    <!--<form>-->
+        <!--<div class="rows">-->
+            <!--<div class="cnt">-->
+                <!--<p>Change CV</p>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="rows">-->
+            <!--<div>-->
+                <!--<label for="cpass">File to upload: </label>-->
+            <!--</div>-->
+            <!--<div class="inp">-->
+                <!--<input type="file" name="image" accept="application/pdf"/>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="rows">-->
+            <!--<div>-->
+                <!--<input class="sbmt" type="submit" value="Upload"/>-->
+            <!--</div>-->
+            <!--<div class="inp">-->
+                <!--<span class="err" th:text="${uploadError}"></span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+    <!--</form>-->
+<!--</div>-->
 </body>
 </html>

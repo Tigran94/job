@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/","/login","/signup").permitAll()
-                .antMatchers("/addPost","posts","settings","profile").authenticated()
+                .antMatchers("/addPost","/posts","/settings","/profile","/settings/*","/apply","/profile/*").authenticated()
                 .and()
                 .authenticationProvider(daoAuthenticationProvider())
                 .sessionManagement().maximumSessions(1)

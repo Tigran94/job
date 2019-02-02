@@ -1,7 +1,5 @@
 package clientSide.controllers;
 
-
-
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,11 +55,9 @@ public class UploadFileController {
         return;
     }
 
-    // helper.addAttachment("attachment-document-name.jpg", new ClassPathResource("memorynotfound-logo.jpg"));
-
     public static void saveFile(MultipartFile file,String userName) throws Exception{
         byte[] bytes = file.getBytes();
-        String rootPath = System.getProperty("catalina.home");
+
         File dir = new File(new ClassPathResource(File.separator+"usersCV"+File.separator + userName).getPath());
 
         if (!dir.exists()) {
@@ -72,8 +68,6 @@ public class UploadFileController {
 
         stream.write(bytes);
         stream.close();
-
-        System.out.println("File loaded succesfully");
     }
 
     private static boolean isFilePdf(MultipartFile file){

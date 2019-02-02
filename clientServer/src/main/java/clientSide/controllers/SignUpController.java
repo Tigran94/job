@@ -2,6 +2,7 @@ package clientSide.controllers;
 
 import clientSide.services.UserDao;
 import clientSide.entities.User;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -57,8 +58,6 @@ public class SignUpController {
         }catch (Exception ignore){}
 
         return "redirect:/";
-
-
 
     }
 

@@ -23,7 +23,7 @@ public class SettingsController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String profileString(HttpServletRequest req) {
+    public String settingsString(HttpServletRequest req) {
         return "settings";
     }
 
@@ -35,8 +35,7 @@ public class SettingsController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-         User user= userDao.getUser(authentication.getName());
-
+        User user= userDao.getUser(authentication.getName());
 
         if(!user.getPassword().equals(currentPassword)){
             red.addFlashAttribute("passwordChanged","Wrong password");

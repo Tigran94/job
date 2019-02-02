@@ -13,6 +13,7 @@ import java.util.Set;
 @Table(name = "users")
 @Getter
 @Setter
+@NoArgsConstructor
 public class User {
 
 
@@ -45,6 +46,4 @@ public class User {
     @JoinColumn(name = "user_Id")
     private Set<Post> posts= new HashSet<>();
 
-    public User() {
-    }
 }

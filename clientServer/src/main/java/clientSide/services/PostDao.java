@@ -5,6 +5,7 @@ import clientSide.entities.Post;
 import clientSide.entities.User;
 import clientSide.repositories.PostRepository;
 import clientSide.repositories.UserRepository;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
 
@@ -101,9 +102,6 @@ public class PostDao {
     }
     private List<JobTitle> getJobTitlesStream(String type, String salary, String workTime,Authentication authUser) {
         User user = userRepository.findByUsername(authUser.getName()).orElse(null);
-
-
-        String sql;
         List<Post> posts;
 
         if(!type.equals("") && !salary.equals("") && !workTime.equals("")){

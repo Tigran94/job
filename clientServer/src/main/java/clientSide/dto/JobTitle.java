@@ -1,5 +1,8 @@
 package clientSide.dto;
 
+import lombok.Getter;
+
+@Getter
 public class JobTitle {
     private long id;
     private String title;
@@ -7,13 +10,5 @@ public class JobTitle {
     public JobTitle(long id, String title) {
         this.id = id;
         this.title = title;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
     }
 }

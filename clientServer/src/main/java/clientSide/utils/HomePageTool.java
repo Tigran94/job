@@ -2,11 +2,9 @@ package clientSide.utils;
 
 import clientSide.dto.JobTitle;
 import clientSide.services.PostDao;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HomePageTool {

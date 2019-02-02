@@ -27,31 +27,6 @@ public class UserDao implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-//    public User login(String username, String password) {
-//
-//        User loggedInUser = null;
-//        Session session = sessionFactory.openSession();
-//        User user = new User();
-//        user.setUsername(username);
-//        user.setPassword(password);
-//        Transaction transaction = session.beginTransaction();
-//        TypedQuery<User> query = session.createQuery("from User h where h.username = :userName and h.password = :password", User.class);
-//        query.setParameter("userName", user.getUsername());
-//        query.setParameter("password", user.getPassword());
-//
-//        transaction.commit();
-//        try {
-//            loggedInUser = query.getSingleResult();
-//
-//        }catch (NoResultException e){
-//        }
-//        if(transaction.isActive()){
-//            session.flush();
-//        }
-//        session.close();
-//        return loggedInUser;
-//    }
-
     public  void registerUser(User userForReg){
         User user = new User();
         user.setEmail(userForReg.getEmail());

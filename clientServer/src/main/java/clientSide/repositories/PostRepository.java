@@ -2,11 +2,16 @@ package clientSide.repositories;
 
 import clientSide.entities.Post;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.security.access.prepost.PreFilter;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository extends CrudRepository<Post,Long> {
+
+    @PreFilter("workTime== " )
+    List<Post> findAll();
+
     Optional<Post> findById(Long id);
     List<Post> findByEmail(String email);
 

@@ -1,5 +1,6 @@
 package clientSide.controllers;
 
+import clientSide.dto.JobTitle;
 import clientSide.services.PostDao;
 import clientSide.entities.Post;
 
@@ -8,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
 @RequestMapping("/profile")
@@ -63,5 +66,20 @@ public class ProfileController {
     public String deletePost(@RequestParam("jobId") long id){
         postDao.deletePost(id);
         return "redirect:/profile";
+    }
+
+    @RequestMapping(value = "/{jobId}", method = RequestMethod.GET)
+    public ModelAndView getUserJobById(@PathVariable("jobId") long id, HttpServletRequest req) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ModelAndView modelAndView = new ModelAndView("profile");
+        List<JobTitle> jobTitles;
+        if( req.getSession().getAttribute("jobTitles")==null){
+            jobTitles= postDao.getJobTitles(authentication.getName());
+        }else {
+            jobTitles = (List<JobTitle>) req.getSession().getAttribute("jobTitles");
+        }
+        modelAndView.addObject("jobTitles", jobTitles);
+        modelAndView.addObject("post", postDao.getJobAnnouncementByIdWithStream(id));
+        return modelAndView;
     }
 }

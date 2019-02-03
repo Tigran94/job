@@ -12,6 +12,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -85,5 +86,16 @@ public class HomeController{
 
         mailSender.send(message);
         return "redirect:/";
+    }
+    @RequestMapping(value = "/{jobId}" ,method = RequestMethod.GET)
+    public ModelAndView getJobById(@PathVariable("jobId") long id, HttpServletRequest req) {
+        ModelAndView modelAndView = new ModelAndView("posts");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        List<JobTitle> jobTitles = HomePageTool.getJobTitles(req,postDao,modelAndView);
+        HomePageTool.sethomePageModel(authentication.getName(),modelAndView);
+        modelAndView.addObject("jobTitles", jobTitles);
+        modelAndView.addObject("post", postDao.getJobAnnouncementByIdWithStream(id));
+        return modelAndView;
     }
 }

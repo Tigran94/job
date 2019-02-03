@@ -72,29 +72,35 @@ public class PostDao {
 
     private List<JobTitle> getJobTitlesStream(String type, String salary, String workTime) {
 
-        List<Post> posts;
+        List<Post> posts=null;
 
-        if(!type.equals("") && !salary.equals("") && !workTime.equals("")){
-             posts = postRepository.findByTypeAndSalaryAndWorkTime(type,salary,workTime);
-        }else if(!type.equals("") && !salary.equals("")){
-            posts = postRepository.findByTypeAndSalary(type,salary);
-        }
-        else if(!type.equals("") && !workTime.equals("")){
-            posts = postRepository.findByTypeAndWorkTime(type,workTime);
-        }else if(!salary.equals("") && !workTime.equals("")){
-           posts = postRepository.findBySalaryAndWorkTime(salary,workTime);
-        }else if(!salary.equals("")){
-            posts = postRepository.findBySalary(salary);
-
-        }else if(!workTime.equals("")){
-            posts = postRepository.findByWorkTime(workTime);
-
-        }else if(!type.equals("")){
+        if (!type.equals("")) {
             posts = postRepository.findByType(type);
-
-        }else{
+        }
+        if (!workTime.equals("")){
+            if(posts!=null){
+                 posts
+                        .stream()
+                        .filter(t->t.getWorkTime().equals(workTime))
+                        .collect(Collectors.toList());
+            }
+            else
+            posts = postRepository.findByWorkTime(workTime);
+        }
+        if (!salary.equals("")){
+            if(posts!=null){
+                posts
+                        .stream()
+                        .filter(t->t.getSalary().equals(salary))
+                        .collect(Collectors.toList());
+            }
+            else
+            posts = postRepository.findBySalary(salary);
+        }
+        if(type.equals("") && workTime.equals("") && salary.equals("")){
             return getJobTitles();
         }
+
         return posts
                 .stream()
                 .map(j -> new JobTitle(j.getId(), j.getTitle()))
@@ -102,31 +108,35 @@ public class PostDao {
     }
     private List<JobTitle> getJobTitlesStream(String type, String salary, String workTime,Authentication authUser) {
         User user = userRepository.findByUsername(authUser.getName()).orElse(null);
-        List<Post> posts;
 
-        if(!type.equals("") && !salary.equals("") && !workTime.equals("")){
-          posts = postRepository.findByTypeAndSalaryAndWorkTimeAndEmail(type,salary,workTime,user.getEmail());
-        }else if(!type.equals("") && !salary.equals("")){
-            posts = postRepository.findByTypeAndSalaryAndEmail(type,salary,user.getEmail());
-        }
-        else if(!type.equals("") && !workTime.equals("")){
-            posts = postRepository.findByTypeAndWorkTimeAndEmail(type,workTime,user.getEmail());
-        }else if(!salary.equals("") && !workTime.equals("")){
-            posts = postRepository.findBySalaryAndWorkTimeAndEmail(salary,workTime,user.getEmail());
+        List<Post> posts=null;
 
-        }else if(!salary.equals("")){
-            posts = postRepository.findBySalaryAndEmail(salary,user.getEmail());
-
-        }else if(!workTime.equals("")){
-            posts = postRepository.findByWorkTimeAndEmail(workTime,user.getEmail());
-
-        }else if(!type.equals("")){
+        if (!type.equals("")) {
             posts = postRepository.findByTypeAndEmail(type,user.getEmail());
-
-        }else{
+        }
+        if (!workTime.equals("")){
+            if(posts!=null){
+                posts
+                        .stream()
+                        .filter(t->t.getWorkTime().equals(workTime))
+                        .collect(Collectors.toList());
+            }
+            else
+                posts = postRepository.findByWorkTimeAndEmail(workTime,user.getEmail());
+        }
+        if (!salary.equals("")){
+            if(posts!=null){
+                posts
+                        .stream()
+                        .filter(t->t.getSalary().equals(salary))
+                        .collect(Collectors.toList());
+            }
+            else
+                posts = postRepository.findBySalaryAndEmail(salary,user.getEmail());
+        }
+        if(type.equals("") && workTime.equals("") && salary.equals("")){
             return getJobTitles(user.getUsername());
         }
-
         return posts
                 .stream()
                 .map(j -> new JobTitle(j.getId(), j.getTitle()))

@@ -63,7 +63,9 @@
                         <div class="derow">
                             <div class="deleft">
                                 <input type="hidden" name="jobId" th:value="${jobTitle.id}"/>
-                                <input type="image" th:src="@{/images/image.png}"/>
+                                <div th:if="${userActive!=null}">
+                                    <input type="image" th:src="@{/images/image.png}"/>
+                                </div>
                             </div>
                             <div class="deright">
                                 <a th:href="${jobTitle.id}" th:text="${jobTitle.title}"/>

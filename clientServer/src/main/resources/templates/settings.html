@@ -98,32 +98,32 @@
 
         </form>
     </div>
-</div>
-<div class="wind">
-    <form action="/uploadFile" enctype="multipart/form-data" method="post">
-        <div class="rows">
-            <div class="cnt">
-                <p>Change CV</p>
+    <div class="wind">
+        <form action="/uploadFile" enctype="multipart/form-data" method="post">
+            <div class="rows">
+                <div class="cnt">
+                    <p>Change CV</p>
+                </div>
             </div>
-        </div>
-        <div class="rows">
-            <div>
-                <label for="cpass">File to upload: </label>
+            <div class="rows">
+                <div>
+                    <label for="cpass">File to upload: </label>
+                </div>
+                <div class="inp">
+                    <input type="file" name="cv" accept="application/pdf"/>
+                </div>
             </div>
-            <div class="inp">
-                <input type="file" name="cv" accept="application/pdf"/>
+            <div class="rows">
+                <div>
+                    <input class="sbmt" type="submit" value="Upload"/>
+                </div>
+                <div class="inp">
+                    <span class="err" th:text="${uploadError}"></span>
+                </div>
             </div>
-        </div>
-        <div class="rows">
-            <div>
-                <input class="sbmt" type="submit" value="Upload"/>
-            </div>
-            <div class="inp">
-                <span class="err" th:text="${uploadError}"></span>
-            </div>
-        </div>
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-    </form>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        </form>
+    </div>
 </div>
 </body>
 </html>

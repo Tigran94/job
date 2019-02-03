@@ -74,8 +74,9 @@ public class HomeController{
         MimeMessageHelper helper;
         try {
             helper = new MimeMessageHelper(message, true);
-            helper.setSubject("aksdnad");
-            helper.setText("asljdna");
+            helper.setSubject("Job Application");
+            helper.setText("Hi, this cv is coming from job.am, please pay attention to him\n"
+                    + "My name is " +authentication.getName() + " and i really need this job");
             helper.setTo(post.getEmail());
             helper.setFrom("springtest94@gmail.com");
             helper.addAttachment("cv.pdf", file);

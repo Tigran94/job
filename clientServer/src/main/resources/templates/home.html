@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
 <div class="header">
@@ -62,7 +62,7 @@
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         </form>
         <div class="mrg">
-            <ul>
+            <ul id="list">
                 <th:block th:each="jobTitle : ${jobTitles}">
                     <form action="/apply" method="post">
                         <li>

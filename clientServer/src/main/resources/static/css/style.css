@@ -95,6 +95,7 @@ body{
 	width: 100%;
 	font-weight: bold;
 	word-wrap: break-word;
+	font-size: 18px;
 }
 #list li:hover{
 	background-color: #1a3131;
@@ -314,4 +315,24 @@ body{
 	height: 25px;
 	display: inline-block;
 	margin-top: -8px;
+}
+.pst{
+	color: #ced2d4;
+	text-transform: uppercase;
+	font-size: 25px;
+	text-align: center;
+	padding-top: 5px;
+	box-shadow: 0px 2px 2px #000;
+}
+.derow{
+	width: 100%;
+	padding-left: 10px;
+	display: flex;
+}
+.deleft{
+	width: 20px;
+	padding-top: 9px;
+}
+.deleft input[type="image"]{
+	width: 100%;
 }

@@ -47,7 +47,7 @@ public class UploadFileController {
         try {
             saveFile(file, username);
         }catch (Exception e){
-            red.addFlashAttribute("uplodError",uploadExceptionMessage);
+            red.addFlashAttribute("uploadError",uploadExceptionMessage);
             return;
         }
 

@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
 <div class="header">
@@ -60,7 +60,15 @@
             <ul id="list">
                 <th:block th:each="jobTitle : ${jobTitles}">
                     <li>
-                        <a th:href="${jobTitle.id}" th:text="${jobTitle.title}"></a>
+                        <div class="derow">
+                            <div class="deleft">
+                                <input type="hidden" name="jobId" th:value="${jobTitle.id}"/>
+                                <input type="image" th:src="@{/images/image.png}"/>
+                            </div>
+                            <div class="deright">
+                                <a th:href="${jobTitle.id}" th:text="${jobTitle.title}"/>
+                            </div>
+                        </div>
                     </li>
                 </th:block>
             </ul>

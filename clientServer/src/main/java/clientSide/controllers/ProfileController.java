@@ -4,6 +4,7 @@ import clientSide.dto.JobTitle;
 import clientSide.services.PostDao;
 import clientSide.entities.Post;
 
+import clientSide.utils.HomePageTool;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -72,13 +73,8 @@ public class ProfileController {
     public ModelAndView getUserJobById(@PathVariable("jobId") long id, HttpServletRequest req) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ModelAndView modelAndView = new ModelAndView("profile");
-        List<JobTitle> jobTitles;
-        if( req.getSession().getAttribute("jobTitles")==null){
-            jobTitles= postDao.getJobTitles(authentication.getName());
-        }else {
-            jobTitles = (List<JobTitle>) req.getSession().getAttribute("jobTitles");
-        }
-        modelAndView.addObject("jobTitles", jobTitles);
+        HomePageTool.
+                getJobTitles(req,postDao,modelAndView,authentication.getName());
         modelAndView.addObject("post", postDao.getJobAnnouncementByIdWithStream(id));
         return modelAndView;
     }

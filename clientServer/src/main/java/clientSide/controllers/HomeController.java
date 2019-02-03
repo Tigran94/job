@@ -92,9 +92,8 @@ public class HomeController{
         ModelAndView modelAndView = new ModelAndView("posts");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        List<JobTitle> jobTitles = HomePageTool.getJobTitles(req,postDao,modelAndView);
+        HomePageTool.getJobTitles(req,postDao,modelAndView);
         HomePageTool.sethomePageModel(authentication.getName(),modelAndView);
-        modelAndView.addObject("jobTitles", jobTitles);
         modelAndView.addObject("post", postDao.getJobAnnouncementByIdWithStream(id));
         return modelAndView;
     }

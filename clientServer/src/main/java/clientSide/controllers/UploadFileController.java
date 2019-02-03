@@ -24,7 +24,7 @@ public class UploadFileController {
     private final static String sucsessfullMessage = "CV uploaded correctly";
 
     @RequestMapping(method = RequestMethod.POST)
-    public String uploadServerFile(@RequestParam("image") MultipartFile file, RedirectAttributes red){
+    public String uploadServerFile(@RequestParam("cv") MultipartFile file, RedirectAttributes red){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(!isFilePdf(file,red)){
             return redirect;

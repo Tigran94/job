@@ -22,6 +22,8 @@ public class UploadFileController {
     private final static String incorrectFileMessage = "Only PDF files are supported";
     private final static String uploadExceptionMessage = "Something went wrong. Please try again";
     private final static String sucsessfullMessage = "CV uploaded correctly";
+    private final static String docxApplication = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    private final static String pdfApplication = "application/pdf";
 
     @RequestMapping(method = RequestMethod.POST)
     public String uploadServerFile(@RequestParam("cv") MultipartFile file, RedirectAttributes red){
@@ -36,7 +38,7 @@ public class UploadFileController {
 
 
     public static boolean isFilePdf(MultipartFile file,RedirectAttributes red){
-        if(!isFilePdf(file)){
+        if(!isFileSupported(file)){
             red.addFlashAttribute("uploadError",incorrectFileMessage);
             return false;
         }
@@ -63,14 +65,28 @@ public class UploadFileController {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        File serverFile = new File(dir.getAbsolutePath() + File.separator + "cv.pdf");
+        String fileType = file.getContentType();
+        File serverFile = null;
+
+        if(fileType.equals(pdfApplication)) {
+            serverFile = new File(dir.getAbsolutePath() + File.separator + "cv.pdf");
+        }
+        if(fileType.equals(docxApplication)){
+            serverFile = new File(dir.getAbsolutePath() + File.separator + "cv.docx");
+        }
+
+        if(serverFile.exists()){
+            serverFile.delete();
+        }
+
         BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
 
         stream.write(bytes);
         stream.close();
     }
 
-    private static boolean isFilePdf(MultipartFile file){
-        return file.getContentType().equals("application/pdf");
+    private static boolean isFileSupported(MultipartFile file){
+        String fileType = file.getContentType();
+        return fileType.equals(pdfApplication) || fileType.equals(docxApplication);
     }
 }

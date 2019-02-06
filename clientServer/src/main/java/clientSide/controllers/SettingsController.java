@@ -4,13 +4,16 @@ import clientSide.services.UserDao;
 import clientSide.entities.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/settings")
@@ -23,8 +26,14 @@ public class SettingsController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String settingsString(HttpServletRequest req) {
-        return "settings";
+    public ModelAndView settingsString(HttpServletRequest req) {
+        Authentication authentication  = SecurityContextHolder.getContext().getAuthentication();
+        ModelAndView modelAndView = new ModelAndView("settings");
+        if(authentication.getAuthorities().toString().contains("ROLE_ADMIN")){
+            modelAndView.addObject("logoutButton","hide");
+            return modelAndView;
+        }
+        return modelAndView;
     }
 
     @RequestMapping(value = "/pass",method = RequestMethod.POST)
@@ -88,5 +97,14 @@ public class SettingsController {
             red.addFlashAttribute("lastNameChanged","Last Name changed successfully");
             return "redirect:/settings";
         }
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        return "redirect:/";
     }
 }

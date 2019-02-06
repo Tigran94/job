@@ -1,5 +1,6 @@
 package clientSide.configuration;
 
+import clientSide.services.CompanyDao;
 import clientSide.services.UserDao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,10 +17,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
     private final UserDao userDao;
+    private final CompanyDao companyDao;
 
-    public WebSecurityConfig(UserDao userDao,PasswordEncoder passwordEncoder){
+    public WebSecurityConfig(UserDao userDao, PasswordEncoder passwordEncoder, CompanyDao companyDao){
         this.passwordEncoder = passwordEncoder;
         this.userDao = userDao;
+        this.companyDao = companyDao;
     }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -31,10 +34,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 .and()
                 .authorizeRequests()
-                .antMatchers("/","/login","/signup").permitAll()
+                .antMatchers("/","/login","/signup","/userSignup","/companySignup").permitAll()
                 .antMatchers("/addPost","/posts","/settings","/profile","/settings/*","/apply","/profile/*").authenticated()
                 .and()
                 .authenticationProvider(daoAuthenticationProvider())
+                .authenticationProvider(daoAuthenticationProvider2())
                 .sessionManagement().maximumSessions(1)
                 .sessionRegistry(sessionRegistry());
     }
@@ -48,6 +52,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDao);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
+        return authenticationProvider;
+    }
+    @Bean
+    public AuthenticationProvider daoAuthenticationProvider2() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(companyDao);
         authenticationProvider.setPasswordEncoder(passwordEncoder);
         return authenticationProvider;
     }

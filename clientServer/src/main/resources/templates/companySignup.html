@@ -1,0 +1,67 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="main_signup">
+    <form action="/signup/companySignup" method="post" enctype="multipart/form-data">
+        <div class="rows">
+            <div class="lab">
+                <label for="usnname">companyName: </label>
+            </div>
+            <div class="inp">
+                <input class="input_settings" id="usnname" type="text" name="companyName" placeholder="Company Name" th:required="required"/>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <label for="usnname">Username: </label>
+            </div>
+            <div class="inp">
+                <input class="input_settings" id="usnname" type="text" name="username" placeholder="Username" th:required="required"/>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <label for="mail">Email: </label>
+            </div>
+            <div class="inp">
+                <input class="input_settings" id="mail" type="email" name="email" placeholder="Email" th:required="required"/>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <label for="passw">Password: </label>
+            </div>
+            <div class="inp">
+                <input class="input_settings" id="passw" type="password" name="password" placeholder="Password" th:required="required"/>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <label for="confpass">Confirm Password: </label>
+            </div>
+            <div class="inp">
+                <input class="input_settings" id="confpass" type="password" name="confirmPassword" placeholder="Confirm Password" th:required="required"/>
+            </div>
+        </div>
+        <div class="rows">
+            <div class="lab">
+                <p class="err" th:text="${passwordConfirmed}"></p>
+                <p class="err" th:text="${registrationFailed}"></p>
+            </div>
+        </div>
+        <div class="rows">
+            <div>
+                <input class="sub" type="submit" value="Submit"/>
+            </div>
+            <div>
+                <a href="/" class="sub aa">Back</a>
+            </div>
+        </div>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    </form>
+</div>
+</body>
+</html>

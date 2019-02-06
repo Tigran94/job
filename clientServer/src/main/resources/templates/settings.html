@@ -6,7 +6,12 @@
 </head>
 <body>
 <div class="header">
-    <a class="header_buttons" href="/profile">Back</a>
+    <div>
+        <a class="header_buttons" href="/profile">Back</a>
+    </div>
+    <div>
+        <a class="header_buttons" href="/settings/" th:if="${logoutButton==null}">Log Out</a>
+    </div>
 </div>
 <div class="main_settings">
     <div class="wind">
@@ -110,7 +115,7 @@
                     <label for="cpass">File to upload: </label>
                 </div>
                 <div class="inp">
-                    <input type="file" name="cv" accept="application/pdf"/>
+                    <input type="file" name="cv" accept="application/pdf,.docx"/>
                 </div>
             </div>
             <div class="rows">

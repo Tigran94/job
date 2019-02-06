@@ -42,8 +42,7 @@ public class HomeController{
 
         ModelAndView modelAndView = new ModelAndView("home");
 
-        HomePageTool.sethomePageModel(authentication.getName(),modelAndView);
-        modelAndView.addObject("jobTitles",postDao.getJobTitles());
+        HomePageTool.sethomePageModel(authentication,modelAndView,postDao);
 
         return modelAndView;
     }
@@ -56,7 +55,13 @@ public class HomeController{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ModelAndView modelAndView = new ModelAndView("home");
 
-        HomePageTool.sethomePageModel(authentication.getName(),modelAndView);
+        HomePageTool.sethomePageModel(authentication,modelAndView);
+        if(authentication.getAuthorities().toString().contains("ROLE_ADMIN")){
+            List<JobTitle> jobTitles = postDao.getJobTitlesWithoutCompany(type,salary,workTime,authentication);
+            modelAndView.addObject("jobTitles",jobTitles);
+            req.getSession().setAttribute("jobTitles",jobTitles);
+            return modelAndView;
+        }
         List<JobTitle> jobTitles = postDao.getJobTitles(type,salary,workTime);
         modelAndView.addObject("jobTitles",jobTitles);
         req.getSession().setAttribute("jobTitles",jobTitles);
@@ -94,7 +99,7 @@ public class HomeController{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         HomePageTool.getJobTitles(req,postDao,modelAndView);
-        HomePageTool.sethomePageModel(authentication.getName(),modelAndView);
+        HomePageTool.sethomePageModel(authentication,modelAndView,postDao);
         modelAndView.addObject("post", postDao.getJobAnnouncementByIdWithStream(id));
         return modelAndView;
     }

@@ -32,7 +32,10 @@ public class ProfileController {
     @RequestMapping(method = RequestMethod.GET)
     public String profileString(HttpServletRequest req, ModelMap modelMap){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        modelMap.addAttribute("jobTitles",postDao.getJobTitles(authentication.getName()));
+        if(authentication.getAuthorities().toString().contains("ROLE_USER")){
+            return "redirect:/";
+        }
+        modelMap.addAttribute("jobTitles",postDao.getJobTitlesForComapny(authentication.getName()));
         modelMap.addAttribute("hiddenContent","hidden");
         modelMap.addAttribute("post",new Post());
         modelMap.addAttribute("hidenValue","hidden");
@@ -57,9 +60,9 @@ public class ProfileController {
         ModelAndView modelAndView = new ModelAndView("profile");
         modelAndView.addObject("hiddenContent","hidden");
 
-        modelAndView.addObject("jobTitles",postDao.getJobTitles(type,salary,workTime,authentication));
-        req.getSession().setAttribute("jobTitles",postDao.getJobTitles(type,salary,workTime,authentication));
-        postDao.getJobTitles(type,salary,workTime,authentication);
+        modelAndView.addObject("jobTitles",postDao.getJobTitlesForCompany(type,salary,workTime,authentication));
+        req.getSession().setAttribute("jobTitles",postDao.getJobTitlesForCompany(type,salary,workTime,authentication));
+        postDao.getJobTitlesForCompany(type,salary,workTime,authentication);
         return modelAndView;
     }
 

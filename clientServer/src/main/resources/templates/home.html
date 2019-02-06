@@ -9,7 +9,8 @@
         <span>Welcome To Job.am </span>
         <span th:text="${parameter}"/>
         <a class="header_buttons" href="/profile" th:if="${profileButton==null}" >My Profile</a>
-        
+        <a class="header_buttons" href="/settings" th:if="${settingsButton==null}" >Settings</a>
+
         <div id="imgdiv">
             <!-- <img src="<spring:url value='${imageSource}'/>" id="profileImage"> -->
         </div>
@@ -70,7 +71,7 @@
                                 <div class="deleft">
                                     <input type="hidden" name="jobId" th:value="${jobTitle.id}"/>
                                     <div th:if="${userActive!=null}">
-                                        <input type="image" th:src="@{/images/image.png}"/>
+                                        <input type="image" th:src="@{/images/image.png}" th:if="${settingsButton==null}"/>
                                     </div>
                                 </div>
                                 <div class="deright">

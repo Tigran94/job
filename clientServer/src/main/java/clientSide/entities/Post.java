@@ -51,6 +51,6 @@ public class Post {
     private Date expirationDate;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "company_id")
+    private Company user;
 }

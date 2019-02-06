@@ -6,10 +6,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Collections;
+
 @SpringBootApplication
 public class Starter {
     public static void main(String[] args) {
-        SpringApplication.run(Starter.class);
+       SpringApplication app = new SpringApplication(Starter.class);
+       app.setDefaultProperties(Collections
+               .singletonMap("server.host", "192.168.0.107"));
+//       SpringApplication.run(Starter.class);
+
+        app.run(args);
     }
 
     @Bean

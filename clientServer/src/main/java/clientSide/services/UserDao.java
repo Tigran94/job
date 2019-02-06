@@ -1,6 +1,8 @@
 package clientSide.services;
 
+import clientSide.entities.Company;
 import clientSide.entities.User;
+import clientSide.repositories.CompanyRepository;
 import clientSide.repositories.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,10 +23,12 @@ public class UserDao implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final CompanyRepository companyRepository;
 
-    public UserDao(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public UserDao(PasswordEncoder passwordEncoder, UserRepository userRepository, CompanyRepository companyRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.companyRepository = companyRepository;
     }
 
     public  void registerUser(User userForReg){
@@ -35,7 +39,7 @@ public class UserDao implements UserDetailsService {
         user.setUsername(userForReg.getUsername());
         user.setPassword(passwordEncoder.encode(userForReg.getPassword()));
         user.setActive(true);
-        user.setRoleName("ROLE_ADMIN");
+        user.setRoleName("ROLE_USER");
         userRepository.save(user);
 
         SecurityContextHolder.getContext()
@@ -43,7 +47,7 @@ public class UserDao implements UserDetailsService {
                         new UsernamePasswordAuthenticationToken(
                                 userForReg.getUsername(),
                                 userForReg.getPassword(),
-                                Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN")))
+                                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")))
                 );
     }
 
@@ -53,11 +57,12 @@ public class UserDao implements UserDetailsService {
 
         User user = userRepository.findByUsername(username).orElse(null);
         User user2 = userRepository.findByEmail(email).orElse(null);
-
-        if(user!=null){
+        Company company = companyRepository.findByUsername(username).orElse(null);
+        Company company2 = companyRepository.findByEmail(email).orElse(null);
+        if(user!=null || company!=null){
             messages.add("This username is already taken");
         }
-        if(user2!=null){
+        if(user2!=null || company2!=null){
             messages.add("This email is already taken");
         }
 
@@ -99,7 +104,7 @@ public class UserDao implements UserDetailsService {
         return userRepository.findByUsername(username).map(user -> new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"))
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
         ))
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }

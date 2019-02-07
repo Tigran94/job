@@ -97,9 +97,9 @@ public class HomeController{
     }
     @RequestMapping(value = "/{jobId}" ,method = RequestMethod.GET)
     public ModelAndView getJobById(@PathVariable("jobId") long id, HttpServletRequest req) {
-        ModelAndView modelAndView = new ModelAndView("posts");
+        ModelAndView modelAndView = new ModelAndView("home");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
+        modelAndView.addObject("contentView","hidden");
         HomePageTool.getJobTitles(req,postDao,modelAndView);
         HomePageTool.sethomePageModel(authentication,modelAndView,postDao);
         modelAndView.addObject("post", postDao.getJobAnnouncementByIdWithStream(id));

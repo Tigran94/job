@@ -85,7 +85,80 @@
             </ul>
         </div>
     </div>
-    <div class="content"/>
+    <div class="content" th:if="${contentView}">
+        <div class="tablerow">
+            <div class="left">
+                <p>Title: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.title}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left">
+                <p>Description: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.description}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left">
+                <p>Type: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.type}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left">
+                <p>Salary: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.salary}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left">
+                <p>Work Time: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.workTime}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left">
+                <p>Email: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.email}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left" >
+                <p>Company: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.company}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left" >
+                <p>Expiration Date: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.expirationDate}"></p>
+            </div>
+        </div>
+        <div class="tablerow">
+            <div class="left" >
+                <p>Post Date: </p>
+            </div>
+            <div class="right">
+                <p th:text="${post.postDate}"></p>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

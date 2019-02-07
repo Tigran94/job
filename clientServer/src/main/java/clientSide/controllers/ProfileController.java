@@ -76,6 +76,7 @@ public class ProfileController {
     public ModelAndView getUserJobById(@PathVariable("jobId") long id, HttpServletRequest req) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ModelAndView modelAndView = new ModelAndView("profile");
+        modelAndView.addObject("contentView","hidden");
         HomePageTool.
                 getJobTitles(req,postDao,modelAndView,authentication.getName());
         modelAndView.addObject("post", postDao.getJobAnnouncementByIdWithStream(id));

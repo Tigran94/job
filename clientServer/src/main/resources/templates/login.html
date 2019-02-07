@@ -22,11 +22,11 @@
                 <input id="pass" type="password" th:name="password" placeholder="Password" th:required="required"/>
             </div>
         </div>
-        <!--<div class="rows">-->
-            <!--<div class="lab">-->
-                <!--<span class="err" th:text="${loginConfirmedLogin}"></span>-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="rows">
+            <div class="lab">
+                <span class="err" th:text="${loginErrorMessage}"></span>
+            </div>
+        </div>
         <div class="rows">
             <div class="lab">
                 <input class="login_login" type="submit" th:value="Login"/>

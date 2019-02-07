@@ -1,6 +1,6 @@
 package clientSide.services;
 
-import clientSide.entities.Company;
+import clientSide.entities.CompanyEntity;
 import clientSide.repositories.CompanyRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,30 +14,30 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 
 @Service
-public class CompanyDao implements UserDetailsService {
+public class CompanyService implements UserDetailsService {
     private final CompanyRepository companyRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public CompanyDao(CompanyRepository companyRepository, PasswordEncoder passwordEncoder) {
+    public CompanyService(CompanyRepository companyRepository, PasswordEncoder passwordEncoder) {
         this.companyRepository = companyRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public  void registerCompany(Company companyForReg){
-        Company company = new Company();
-        company.setEmail(companyForReg.getEmail());
-        company.setUsername(companyForReg.getUsername());
-        company.setCompanyName(companyForReg.getCompanyName());
-        company.setPassword(passwordEncoder.encode(companyForReg.getPassword()));
-        company.setActive(true);
-        company.setRoleName("ROLE_ADMIN");
-        companyRepository.save(company);
+    public  void registerCompany(CompanyEntity companyEntityForReg){
+        CompanyEntity companyEntity = new CompanyEntity();
+        companyEntity.setEmail(companyEntityForReg.getEmail());
+        companyEntity.setUsername(companyEntityForReg.getUsername());
+        companyEntity.setCompanyName(companyEntityForReg.getCompanyName());
+        companyEntity.setPassword(passwordEncoder.encode(companyEntityForReg.getPassword()));
+        companyEntity.setActive(true);
+        companyEntity.setRoleName("ROLE_ADMIN");
+        companyRepository.save(companyEntity);
 
         SecurityContextHolder.getContext()
                 .setAuthentication(
                         new UsernamePasswordAuthenticationToken(
-                                companyForReg.getCompanyName(),
-                                companyForReg.getPassword(),
+                                companyEntityForReg.getCompanyName(),
+                                companyEntityForReg.getPassword(),
                                 Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN")))
                 );
     }
@@ -48,6 +48,6 @@ public class CompanyDao implements UserDetailsService {
                 company.getPassword(),
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"))
         ))
-                .orElseThrow(() -> new UsernameNotFoundException("Company name not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("CompanyEntity name not found"));
     }
 }

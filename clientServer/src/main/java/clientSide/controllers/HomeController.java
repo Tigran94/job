@@ -2,8 +2,8 @@ package clientSide.controllers;
 
 
 import clientSide.dto.JobTitle;
-import clientSide.entities.Post;
-import clientSide.services.PostDao;
+import clientSide.entities.PostEntity;
+import clientSide.services.PostService;
 import clientSide.utils.HomePageTool;
 
 import org.springframework.core.io.ClassPathResource;
@@ -28,11 +28,11 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 public class HomeController{
-    private final PostDao postDao;
+    private final PostService postService;
     private final JavaMailSender mailSender;
 
-    public HomeController(PostDao postDao, JavaMailSender mailSender) {
-        this.postDao = postDao;
+    public HomeController(PostService postService, JavaMailSender mailSender) {
+        this.postService = postService;
         this.mailSender = mailSender;
     }
 
@@ -42,7 +42,7 @@ public class HomeController{
 
         ModelAndView modelAndView = new ModelAndView("home");
 
-        HomePageTool.sethomePageModel(authentication,modelAndView,postDao);
+        HomePageTool.sethomePageModel(authentication,modelAndView, postService);
 
         return modelAndView;
     }
@@ -57,12 +57,12 @@ public class HomeController{
 
         HomePageTool.sethomePageModel(authentication,modelAndView);
         if(authentication.getAuthorities().toString().contains("ROLE_ADMIN")){
-            List<JobTitle> jobTitles = postDao.getJobTitlesWithoutCompany(type,salary,workTime,authentication);
+            List<JobTitle> jobTitles = postService.getJobTitlesWithoutCompany(type,salary,workTime,authentication);
             modelAndView.addObject("jobTitles",jobTitles);
             req.getSession().setAttribute("jobTitles",jobTitles);
             return modelAndView;
         }
-        List<JobTitle> jobTitles = postDao.getJobTitles(type,salary,workTime);
+        List<JobTitle> jobTitles = postService.getJobTitles(type,salary,workTime);
         modelAndView.addObject("jobTitles",jobTitles);
         req.getSession().setAttribute("jobTitles",jobTitles);
         return modelAndView;
@@ -71,7 +71,7 @@ public class HomeController{
     @RequestMapping(value = "/apply",method = RequestMethod.POST)
     public String applyPost(@RequestParam("jobId") long id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Post post = postDao.getJobAnnouncementByIdWithStream(id);
+        PostEntity postEntity = postService.getJobAnnouncementByIdWithStream(id);
         File file;
         if(new File(new ClassPathResource(File.separator+"usersCV"+File.separator + authentication.getName()+File.separator+"cv.pdf").getPath()).exists()){
             file = new File(new ClassPathResource(File.separator+"usersCV"+File.separator + authentication.getName()+File.separator+"cv.pdf").getPath());
@@ -84,7 +84,7 @@ public class HomeController{
             helper.setSubject("Job Application");
             helper.setText("Hi, this cv is coming from job.am, please pay attention to him\n"
                     + "My name is " +authentication.getName() + " and i really need this job");
-            helper.setTo(post.getEmail());
+            helper.setTo(postEntity.getEmail());
             helper.setFrom("springtest94@gmail.com");
             helper.addAttachment("cv.pdf", file);
 
@@ -100,9 +100,9 @@ public class HomeController{
         ModelAndView modelAndView = new ModelAndView("home");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         modelAndView.addObject("contentView","hidden");
-        HomePageTool.getJobTitles(req,postDao,modelAndView);
-        HomePageTool.sethomePageModel(authentication,modelAndView,postDao);
-        modelAndView.addObject("post", postDao.getJobAnnouncementByIdWithStream(id));
+        HomePageTool.getJobTitles(req, postService,modelAndView);
+        HomePageTool.sethomePageModel(authentication,modelAndView, postService);
+        modelAndView.addObject("post", postService.getJobAnnouncementByIdWithStream(id));
         return modelAndView;
     }
 }

@@ -7,16 +7,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
 @Controller
 @RequestMapping("/uploadFile")
-public class UploadFileController {
+public class UploadFileController implements HandlerExceptionResolver {
 
     private final static String redirect = "redirect:/settings";
     private final static String incorrectFileMessage = "Only PDF files are supported";
@@ -88,5 +93,15 @@ public class UploadFileController {
     private static boolean isFileSupported(MultipartFile file){
         String fileType = file.getContentType();
         return fileType.equals(pdfApplication) || fileType.equals(docxApplication);
+    }
+
+    @Override
+    public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {
+
+        ModelAndView modelAndView = new ModelAndView("settings");
+
+        modelAndView.addObject("uploadError",uploadExceptionMessage);
+
+        return modelAndView;
     }
 }

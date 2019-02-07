@@ -1,7 +1,7 @@
 package clientSide.configuration;
 
-import clientSide.services.CompanyDao;
-import clientSide.services.UserDao;
+import clientSide.services.CompanyService;
+import clientSide.services.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -16,13 +16,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
-    private final UserDao userDao;
-    private final CompanyDao companyDao;
+    private final UserService userService;
+    private final CompanyService companyService;
 
-    public WebSecurityConfig(UserDao userDao, PasswordEncoder passwordEncoder, CompanyDao companyDao){
+    public WebSecurityConfig(UserService userService, PasswordEncoder passwordEncoder, CompanyService companyService){
         this.passwordEncoder = passwordEncoder;
-        this.userDao = userDao;
-        this.companyDao = companyDao;
+        this.userService = userService;
+        this.companyService = companyService;
     }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -53,14 +53,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDao);
+        authenticationProvider.setUserDetailsService(userService);
         authenticationProvider.setPasswordEncoder(passwordEncoder);
         return authenticationProvider;
     }
     @Bean
     public AuthenticationProvider daoAuthenticationProvider2() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(companyDao);
+        authenticationProvider.setUserDetailsService(companyService);
         authenticationProvider.setPasswordEncoder(passwordEncoder);
         return authenticationProvider;
     }

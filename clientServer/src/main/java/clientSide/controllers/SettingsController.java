@@ -1,7 +1,8 @@
 package clientSide.controllers;
 
-import clientSide.services.UserDao;
-import clientSide.entities.User;
+import clientSide.services.UserService;
+import clientSide.entities.UserEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -19,10 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/settings")
 public class SettingsController {
 
-    private final UserDao userDao;
+    @Autowired
+    private final UserService userService;
 
-    public SettingsController(UserDao userDao) {
-        this.userDao = userDao;
+    public SettingsController(UserService userService) {
+        this.userService = userService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -31,6 +33,7 @@ public class SettingsController {
         ModelAndView modelAndView = new ModelAndView("settings");
         if(authentication.getAuthorities().toString().contains("ROLE_ADMIN")){
             modelAndView.addObject("logoutButton","hide");
+            modelAndView.addObject("userAdmin","Hide");
             return modelAndView;
         }
         return modelAndView;
@@ -44,14 +47,14 @@ public class SettingsController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        User user= userDao.getUser(authentication.getName());
+        UserEntity userEntity = userService.getUser(authentication.getName());
 
-        if(!user.getPassword().equals(currentPassword)){
+        if(!userEntity.getPassword().equals(currentPassword)){
             red.addFlashAttribute("passwordChanged","Wrong password");
             return "redirect:/settings";
         }
         else{
-            userDao.changePassword(authentication,newPassword);
+            userService.changePassword(authentication,newPassword);
             red.addFlashAttribute("passwordChanged","Password changed successfully");
             return "redirect:/settings";
         }
@@ -64,15 +67,15 @@ public class SettingsController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        User user= userDao.getUser(authentication.getName());
+        UserEntity userEntity = userService.getUser(authentication.getName());
 
 
-        if(user.getFirstName().equals(firstName)){
+        if(userEntity.getFirstName().equals(firstName)){
             red.addFlashAttribute("firstNameChanged","Your name is already "+firstName);
             return "redirect:/settings";
         }
         else{
-            userDao.changeFirstName(authentication,firstName);
+            userService.changeFirstName(authentication,firstName);
             red.addFlashAttribute("firstNameChanged","First Name changed successfully");
             return "redirect:/settings";
         }
@@ -85,15 +88,15 @@ public class SettingsController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        User user= userDao.getUser(authentication.getName());
+        UserEntity userEntity = userService.getUser(authentication.getName());
 
 
-        if(user.getLastName().equals(lastName)){
+        if(userEntity.getLastName().equals(lastName)){
             red.addFlashAttribute("lastNameChanged","Your last name is already "+lastName);
             return "redirect:/settings";
         }
         else{
-            userDao.changeLastName(authentication,lastName);
+            userService.changeLastName(authentication,lastName);
             red.addFlashAttribute("lastNameChanged","Last Name changed successfully");
             return "redirect:/settings";
         }

@@ -1,14 +1,14 @@
 package clientSide.repositories;
 
-import clientSide.entities.Company;
+import clientSide.entities.CompanyEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface CompanyRepository extends CrudRepository<Company,Long> {
+public interface CompanyRepository extends CrudRepository<CompanyEntity,Long> {
 
-    Optional<Company> findByCompanyName(String companyName);
+    Optional<CompanyEntity> findByCompanyName(String companyName);
 
-    Optional<Company> findByUsername(String userName);
-    Optional<Company> findByEmail(String email);
+    Optional<CompanyEntity> findByUsername(String userName);
+    Optional<CompanyEntity> findByEmail(String email);
 }

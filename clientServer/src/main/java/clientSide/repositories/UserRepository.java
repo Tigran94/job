@@ -1,12 +1,12 @@
 package clientSide.repositories;
 
 
-import clientSide.entities.User;
+import clientSide.entities.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<User,Long> {
-    Optional<User> findByUsername(String username);
-    Optional<User> findByEmail(String email);
+public interface UserRepository extends CrudRepository<UserEntity,Long> {
+    Optional<UserEntity> findByUsername(String username);
+    Optional<UserEntity> findByEmail(String email);
 }

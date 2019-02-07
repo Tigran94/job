@@ -1,7 +1,7 @@
 package clientSide.controllers;
 
-import clientSide.services.PostDao;
-import clientSide.entities.Post;
+import clientSide.services.PostService;
+import clientSide.entities.PostEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,10 +16,10 @@ import java.util.GregorianCalendar;
 @RequestMapping("/addPost")
 public class AddPostController {
 
-    private final PostDao postDao;
+    private final PostService postService;
 
-    public AddPostController(PostDao postDao) {
-        this.postDao = postDao;
+    public AddPostController(PostService postService) {
+        this.postService = postService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -28,7 +28,7 @@ public class AddPostController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String addPost(Post post, HttpServletRequest req){
+    public String addPost(PostEntity postEntity, HttpServletRequest req){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String[] date = req.getParameter("endDate").split("-");
@@ -37,10 +37,10 @@ public class AddPostController {
         int month = Integer.parseInt(date[1]);
         int day = Integer.parseInt(date[2]);
 
-        post.setPostDate(new Date());
-        post.setExpirationDate(new GregorianCalendar(year,month,day).getTime());
+        postEntity.setPostDate(new Date());
+        postEntity.setExpirationDate(new GregorianCalendar(year,month,day).getTime());
 
-        postDao.addPost(post,authentication);
+        postService.addPost(postEntity,authentication);
 
         return "redirect:/";
     }

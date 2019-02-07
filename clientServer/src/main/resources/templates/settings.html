@@ -14,7 +14,7 @@
     </div>
 </div>
 <div class="main_settings">
-    <div class="wind">
+    <div class="wind" th:if="${userAdmin==null}">
         <form action="/settings/fn" method="post">
             <div class="rows">
                 <div class="cnt">
@@ -41,7 +41,7 @@
 
         </form>
     </div>
-    <div class="wind">
+    <div class="wind" th:if="${userAdmin==null}">
         <form action="/settings/ln" method="post">
             <div class="rows">
                 <div class="cnt">
@@ -103,7 +103,7 @@
 
         </form>
     </div>
-    <div class="wind">
+    <div class="wind" th:if="${userAdmin==null}">
         <form action="/uploadFile" enctype="multipart/form-data" method="post">
             <div class="rows">
                 <div class="cnt">

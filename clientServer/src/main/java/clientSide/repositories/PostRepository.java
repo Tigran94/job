@@ -1,23 +1,23 @@
 package clientSide.repositories;
 
-import clientSide.entities.Post;
+import clientSide.entities.PostEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface PostRepository extends CrudRepository<Post,Long> {
+public interface PostRepository extends CrudRepository<PostEntity,Long> {
 
-    Optional<Post> findById(Long id);
-    List<Post> findByEmail(String email);
+    Optional<PostEntity> findById(Long id);
+    List<PostEntity> findByEmail(String email);
 
 
-    List<Post> findBySalary(String salary);
-    List<Post> findByWorkTime(String workTime);
-    List<Post> findByType(String type);
+    List<PostEntity> findBySalary(String salary);
+    List<PostEntity> findByWorkTime(String workTime);
+    List<PostEntity> findByType(String type);
 
-    List<Post> findBySalaryAndEmail(String salary,String email);
-    List<Post> findByWorkTimeAndEmail(String workTime,String email);
-    List<Post> findByTypeAndEmail(String type,String email);
+    List<PostEntity> findBySalaryAndEmail(String salary, String email);
+    List<PostEntity> findByWorkTimeAndEmail(String workTime, String email);
+    List<PostEntity> findByTypeAndEmail(String type, String email);
 
 }

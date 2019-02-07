@@ -9,17 +9,22 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "company")
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Company {
+public class UserEntity {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "companyName",unique = true,nullable = false)
-    private String companyName;
+    @Column(name = "firstName")
+    private String firstName;
+
+    @Column(name = "lastName")
+    private String lastName;
 
     @Column(name = "userName",unique = true,nullable = false)
     private String username;
@@ -30,13 +35,14 @@ public class Company {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "roleName", columnDefinition = "VARCHAR(255) default \"ROLE_ADMIN\"",nullable = false)
+    @Column(name = "roleName", columnDefinition = "VARCHAR(255) default \"ROLE_USER\"",nullable = false)
     private String roleName;
 
     @Column(name = "isActive",columnDefinition = "boolean default 1",nullable = false)
     private boolean isActive;
 
-    @OneToMany(targetEntity = Post.class,cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "company_Id")
-    private Set<Post> posts= new HashSet<>();
+    @OneToMany(targetEntity = PostEntity.class,cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "user_Id")
+    private Set<PostEntity> postEntities = new HashSet<>();
+
 }

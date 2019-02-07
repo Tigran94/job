@@ -15,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "posts")
-public class Post {
+public class PostEntity {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "postDate",nullable = false)
@@ -52,5 +52,5 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "company_id")
-    private Company user;
+    private CompanyEntity user;
 }

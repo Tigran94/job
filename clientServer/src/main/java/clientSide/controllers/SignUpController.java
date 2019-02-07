@@ -1,9 +1,9 @@
 package clientSide.controllers;
 
-import clientSide.entities.Company;
-import clientSide.services.CompanyDao;
-import clientSide.services.UserDao;
-import clientSide.entities.User;
+import clientSide.entities.CompanyEntity;
+import clientSide.services.CompanyService;
+import clientSide.services.UserService;
+import clientSide.entities.UserEntity;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +19,12 @@ import javax.servlet.http.HttpServletRequest;
 public class SignUpController {
 
 
-    private final UserDao userDao;
-    private final CompanyDao companyDao;
+    private final UserService userService;
+    private final CompanyService companyService;
 
-    public SignUpController(UserDao userDao, CompanyDao companyDao) {
-        this.userDao = userDao;
-        this.companyDao = companyDao;
+    public SignUpController(UserService userService, CompanyService companyService) {
+        this.userService = userService;
+        this.companyService = companyService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -45,10 +45,9 @@ public class SignUpController {
     @RequestMapping(value = "/userSignup",method = RequestMethod.POST)
     public String userRegistration(@RequestParam("confirmPassword") String confirmPass,
                                    @RequestParam("pdfFile") MultipartFile file,
-                                   HttpServletRequest req, RedirectAttributes red, User user){
+                                   HttpServletRequest req, RedirectAttributes red, UserEntity userEntity){
 
-
-        if(!(user.getPassword().equals(confirmPass))){
+        if(!(userEntity.getPassword().equals(confirmPass))){
             red.addFlashAttribute("passwordConfirmed","Wrong confirm password");
            return "redirect:/signup/userSignup";
         }
@@ -57,18 +56,17 @@ public class SignUpController {
             return "redirect:/signup/userSignup";
         }
 
-        String messages = userDao.checkIfUserExists(user.getUsername(),user.getEmail());
+        String messages = userService.checkIfUserExists(userEntity.getUsername(), userEntity.getEmail());
 
         if(messages.length()!=0){
             red.addFlashAttribute("registrationFailed",messages);
             return "redirect:/signup/userSignup";
         }
 
-        userDao.registerUser(user);
-        req.getSession().setAttribute("user",user);
+        userService.registerUser(userEntity);
 
         try {
-            UploadFileController.saveFile(file, user.getUsername());
+            UploadFileController.saveFile(file, userEntity.getUsername());
         }catch (Exception ignore){}
 
         return "redirect:/";
@@ -76,23 +74,22 @@ public class SignUpController {
     }
     @RequestMapping(value = "/companySignup",method = RequestMethod.POST)
     public String companyRegistration(@RequestParam("confirmPassword") String confirmPass,
-                                   HttpServletRequest req, RedirectAttributes red, Company company){
+                                      RedirectAttributes red, CompanyEntity companyEntity){
 
 
-        if(!(company.getPassword().equals(confirmPass))){
+        if(!(companyEntity.getPassword().equals(confirmPass))){
             red.addFlashAttribute("passwordConfirmed","Wrong confirm password");
             return "redirect:/signup/companySignup";
         }
 
-        String messages = userDao.checkIfUserExists(company.getCompanyName(),company.getEmail());
+        String messages = userService.checkIfUserExists(companyEntity.getCompanyName(), companyEntity.getEmail());
 
         if(messages.length()!=0){
             red.addFlashAttribute("registrationFailed",messages);
             return "redirect:/signup/companySignup";
         }
 
-        companyDao.registerCompany(company);
-        req.getSession().setAttribute("company",company);
+        companyService.registerCompany(companyEntity);
 
         return "redirect:/";
 

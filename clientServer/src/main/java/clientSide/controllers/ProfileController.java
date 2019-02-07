@@ -1,8 +1,7 @@
 package clientSide.controllers;
 
-import clientSide.dto.JobTitle;
-import clientSide.services.PostDao;
-import clientSide.entities.Post;
+import clientSide.services.PostService;
+import clientSide.entities.PostEntity;
 
 import clientSide.utils.HomePageTool;
 import org.springframework.security.core.Authentication;
@@ -18,15 +17,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 @Controller
 @RequestMapping("/profile")
 public class ProfileController {
 
-    private final PostDao postDao;
-    public ProfileController(PostDao postDao) {
-        this.postDao = postDao;
+    private final PostService postService;
+    public ProfileController(PostService postService) {
+        this.postService = postService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -35,9 +33,9 @@ public class ProfileController {
         if(authentication.getAuthorities().toString().contains("ROLE_USER")){
             return "redirect:/";
         }
-        modelMap.addAttribute("jobTitles",postDao.getJobTitlesForComapny(authentication.getName()));
+        modelMap.addAttribute("jobTitles", postService.getJobTitlesForComapny(authentication.getName()));
         modelMap.addAttribute("hiddenContent","hidden");
-        modelMap.addAttribute("post",new Post());
+        modelMap.addAttribute("post",new PostEntity());
         modelMap.addAttribute("hidenValue","hidden");
         return "profile";
     }
@@ -60,15 +58,15 @@ public class ProfileController {
         ModelAndView modelAndView = new ModelAndView("profile");
         modelAndView.addObject("hiddenContent","hidden");
 
-        modelAndView.addObject("jobTitles",postDao.getJobTitlesForCompany(type,salary,workTime,authentication));
-        req.getSession().setAttribute("jobTitles",postDao.getJobTitlesForCompany(type,salary,workTime,authentication));
-        postDao.getJobTitlesForCompany(type,salary,workTime,authentication);
+        modelAndView.addObject("jobTitles", postService.getJobTitlesForCompany(type,salary,workTime,authentication));
+        req.getSession().setAttribute("jobTitles", postService.getJobTitlesForCompany(type,salary,workTime,authentication));
+        postService.getJobTitlesForCompany(type,salary,workTime,authentication);
         return modelAndView;
     }
 
     @RequestMapping(value = "/del",method = RequestMethod.POST)
     public String deletePost(@RequestParam("jobId") long id){
-        postDao.deletePost(id);
+        postService.deletePost(id);
         return "redirect:/profile";
     }
 
@@ -78,8 +76,9 @@ public class ProfileController {
         ModelAndView modelAndView = new ModelAndView("profile");
         modelAndView.addObject("contentView","hidden");
         HomePageTool.
-                getJobTitles(req,postDao,modelAndView,authentication.getName());
-        modelAndView.addObject("post", postDao.getJobAnnouncementByIdWithStream(id));
+                getJobTitles(req, postService,modelAndView,authentication.getName());
+        modelAndView.addObject("post", postService.getJobAnnouncementByIdWithStream(id));
+        modelAndView.addObject("selected","selected");
         return modelAndView;
     }
 }

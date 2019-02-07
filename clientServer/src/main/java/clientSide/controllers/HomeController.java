@@ -72,8 +72,10 @@ public class HomeController{
     public String applyPost(@RequestParam("jobId") long id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Post post = postDao.getJobAnnouncementByIdWithStream(id);
-
-        File file = new File(new ClassPathResource(File.separator+"usersCV"+File.separator + authentication.getName()+File.separator+"cv.pdf").getPath());
+        File file;
+        if(new File(new ClassPathResource(File.separator+"usersCV"+File.separator + authentication.getName()+File.separator+"cv.pdf").getPath()).exists()){
+            file = new File(new ClassPathResource(File.separator+"usersCV"+File.separator + authentication.getName()+File.separator+"cv.pdf").getPath());
+        }else   file = new File(new ClassPathResource(File.separator+"usersCV"+File.separator + authentication.getName()+File.separator+"cv.docx").getPath());
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper;

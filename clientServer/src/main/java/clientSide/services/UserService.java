@@ -80,7 +80,7 @@ public class UserService implements UserDetailsService {
 
         UserEntity userEntity = userRepository.findByUsername(authUser.getName()).orElse(null);
 
-        userEntity.setPassword(newPassword);
+        userEntity.setPassword(passwordEncoder.encode(newPassword));
 
         userRepository.save(userEntity);
     }

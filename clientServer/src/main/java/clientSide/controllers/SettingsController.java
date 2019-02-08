@@ -5,6 +5,7 @@ import clientSide.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +24,12 @@ public class SettingsController {
     @Autowired
     private final UserService userService;
 
-    public SettingsController(UserService userService) {
+    @Autowired
+    private final PasswordEncoder passwordEncoder;
+
+    public SettingsController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -49,7 +54,7 @@ public class SettingsController {
 
         UserEntity userEntity = userService.getUser(authentication.getName());
 
-        if(!userEntity.getPassword().equals(currentPassword)){
+        if(!passwordEncoder.matches(currentPassword,userEntity.getPassword())){
             red.addFlashAttribute("passwordChanged","Wrong password");
             return "redirect:/settings";
         }

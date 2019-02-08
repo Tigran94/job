@@ -44,7 +44,7 @@ public class CompanyService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         return companyRepository.findByUsername(userName).map(company -> new org.springframework.security.core.userdetails.User(
-                company.getUsername(),
+                company.getCompanyName(),
                 company.getPassword(),
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"))
         ))

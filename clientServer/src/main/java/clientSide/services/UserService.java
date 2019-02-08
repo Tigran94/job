@@ -63,7 +63,7 @@ public class UserService implements UserDetailsService {
 
         UserEntity userEntity = userRepository.findByUsername(username).orElse(null);
         UserEntity userEntity2 = userRepository.findByEmail(email).orElse(null);
-        CompanyEntity companyEntity = companyRepository.findByUsername(username).orElse(null);
+        CompanyEntity companyEntity = companyRepository.findByCompanyName(username).orElse(null);
         CompanyEntity companyEntity2 = companyRepository.findByEmail(email).orElse(null);
 
         if(userEntity !=null || companyEntity !=null){

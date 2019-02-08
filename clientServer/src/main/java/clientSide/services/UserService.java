@@ -1,6 +1,5 @@
 package clientSide.services;
 
-import clientSide.dto.UserDto;
 import clientSide.entities.CompanyEntity;
 import clientSide.entities.UserEntity;
 import clientSide.repositories.CompanyRepository;

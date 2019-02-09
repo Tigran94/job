@@ -60,10 +60,14 @@
             <div class="formdiv">
                 <input id="filter" type="submit" th:value="Filter"/>
             </div>
+            <div class="formdiv">
+                <a href="/reset" class="header_buttons">Reset Filter</a>
+            </div>
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         </form>
         <div class="mrg">
             <ul id="list">
+                <span class="err" th:text="${noJobTitlesFound}"></span>
                 <th:block th:each="jobTitle : ${jobTitles}">
                     <form action="/apply" method="post">
                         <li>

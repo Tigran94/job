@@ -7,7 +7,8 @@
 <body>
 <div class="header">
     <div>
-        <a class="header_buttons" href="/profile">Back</a>
+        <a class="header_buttons" href="/profile" th:if="${userAdmin!=null}">Back</a>
+        <a class="header_buttons" href="/" th:if="${userAdmin==null}">Back</a>
     </div>
     <div>
         <a class="header_buttons" href="/settings/" th:if="${logoutButton==null}">Log Out</a>

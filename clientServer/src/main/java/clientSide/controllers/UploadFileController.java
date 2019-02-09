@@ -1,5 +1,6 @@
 package clientSide.controllers;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +27,7 @@ public class UploadFileController implements HandlerExceptionResolver {
     private final static String redirect = "redirect:/settings";
     private final static String incorrectFileMessage = "Only PDF files are supported";
     private final static String uploadExceptionMessage = "Something went wrong. Please try again";
-    private final static String sucsessfullMessage = "CV uploaded correctly";
+    private final static String successfullMessage = "CV uploaded correctly";
     private final static String docxApplication = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     private final static String pdfApplication = "application/pdf";
 
@@ -58,7 +59,7 @@ public class UploadFileController implements HandlerExceptionResolver {
             return;
         }
 
-        red.addFlashAttribute("uploadError",sucsessfullMessage);
+        red.addFlashAttribute("uploadError",successfullMessage);
         return;
     }
 
@@ -70,6 +71,9 @@ public class UploadFileController implements HandlerExceptionResolver {
         if (!dir.exists()) {
             dir.mkdirs();
         }
+
+        FileUtils.cleanDirectory(dir);
+
         String fileType = file.getContentType();
         File serverFile = null;
 

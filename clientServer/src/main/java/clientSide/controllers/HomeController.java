@@ -6,6 +6,7 @@ import clientSide.services.PostService;
 import clientSide.utils.HomePageTool;
 
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpRequest;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -33,14 +35,20 @@ public class HomeController{
     }
 
     @GetMapping
-    public ModelAndView homeString(){
+    public ModelAndView homeString(HttpServletRequest req){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         ModelAndView modelAndView = new ModelAndView("home");
 
-        HomePageTool.sethomePageModel(authentication,modelAndView, postService);
+        HomePageTool.sethomePageModel(authentication,modelAndView,postService);
 
         return modelAndView;
+    }
+
+    @GetMapping("/reset")
+    public String resetFilter(HttpServletRequest req){
+        req.getSession().setAttribute("jobTitles",postService.getJobTitles());
+        return "redirect:/";
     }
 
     @PostMapping
@@ -51,15 +59,17 @@ public class HomeController{
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ModelAndView modelAndView = new ModelAndView("home");
+        List<JobTitle> jobTitles;
 
         HomePageTool.sethomePageModel(authentication,modelAndView);
         if(authentication.getAuthorities().toString().contains("ROLE_ADMIN")){
-            List<JobTitle> jobTitles = postService.getJobTitlesWithoutCompany(type,salary,workTime,authentication);
-            modelAndView.addObject("jobTitles",jobTitles);
-            req.getSession().setAttribute("jobTitles",jobTitles);
-            return modelAndView;
+            jobTitles = postService.getJobTitlesWithoutCompany(type,salary,workTime,authentication);
+        }else{
+            jobTitles = postService.getJobTitles(type,salary,workTime);
         }
-        List<JobTitle> jobTitles = postService.getJobTitles(type,salary,workTime);
+        if(jobTitles.size()==0){
+            modelAndView.addObject("noJobTitlesFound","No job titles found with that criteria");
+        }
         modelAndView.addObject("jobTitles",jobTitles);
         req.getSession().setAttribute("jobTitles",jobTitles);
         return modelAndView;
@@ -99,7 +109,7 @@ public class HomeController{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         modelAndView.addObject("contentView","hidden");
         HomePageTool.getJobTitles(req, postService,modelAndView);
-        HomePageTool.sethomePageModel(authentication,modelAndView, postService);
+        HomePageTool.sethomePageModel(authentication,modelAndView);
         modelAndView.addObject("post", postService.getJobAnnouncementByIdWithStream(id));
         return modelAndView;
     }

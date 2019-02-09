@@ -45,8 +45,6 @@ public class HomePageTool {
         }
         modelAndView.addObject("userActive","active");
         modelAndView.addObject("parameter", authUser.getName());
-
-        return;
     }
 
     public static List<JobTitle> getJobTitles(HttpServletRequest req, PostService postService, ModelAndView modelAndView,String name){

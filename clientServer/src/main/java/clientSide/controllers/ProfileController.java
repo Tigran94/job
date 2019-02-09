@@ -2,17 +2,14 @@ package clientSide.controllers;
 
 import clientSide.services.PostService;
 import clientSide.entities.PostEntity;
-
 import clientSide.utils.HomePageTool;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,8 +24,8 @@ public class ProfileController {
         this.postService = postService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String profileString(HttpServletRequest req, ModelMap modelMap){
+    @GetMapping
+    public String profileString(ModelMap modelMap){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.getAuthorities().toString().contains("ROLE_USER")){
             return "redirect:/";
@@ -39,7 +36,8 @@ public class ProfileController {
         modelMap.addAttribute("hidenValue","hidden");
         return "profile";
     }
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+
+    @GetMapping(value = "/")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
@@ -48,7 +46,7 @@ public class ProfileController {
         return "redirect:/";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public ModelAndView filteredJobs(HttpServletRequest req,
                                    @RequestParam("type") String type,
                                    @RequestParam("workTime") String workTime,
@@ -64,13 +62,13 @@ public class ProfileController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/del",method = RequestMethod.POST)
+    @PostMapping(value = "/del")
     public String deletePost(@RequestParam("jobId") long id){
         postService.deletePost(id);
         return "redirect:/profile";
     }
 
-    @RequestMapping(value = "/{jobId}", method = RequestMethod.GET)
+    @GetMapping(value = "/{jobId}")
     public ModelAndView getUserJobById(@PathVariable("jobId") long id, HttpServletRequest req) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ModelAndView modelAndView = new ModelAndView("profile");

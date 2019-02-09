@@ -2,6 +2,7 @@ package clientSide.utils;
 
 import clientSide.dto.JobTitle;
 import clientSide.services.PostService;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -11,7 +12,6 @@ import java.util.List;
 public class HomePageTool {
 
     public static void sethomePageModel(Authentication authUser, ModelAndView modelAndView, PostService postService){
-
         if(authUser.getName().equals("anonymousUser")) {
             modelAndView.addObject("profileButton","hide");
             modelAndView.addObject("settingsButton","hide");
@@ -30,6 +30,7 @@ public class HomePageTool {
 
         return;
     }
+
     public static void sethomePageModel(Authentication authUser, ModelAndView modelAndView){
 
         if(authUser.getName().equals("anonymousUser")) {
@@ -48,9 +49,7 @@ public class HomePageTool {
         return;
     }
 
-    public static List<JobTitle> getJobTitles(HttpServletRequest req, PostService postService, ModelAndView modelAndView,
-                                              String name){
-
+    public static List<JobTitle> getJobTitles(HttpServletRequest req, PostService postService, ModelAndView modelAndView,String name){
         List<JobTitle> jobTitles = (List<JobTitle>) req.getSession().getAttribute("jobTitles");
         if( jobTitles==null){
             jobTitles= postService.getJobTitlesForComapny(name);
@@ -60,7 +59,6 @@ public class HomePageTool {
     }
 
     public static List<JobTitle> getJobTitles(HttpServletRequest req, PostService postService, ModelAndView modelAndView){
-
         List<JobTitle> jobTitles = (List<JobTitle>) req.getSession().getAttribute("jobTitles");
         if( jobTitles==null){
             jobTitles = postService.getJobTitles();

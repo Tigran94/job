@@ -2,7 +2,9 @@ package clientSide.services;
 
 import clientSide.entities.CompanyEntity;
 import clientSide.repositories.CompanyRepository;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 public class CompanyService implements UserDetailsService {
@@ -23,7 +26,7 @@ public class CompanyService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public  void registerCompany(CompanyEntity companyEntityForReg){
+    public void registerCompany(CompanyEntity companyEntityForReg){
         CompanyEntity companyEntity = new CompanyEntity();
         companyEntity.setEmail(companyEntityForReg.getEmail());
         companyEntity.setUsername(companyEntityForReg.getUsername());
@@ -41,6 +44,19 @@ public class CompanyService implements UserDetailsService {
                                 Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN")))
                 );
     }
+
+    public void changePassword(Authentication authUser, String newPassword){
+        CompanyEntity companyEntity = companyRepository.findByCompanyName(authUser.getName()).orElse(null);
+        companyEntity.setPassword(passwordEncoder.encode(newPassword));
+        companyRepository.save(companyEntity);
+    }
+
+    public CompanyEntity getUser(String username) {
+        Optional<CompanyEntity> username1 = companyRepository.findByCompanyName(username);
+        CompanyEntity userEntity =  username1.get();
+        return userEntity;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         return companyRepository.findByUsername(userName).map(company -> new org.springframework.security.core.userdetails.User(

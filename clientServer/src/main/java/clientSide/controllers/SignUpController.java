@@ -6,13 +6,10 @@ import clientSide.services.UserService;
 import clientSide.entities.UserEntity;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/signup")
@@ -27,25 +24,25 @@ public class SignUpController {
         this.companyService = companyService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public String signupString(){
         return "signup";
     }
 
-    @RequestMapping(value = "/userSignup",method = RequestMethod.GET)
+    @GetMapping(value = "/userSignup")
     public String userSignupString(){
         return "userSignup";
     }
-    @RequestMapping(value = "/companySignup",method = RequestMethod.GET)
+    @GetMapping(value = "/companySignup")
     public String companySignupString(){
         return "companySignup";
     }
 
 
-    @RequestMapping(value = "/userSignup",method = RequestMethod.POST)
+    @PostMapping(value = "/userSignup")
     public String userRegistration(@RequestParam("confirmPassword") String confirmPass,
                                    @RequestParam("pdfFile") MultipartFile file,
-                                   HttpServletRequest req, RedirectAttributes red, UserEntity userEntity){
+                                   RedirectAttributes red, UserEntity userEntity){
 
         if(!(userEntity.getPassword().equals(confirmPass))){
             red.addFlashAttribute("passwordConfirmed","Wrong confirm password");
@@ -72,10 +69,9 @@ public class SignUpController {
         return "redirect:/";
 
     }
-    @RequestMapping(value = "/companySignup",method = RequestMethod.POST)
+    @PostMapping(value = "/companySignup")
     public String companyRegistration(@RequestParam("confirmPassword") String confirmPass,
                                       RedirectAttributes red, CompanyEntity companyEntity){
-
 
         if(!(companyEntity.getPassword().equals(confirmPass))){
             red.addFlashAttribute("passwordConfirmed","Wrong confirm password");
@@ -92,7 +88,5 @@ public class SignUpController {
         companyService.registerCompany(companyEntity);
 
         return "redirect:/";
-
     }
-
 }

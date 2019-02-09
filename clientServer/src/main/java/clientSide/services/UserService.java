@@ -4,7 +4,7 @@ import clientSide.entities.CompanyEntity;
 import clientSide.entities.UserEntity;
 import clientSide.repositories.CompanyRepository;
 import clientSide.repositories.UserRepository;
-import org.springframework.beans.BeanUtils;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,7 +33,7 @@ public class UserService implements UserDetailsService {
         this.companyRepository = companyRepository;
     }
 
-    public  void registerUser(UserEntity userEntityForReg){
+    public void registerUser(UserEntity userEntityForReg){
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(userEntityForReg.getEmail());
 
@@ -54,7 +54,24 @@ public class UserService implements UserDetailsService {
                                 userEntityForReg.getPassword(),
                                 Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")))
                 );
+    }
 
+    public void changePassword(Authentication authUser, String newPassword){
+        UserEntity userEntity = userRepository.findByUsername(authUser.getName()).orElse(null);
+        userEntity.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(userEntity);
+    }
+
+    public void changeFirstName(Authentication authUser,String firstName){
+        UserEntity userEntity = userRepository.findByUsername(authUser.getName()).orElse(null);
+        userEntity.setFirstName(firstName);
+        userRepository.save(userEntity);
+    }
+
+    public void changeLastName(Authentication authUser,String lastName){
+        UserEntity userEntity = userRepository.findByUsername(authUser.getName()).orElse(null);
+        userEntity.setLastName(lastName);
+        userRepository.save(userEntity);
     }
 
     public String checkIfUserExists(String username, String email){
@@ -76,35 +93,11 @@ public class UserService implements UserDetailsService {
         return messages.toString().substring(1,messages.toString().length()-1);
     }
 
-    public  void changePassword(Authentication authUser, String newPassword){
-
-        UserEntity userEntity = userRepository.findByUsername(authUser.getName()).orElse(null);
-
-        userEntity.setPassword(passwordEncoder.encode(newPassword));
-
-        userRepository.save(userEntity);
-    }
-
-    public void changeFirstName(Authentication authUser,String firstName){
-        UserEntity userEntity = userRepository.findByUsername(authUser.getName()).orElse(null);
-
-        userEntity.setFirstName(firstName);
-
-        userRepository.save(userEntity);
-    }
-
-    public void changeLastName(Authentication authUser,String lastName){
-        UserEntity userEntity = userRepository.findByUsername(authUser.getName()).orElse(null);
-        userEntity.setLastName(lastName);
-        userRepository.save(userEntity);
-    }
-
     public UserEntity getUser(String username) {
         Optional<UserEntity> username1 = userRepository.findByUsername(username);
         UserEntity userEntity =  username1.get();
         return userEntity;
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

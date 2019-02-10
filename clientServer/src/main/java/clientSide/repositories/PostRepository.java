@@ -13,12 +13,4 @@ public interface PostRepository extends CrudRepository<PostEntity,Long>, JpaSpec
     List<PostEntity> findAll();
     List<PostEntity> findByEmail(String email);
 
-    List<PostEntity> findBySalary(String salary);
-    List<PostEntity> findByWorkTime(String workTime);
-    List<PostEntity> findByType(String type);
-
-    List<PostEntity> findBySalaryAndEmail(String salary, String email);
-    List<PostEntity> findByWorkTimeAndEmail(String workTime, String email);
-    List<PostEntity> findByTypeAndEmail(String type, String email);
-
 }

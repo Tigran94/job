@@ -2,6 +2,11 @@
 <head>
     <title>Title</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <script type = "text/javascript">
+        function Warm() {
+            alert("CV Sends successfully");
+        }
+    </script>
 </head>
 <body>
 <div class="header">
@@ -69,13 +74,13 @@
             <ul id="list">
                 <span class="err" th:text="${noJobTitlesFound}"></span>
                 <th:block th:each="jobTitle : ${jobTitles}">
-                    <form action="/apply" method="post">
+                    <form action="/apply" method="post" onclick="Warm()">
                         <li>
                             <div class="derow">
                                 <div class="deleft">
                                     <input type="hidden" name="jobId" th:value="${jobTitle.id}"/>
                                     <div th:if="${userActive!=null}">
-                                        <input type="image" th:src="@{/images/image.png}" th:if="${settingsButton==null}"/>
+                                        <input type="image" th:src="@{/images/image.png}" th:if="${settingsButton==null}" />
                                     </div>
                                 </div>
                                 <div class="deright">

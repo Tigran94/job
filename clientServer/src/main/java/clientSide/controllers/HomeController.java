@@ -37,10 +37,16 @@ public class HomeController{
     @GetMapping
     public ModelAndView homeString(HttpServletRequest req){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<JobTitle> jobTitles;
 
         ModelAndView modelAndView = new ModelAndView("home");
-
+        if(authentication.getAuthorities().toString().contains("ROLE_ADMIN")){
+            jobTitles = postService.getJobTitlesWithoutCompany(authentication.getName());
+        }else{
+            jobTitles = postService.getJobTitles();
+        }
         HomePageTool.sethomePageModel(authentication,modelAndView,postService);
+        req.getSession().setAttribute("jobTitles",jobTitles);
 
         return modelAndView;
     }

@@ -74,13 +74,13 @@
             <ul id="list">
                 <span class="err" th:text="${noJobTitlesFound}"></span>
                 <th:block th:each="jobTitle : ${jobTitles}">
-                    <form action="/apply" method="post" onclick="Warm()">
+                    <form action="/apply" method="post">
                         <li>
                             <div class="derow">
                                 <div class="deleft">
                                     <input type="hidden" name="jobId" th:value="${jobTitle.id}"/>
                                     <div th:if="${userActive!=null}">
-                                        <input type="image" th:src="@{/images/image.png}" th:if="${settingsButton==null}" />
+                                        <input type="image" th:src="@{/images/image.png}" th:if="${settingsButton==null}" onclick="Warm()" />
                                     </div>
                                 </div>
                                 <div class="deright">

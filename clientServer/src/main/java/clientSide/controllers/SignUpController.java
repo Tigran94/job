@@ -61,9 +61,10 @@ public class SignUpController {
         }
 
         userService.registerUser(userEntity);
+        UploadFileController uploadFileController = new UploadFileController();
 
         try {
-            UploadFileController.saveFile(file, userEntity.getUsername());
+            uploadFileController.saveFile(file, userEntity.getUsername());
         }catch (Exception ignore){}
 
         return "redirect:/";

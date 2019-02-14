@@ -1,4 +1,5 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <title>Title</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
@@ -13,14 +14,14 @@
     <div>
         <span>Welcome To Job.am </span>
         <span th:text="${parameter}"/>
-        <a class="header_buttons" href="/profile" th:if="${profileButton==null}" >My Profile</a>
-        <a class="header_buttons" href="/settings" th:if="${settingsButton==null}" >Settings</a>
+        <a class="header_buttons" href="/profile" sec:authorize="hasRole('ROLE_ADMIN')">My Profile</a>
+        <a class="header_buttons" href="/settings" sec:authorize="hasRole('ROLE_USER')">Settings</a>
 
         <div id="imgdiv">
             <!-- <img src="<spring:url value='${imageSource}'/>" id="profileImage"> -->
         </div>
     </div>
-    <div th:if="${userActive==null}">
+    <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
         <a class="header_buttons" href="/login">Login</a>
         <a class="header_buttons" href="/signup">Sign UP</a>
         <!-- <a class="header_buttons" href="/" ${hiddenBack}>Back</a> -->
@@ -79,7 +80,7 @@
                             <div class="derow">
                                 <div class="deleft">
                                     <input type="hidden" name="jobId" th:value="${jobTitle.id}"/>
-                                    <div th:if="${userActive!=null}">
+                                    <div sec:authorize="hasRole('ROLE_USER')">
                                         <input type="image" th:src="@{/images/image.png}" th:if="${settingsButton==null}" onclick="Warm()" />
                                     </div>
                                 </div>

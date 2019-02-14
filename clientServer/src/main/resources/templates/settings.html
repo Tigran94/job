@@ -1,4 +1,5 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Title</title>
@@ -7,15 +8,15 @@
 <body>
 <div class="header">
     <div>
-        <a class="header_buttons" href="/profile" th:if="${userAdmin!=null}">Back</a>
-        <a class="header_buttons" href="/" th:if="${userAdmin==null}">Back</a>
+        <a class="header_buttons" href="/profile" sec:authorize="hasRole('ROLE_ADMIN')">Back</a>
+        <a class="header_buttons" href="/" sec:authorize="hasRole('ROLE_USER')">Back</a>
     </div>
     <div>
-        <a class="header_buttons" href="/settings/" th:if="${logoutButton==null}">Log Out</a>
+        <a class="header_buttons" href="/settings/" sec:authorize="hasRole('ROLE_USER')">Log Out</a>
     </div>
 </div>
 <div class="main_settings">
-    <div class="wind" th:if="${userAdmin==null}">
+    <div class="wind" sec:authorize="hasRole('ROLE_USER')">
         <form action="/settings/fn" method="post">
             <div class="rows">
                 <div class="cnt">
@@ -42,7 +43,7 @@
 
         </form>
     </div>
-    <div class="wind" th:if="${userAdmin==null}">
+    <div class="wind" sec:authorize="hasRole('ROLE_USER')">
         <form action="/settings/ln" method="post">
             <div class="rows">
                 <div class="cnt">
@@ -104,7 +105,7 @@
 
         </form>
     </div>
-    <div class="wind" th:if="${userAdmin==null}">
+    <div class="wind" sec:authorize="hasRole('ROLE_USER')">
         <form action="/uploadFile" enctype="multipart/form-data" method="post">
             <div class="rows">
                 <div class="cnt">

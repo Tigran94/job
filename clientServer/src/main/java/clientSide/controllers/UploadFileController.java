@@ -1,13 +1,13 @@
 package clientSide.controllers;
 
-import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -16,13 +16,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.plaf.multi.MultiPanelUI;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 @RequestMapping("/uploadFile")
-public class UploadFileController implements HandlerExceptionResolver {
+public class UploadFileController {
 
     private final static String redirect = "redirect:/settings";
     private final static String incorrectFileMessage = "Only PDF files are supported";
@@ -43,6 +47,7 @@ public class UploadFileController implements HandlerExceptionResolver {
     }
 
 
+
     public static boolean isFilePdf(MultipartFile file,RedirectAttributes red){
         if(!isFileSupported(file)){
             red.addFlashAttribute("uploadError",incorrectFileMessage);
@@ -51,61 +56,38 @@ public class UploadFileController implements HandlerExceptionResolver {
         return true;
     }
 
-    public static void saveFile(MultipartFile file,String username,RedirectAttributes red){
-        try {
-            saveFile(file, username);
+
+    public void saveFile(MultipartFile file,String username,RedirectAttributes red){
+        try{
+            saveFile(file,username);
         }catch (Exception e){
             red.addFlashAttribute("uploadError",uploadExceptionMessage);
-            return;
         }
-
         red.addFlashAttribute("uploadError",successfullMessage);
-        return;
     }
 
-    public static void saveFile(MultipartFile file,String userName) throws Exception{
+
+    public void saveFile(MultipartFile file,String userName) throws Exception{
+        String systemPath = "usersCV" + File.separator + userName;
+        File cv = new File(systemPath);
+        Files.createDirectories(Paths.get(systemPath));
+        systemPath = systemPath + File.separator + getFileType(file.getContentType());
+        Files.deleteIfExists(Paths.get(systemPath));
         byte[] bytes = file.getBytes();
-
-        File dir = new File(new ClassPathResource(File.separator+"usersCV"+File.separator + userName).getPath());
-
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        FileUtils.cleanDirectory(dir);
-
-        String fileType = file.getContentType();
-        File serverFile = null;
-
-        if(fileType.equals(pdfApplication)) {
-            serverFile = new File(dir.getAbsolutePath() + File.separator + "cv.pdf");
-        }
-        if(fileType.equals(docxApplication)){
-            serverFile = new File(dir.getAbsolutePath() + File.separator + "cv.docx");
-        }
-
-        if(serverFile.exists()){
-            serverFile.delete();
-        }
-
-        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
-
+        cv = new File(systemPath);
+        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(cv));
         stream.write(bytes);
         stream.close();
+
+
+    }
+
+    private static String getFileType(String contentType){
+        return contentType.equals(pdfApplication) ? "cv.pdf" : "cv.docx";
     }
 
     private static boolean isFileSupported(MultipartFile file){
         String fileType = file.getContentType();
         return fileType.equals(pdfApplication) || fileType.equals(docxApplication);
-    }
-
-    @Override
-    public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {
-
-        ModelAndView modelAndView = new ModelAndView("settings");
-
-        modelAndView.addObject("uploadError",uploadExceptionMessage);
-
-        return modelAndView;
     }
 }

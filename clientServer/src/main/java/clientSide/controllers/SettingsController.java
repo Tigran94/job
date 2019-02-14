@@ -33,15 +33,8 @@ public class SettingsController {
     }
 
     @GetMapping
-    public ModelAndView settingsString() {
-        Authentication authentication  = SecurityContextHolder.getContext().getAuthentication();
-        ModelAndView modelAndView = new ModelAndView("settings");
-        if(authentication.getAuthorities().toString().contains("ROLE_ADMIN")){
-            modelAndView.addObject("logoutButton","hide");
-            modelAndView.addObject("userAdmin","Hide");
-            return modelAndView;
-        }
-        return modelAndView;
+    public String settingsString() {
+        return "settings";
     }
 
     @PostMapping(value = "/pass")

@@ -5,6 +5,7 @@ import clientSide.entities.PostEntity;
 import clientSide.services.PostService;
 import clientSide.utils.HomePageTool;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpRequest;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -28,6 +29,8 @@ import java.util.List;
 public class HomeController{
     private final PostService postService;
     private final JavaMailSender mailSender;
+    private final String storage = "usersCV";
+
 
     public HomeController(PostService postService, JavaMailSender mailSender) {
         this.postService = postService;
@@ -45,9 +48,8 @@ public class HomeController{
         }else{
             jobTitles = postService.getJobTitles();
         }
-        HomePageTool.sethomePageModel(authentication,modelAndView,postService);
         req.getSession().setAttribute("jobTitles",jobTitles);
-
+        modelAndView.addObject("jobTitles",jobTitles);
         return modelAndView;
     }
 
@@ -67,7 +69,6 @@ public class HomeController{
         ModelAndView modelAndView = new ModelAndView("home");
         List<JobTitle> jobTitles;
 
-        HomePageTool.sethomePageModel(authentication,modelAndView);
         if(authentication.getAuthorities().toString().contains("ROLE_ADMIN")){
             jobTitles = postService.getJobTitlesWithoutCompany(type,salary,workTime,authentication);
         }else{
@@ -85,11 +86,10 @@ public class HomeController{
     public String applyPost(@RequestParam("jobId") long id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PostEntity postEntity = postService.getJobAnnouncementByIdWithStream(id);
-        File file;
-        if(new File(new ClassPathResource(File.separator+"usersCV"+File.separator + authentication.getName()+File.separator+"cv.pdf").getPath()).exists()){
-            file = new File(new ClassPathResource(File.separator+"usersCV"+File.separator + authentication.getName()+File.separator+"cv.pdf").getPath());
-        }else   file = new File(new ClassPathResource(File.separator+"usersCV"+File.separator + authentication.getName()+File.separator+"cv.docx").getPath());
-
+        String path = storage + File.separator + authentication.getName();
+        path = new File(path).getAbsolutePath();
+        File userFolder = new File(path);
+        File userCv = new File(path + File.separator + userFolder.list()[0]);
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper;
         try {
@@ -99,7 +99,7 @@ public class HomeController{
                     + "My name is " +authentication.getName() + " and i really need this job");
             helper.setTo(postEntity.getEmail());
             helper.setFrom("springtest94@gmail.com");
-            helper.addAttachment("cv.pdf", file);
+            helper.addAttachment(userCv.getName(), userCv);
 
         } catch (MessagingException e) {
             e.printStackTrace();
@@ -112,10 +112,8 @@ public class HomeController{
     @GetMapping(value = "/{jobId}")
     public ModelAndView getJobById(@PathVariable("jobId") long id, HttpServletRequest req) {
         ModelAndView modelAndView = new ModelAndView("home");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         modelAndView.addObject("contentView","hidden");
         HomePageTool.getJobTitles(req, postService,modelAndView);
-        HomePageTool.sethomePageModel(authentication,modelAndView);
         modelAndView.addObject("post", postService.getJobAnnouncementByIdWithStream(id));
         return modelAndView;
     }

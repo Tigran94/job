@@ -1,13 +1,10 @@
 package clientSide.controllers;
 
 import clientSide.dto.JobTitle;
+import clientSide.dto.PostSearchDto;
 import clientSide.entities.PostEntity;
+import clientSide.search.PostSearch;
 import clientSide.services.PostService;
-import clientSide.utils.HomePageTool;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpRequest;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
@@ -18,9 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,47 +34,25 @@ public class HomeController{
     }
 
     @GetMapping
-    public ModelAndView homeString(HttpServletRequest req){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<JobTitle> jobTitles;
+    public ModelAndView homeString(){
+        List<JobTitle> jobTitles = postService.getJobTitles();
 
         ModelAndView modelAndView = new ModelAndView("home");
-        if(authentication.getAuthorities().toString().contains("ROLE_ADMIN")){
-            jobTitles = postService.getJobTitlesWithoutCompany(authentication.getName());
-        }else{
-            jobTitles = postService.getJobTitles();
-        }
-        req.getSession().setAttribute("jobTitles",jobTitles);
         modelAndView.addObject("jobTitles",jobTitles);
         return modelAndView;
     }
 
-    @GetMapping("/reset")
-    public String resetFilter(HttpServletRequest req){
-        req.getSession().setAttribute("jobTitles",postService.getJobTitles());
-        return "redirect:/";
-    }
 
     @PostMapping
-    public ModelAndView homeFiltered(HttpServletRequest req,
-                             @RequestParam("type") String type,
-                             @RequestParam("workTime") String workTime,
-                             @RequestParam("salary") String salary){
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public ModelAndView homeFiltered(PostSearchDto postSearchDto){
+        PostSearch postSearch = new PostSearch(postSearchDto.getType(),postSearchDto.getSalary(),postSearchDto.getWorkTime());
+        List<JobTitle> jobTitles = postService.getJobTitles(postSearch);
         ModelAndView modelAndView = new ModelAndView("home");
-        List<JobTitle> jobTitles;
-
-        if(authentication.getAuthorities().toString().contains("ROLE_ADMIN")){
-            jobTitles = postService.getJobTitlesWithoutCompany(type,salary,workTime,authentication);
-        }else{
-            jobTitles = postService.getJobTitles(type,salary,workTime);
-        }
-        if(jobTitles.size()==0){
-            modelAndView.addObject("noJobTitlesFound","No job titles found with that criteria");
+        if(jobTitles.isEmpty()){
+            modelAndView.addObject("noJobTitlesFound","No job titles found with that search criteria");
+            return modelAndView;
         }
         modelAndView.addObject("jobTitles",jobTitles);
-        req.getSession().setAttribute("jobTitles",jobTitles);
         return modelAndView;
     }
 
@@ -110,10 +84,10 @@ public class HomeController{
     }
 
     @GetMapping(value = "/{jobId}")
-    public ModelAndView getJobById(@PathVariable("jobId") long id, HttpServletRequest req) {
+    public ModelAndView getJobById(@PathVariable("jobId") long id) {
         ModelAndView modelAndView = new ModelAndView("home");
-        modelAndView.addObject("contentView","hidden");
-        HomePageTool.getJobTitles(req, postService,modelAndView);
+        modelAndView.addObject("contentView","visible");
+        modelAndView.addObject("jobTitles",postService.getJobTitles());
         modelAndView.addObject("post", postService.getJobAnnouncementByIdWithStream(id));
         return modelAndView;
     }

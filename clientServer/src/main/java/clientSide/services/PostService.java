@@ -50,37 +50,13 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    public List<JobTitle> getJobTitles(String type, String salary, String workTime) {
-        List<PostEntity> postEntities = getFilteredPosts(type,salary,workTime);
+    public List<JobTitle> getJobTitles(PostSearch postSearch) {
+        List<PostEntity> postEntities = postRepository.findAll(postSearch);
 
         return postEntities
                 .stream()
                 .map(j -> new JobTitle(j.getId(), j.getTitle()))
                 .collect(Collectors.toList());
-    }
-
-    public List<JobTitle> getJobTitlesWithoutCompany(String username) {
-        CompanyEntity companyEntity = companyRepository.findByCompanyName(username).orElse(null);
-        List<PostEntity> postEntities = postRepository.findAll();
-        return postEntities
-                .stream()
-                .filter(u -> !u.getEmail().equals(companyEntity.getEmail()))
-                .map(j -> new JobTitle(j.getId(), j.getTitle()))
-                .collect(Collectors.toList());
-    }
-
-    public List<JobTitle> getJobTitlesWithoutCompany(String type, String salary, String workTime,Authentication authUser) {
-
-        List<PostEntity> postEntities;
-        CompanyEntity companyEntity = companyRepository.findByCompanyName(authUser.getName()).orElse(null);
-        postEntities = getFilteredPosts(type,salary,workTime);
-
-        return postEntities
-                .stream()
-                .filter(u -> !u.getEmail().equals(companyEntity.getEmail()))
-                .map(j -> new JobTitle(j.getId(), j.getTitle()))
-                .collect(Collectors.toList());
-
     }
 
     public List<JobTitle> getJobTitlesForComapny(String companyName) {
@@ -93,11 +69,11 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    public List<JobTitle> getJobTitlesForCompany(String type, String salary, String workTime,Authentication authUser) {
+    public List<JobTitle> getJobTitlesForCompany(PostSearch postSearch,String username) {
 
         List<PostEntity> postEntities;
-        CompanyEntity companyEntity = companyRepository.findByCompanyName(authUser.getName()).orElse(null);
-        postEntities = getFilteredPosts(type,salary,workTime);
+        CompanyEntity companyEntity = companyRepository.findByCompanyName(username).orElse(null);
+        postEntities = postRepository.findAll(postSearch);
 
         return postEntities
                 .stream()
@@ -109,10 +85,5 @@ public class PostService {
 
     public PostEntity getJobAnnouncementByIdWithStream(long id) {
         return postRepository.findById(id).orElse(null);
-    }
-
-    public List<PostEntity> getFilteredPosts(String type,String salary,String workTime){
-        PostSearch postSearch = new PostSearch(type,salary,workTime);
-        return postRepository.findAll(postSearch);
     }
 }

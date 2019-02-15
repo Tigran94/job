@@ -29,6 +29,7 @@ public class CompanyService implements UserDetailsService {
     public void registerCompany(CompanyEntity companyEntityForReg){
         CompanyEntity companyEntity = new CompanyEntity();
         companyEntity.setEmail(companyEntityForReg.getEmail());
+        companyEntity.setPhoneNumber(companyEntityForReg.getPhoneNumber());
         companyEntity.setUsername(companyEntityForReg.getUsername());
         companyEntity.setCompanyName(companyEntityForReg.getCompanyName());
         companyEntity.setPassword(passwordEncoder.encode(companyEntityForReg.getPassword()));

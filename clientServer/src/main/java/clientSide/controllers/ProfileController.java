@@ -1,9 +1,12 @@
 package clientSide.controllers;
 
+import clientSide.dto.JobTitle;
+import clientSide.dto.PostSearchDto;
+import clientSide.search.PostSearch;
 import clientSide.services.PostService;
 import clientSide.entities.PostEntity;
-import clientSide.utils.HomePageTool;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -14,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/profile")
@@ -47,19 +52,18 @@ public class ProfileController {
     }
 
     @PostMapping
-    public ModelAndView filteredJobs(HttpServletRequest req,
-                                   @RequestParam("type") String type,
-                                   @RequestParam("workTime") String workTime,
-                                   @RequestParam("salary") String salary){
+    public ModelAndView filteredJobs(PostSearchDto postSearchDto){
+        PostSearch postSearch = new PostSearch(postSearchDto.getType(),postSearchDto.getSalary(),postSearchDto.getWorkTime());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ModelAndView modelAndView = new ModelAndView("/profile");
+        List<JobTitle> jobTitles = postService.getJobTitlesForCompany(postSearch,authentication.getName());
+        if(jobTitles.isEmpty()){
+            modelAndView.addObject("noJobTitlesFound","No job titles found by that criteria");
+            return modelAndView;
+        }
+        modelAndView.addObject("jobTitles",jobTitles);
 
-        ModelAndView modelAndView = new ModelAndView("profile");
-        modelAndView.addObject("hiddenContent","hidden");
-
-        modelAndView.addObject("jobTitles", postService.getJobTitlesForCompany(type,salary,workTime,authentication));
-        req.getSession().setAttribute("jobTitles", postService.getJobTitlesForCompany(type,salary,workTime,authentication));
-        postService.getJobTitlesForCompany(type,salary,workTime,authentication);
-        return modelAndView;
+       return modelAndView;
     }
 
     @PostMapping(value = "/del")
@@ -69,12 +73,11 @@ public class ProfileController {
     }
 
     @GetMapping(value = "/{jobId}")
-    public ModelAndView getUserJobById(@PathVariable("jobId") long id, HttpServletRequest req) {
+    public ModelAndView getUserJobById(@PathVariable("jobId") long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ModelAndView modelAndView = new ModelAndView("profile");
         modelAndView.addObject("contentView","hidden");
-        HomePageTool.
-                getJobTitles(req, postService,modelAndView,authentication.getName());
+        modelAndView.addObject("jobTitles",postService.getJobTitles());
         modelAndView.addObject("post", postService.getJobAnnouncementByIdWithStream(id));
         modelAndView.addObject("selected","selected");
         return modelAndView;

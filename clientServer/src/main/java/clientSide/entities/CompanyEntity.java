@@ -27,6 +27,9 @@ public class CompanyEntity {
     @Column(name = "email",unique = true,nullable = false)
     private String email;
 
+    @Column(name = "phoneNumber",unique = true,nullable = false)
+    private String phoneNumber;
+
     @Column(name = "password", nullable = false)
     private String password;
 

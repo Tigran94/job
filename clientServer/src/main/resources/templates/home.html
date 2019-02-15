@@ -66,9 +66,6 @@
             <div class="formdiv">
                 <input id="filter" type="submit" th:value="Filter"/>
             </div>
-            <div class="formdiv">
-                <a href="/reset" class="header_buttons">Reset Filter</a>
-            </div>
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         </form>
         <div class="mrg">
@@ -81,7 +78,7 @@
                                 <div class="deleft">
                                     <input type="hidden" name="jobId" th:value="${jobTitle.id}"/>
                                     <div sec:authorize="hasRole('ROLE_USER')">
-                                        <input type="image" th:src="@{/images/image.png}" th:if="${settingsButton==null}" onclick="Warm()" />
+                                        <input type="image" th:src="@{/images/image.png}" sec:authorize="hasRole('ROLE_USER')" onclick="Warm()" />
                                     </div>
                                 </div>
                                 <div class="deright">
@@ -171,4 +168,6 @@
     </div>
 </div>
 </body>
+<head>
+</head>
 </html>

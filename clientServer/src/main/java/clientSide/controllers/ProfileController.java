@@ -1,6 +1,7 @@
 package clientSide.controllers;
 
 import clientSide.dto.JobTitle;
+import clientSide.dto.PostDto;
 import clientSide.dto.PostSearchDto;
 import clientSide.search.PostSearch;
 import clientSide.services.PostService;
@@ -73,13 +74,8 @@ public class ProfileController {
     }
 
     @GetMapping(value = "/{jobId}")
-    public ModelAndView getUserJobById(@PathVariable("jobId") long id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ModelAndView modelAndView = new ModelAndView("profile");
-        modelAndView.addObject("contentView","hidden");
-        modelAndView.addObject("jobTitles",postService.getJobTitles());
-        modelAndView.addObject("post", postService.getJobAnnouncementByIdWithStream(id));
-        modelAndView.addObject("selected","selected");
-        return modelAndView;
+    public ResponseEntity getUserJobById(@PathVariable("jobId") long id) {
+        PostDto postDto = new PostDto(postService.getJobAnnouncementByIdWithStream(id));
+        return ResponseEntity.ok(postDto);
     }
 }

@@ -1,10 +1,13 @@
 package clientSide.controllers;
 
 import clientSide.dto.JobTitle;
+import clientSide.dto.PostDto;
 import clientSide.dto.PostSearchDto;
 import clientSide.entities.PostEntity;
 import clientSide.search.PostSearch;
 import clientSide.services.PostService;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
@@ -15,6 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
 import java.util.List;
@@ -78,17 +83,13 @@ public class HomeController{
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-
         mailSender.send(message);
         return "redirect:/";
     }
 
     @GetMapping(value = "/{jobId}")
-    public ModelAndView getJobById(@PathVariable("jobId") long id) {
-        ModelAndView modelAndView = new ModelAndView("home");
-        modelAndView.addObject("contentView","visible");
-        modelAndView.addObject("jobTitles",postService.getJobTitles());
-        modelAndView.addObject("post", postService.getJobAnnouncementByIdWithStream(id));
-        return modelAndView;
+    public ResponseEntity getJobById(@PathVariable("jobId") long id) {
+        PostDto postDto = new PostDto(postService.getJobAnnouncementByIdWithStream(id));
+        return ResponseEntity.ok(postDto);
     }
 }

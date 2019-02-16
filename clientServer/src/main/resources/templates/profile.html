@@ -1,6 +1,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script th:src="@{/js/jobIdAjaxProfile.js}"></script>
     <title>Title</title>
 </head>
 <body>
@@ -70,7 +72,7 @@
                                     <input type="image" th:src="@{/images/del.png}"/>
                                 </div>
                                 <div class="deright">
-                                   <a th:href="@{'/profile/' + ${jobTitle.id}}"  th:text="${jobTitle.title}"></a>
+                                   <a th:value="${jobTitle.id}" th:text="${jobTitle.title}" name="jobID"></a>
                                 </div>
                             </div>
                         </li>
@@ -80,77 +82,50 @@
                  </ul>
         </div>
     </div>
-    <div class="content" th:if="${contentView}">
+    <div class="content">
         <div class="tablerow">
             <div class="left">
-                <p>Title: </p>
-            </div>
-            <div class="right">
-                <p th:text="${post?.title}"></p>
+                <p id="title"></p>
             </div>
         </div>
         <div class="tablerow">
             <div class="left">
-                <p>Description: </p>
-            </div>
-            <div class="right">
-                <p th:text="${post?.description}"></p>
+                <p id="description"></p>
             </div>
         </div>
         <div class="tablerow">
             <div class="left">
-                <p>Type: </p>
-            </div>
-            <div class="right">
-                <p th:text="${post?.type}"></p>
+                <p id="type"></p>
             </div>
         </div>
         <div class="tablerow">
             <div class="left">
-                <p>Salary: </p>
-            </div>
-            <div class="right">
-                <p th:text="${post?.salary}"></p>
+                <p id="salary"></p>
             </div>
         </div>
         <div class="tablerow">
             <div class="left">
-                <p>Work Time: </p>
-            </div>
-            <div class="right">
-                <p th:text="${post?.workTime}"></p>
+                <p id="time"></p>
             </div>
         </div>
         <div class="tablerow">
             <div class="left">
-                <p>Email: </p>
-            </div>
-            <div class="right">
-                <p th:text="${post?.email}"></p>
+                <p id="email"></p>
             </div>
         </div>
         <div class="tablerow">
             <div class="left" >
-                <p>Company: </p>
-            </div>
-            <div class="right">
-                <p th:text="${post?.company}"></p>
+                <p id="company"></p>
             </div>
         </div>
         <div class="tablerow">
             <div class="left" >
-                <p>Expiration Date: </p>
-            </div>
-            <div class="right">
-                <p th:text="${post?.expirationDate}"></p>
+                <p id="postDate"></p>
             </div>
         </div>
         <div class="tablerow">
             <div class="left" >
-                <p>Post Date: </p>
-            </div>
-            <div class="right">
-                <p th:text="${post?.postDate}"></p>
+                <p id="expDate"></p>
             </div>
         </div>
     </div>

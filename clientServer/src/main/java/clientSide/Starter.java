@@ -13,7 +13,7 @@ public class Starter {
     public static void main(String[] args) {
        SpringApplication app = new SpringApplication(Starter.class);
        app.setDefaultProperties(Collections
-               .singletonMap("server.host", "192.168.0.107"));
+               .singletonMap("server.host", "192.168.88.40"));
 //       SpringApplication.run(Starter.class);
 
         app.run(args);

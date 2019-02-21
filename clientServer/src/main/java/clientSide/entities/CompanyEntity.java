@@ -39,6 +39,10 @@ public class CompanyEntity {
     @Column(name = "isActive",columnDefinition = "boolean default 1",nullable = false)
     private boolean isActive;
 
+    @OneToMany(targetEntity = CompanyHistory.class,cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "companyHistory_Id")
+    private Set<CompanyHistory> companyHistoryId = new HashSet<>();
+
     @OneToMany(targetEntity = PostEntity.class,cascade = CascadeType.REMOVE)
     @JoinColumn(name = "company_Id")
     private Set<PostEntity> postEntities = new HashSet<>();

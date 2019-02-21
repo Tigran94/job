@@ -45,4 +45,8 @@ public class UserEntity {
     @JoinColumn(name = "user_Id")
     private Set<PostEntity> postEntities = new HashSet<>();
 
+    @OneToMany(targetEntity = UserHistory.class,cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "userHistory_Id")
+    private Set<UserHistory> userHistories = new HashSet<>();
+
 }

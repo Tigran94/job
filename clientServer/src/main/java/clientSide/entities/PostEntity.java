@@ -53,4 +53,8 @@ public class PostEntity {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private CompanyEntity user;
+
+    @ManyToOne
+    @JoinColumn(name = "companyHistory_id")
+    private CompanyHistory actionHistoryID;
 }

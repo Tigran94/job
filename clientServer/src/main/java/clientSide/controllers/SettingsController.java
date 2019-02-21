@@ -1,10 +1,15 @@
 package clientSide.controllers;
 
 import clientSide.entities.CompanyEntity;
+import clientSide.entities.CompanyHistory;
+import clientSide.entities.UserHistory;
+import clientSide.services.CompanyHistoryService;
 import clientSide.services.CompanyService;
+import clientSide.services.UserHistoryService;
 import clientSide.services.UserService;
 import clientSide.entities.UserEntity;
 
+import clientSide.utils.DateUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +21,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/settings")
@@ -23,12 +32,18 @@ public class SettingsController {
 
 
     private final UserService userService;
+    private final UserHistoryService userHistoryService;
     private final CompanyService companyService;
+    private final CompanyHistoryService companyHistoryService;
     private final PasswordEncoder passwordEncoder;
 
-    public SettingsController(UserService userService, CompanyService companyService, PasswordEncoder passwordEncoder) {
+    public SettingsController(UserService userService,UserHistoryService userHistoryService,
+                              CompanyService companyService,CompanyHistoryService companyHistoryService,
+                              PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.userHistoryService = userHistoryService;
         this.companyService = companyService;
+        this.companyHistoryService = companyHistoryService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -66,7 +81,11 @@ public class SettingsController {
             return "redirect:/settings";
         }
         else{
-            userService.changeFirstName(authentication,firstName);
+            userEntity = userService.changeFirstName(authentication,firstName);
+            UserHistory userHistory = userHistoryService.converUserToHistory(userEntity);
+            userHistory.setAction("I have change my first name from " +
+                    userEntity.getFirstName()+ " to "+ firstName + "at" + DateUtils.getCurrentTime());
+            userHistoryService.save(userHistory);
             red.addFlashAttribute("firstNameChanged","First Name changed successfully");
             return "redirect:/settings";
         }
@@ -86,6 +105,10 @@ public class SettingsController {
         }
         else{
             userService.changeLastName(authentication,lastName);
+            UserHistory userHistory = userHistoryService.converUserToHistory(userEntity);
+            userHistory.setAction("LastName changed from "+ userEntity.getLastName()+ " to "+ lastName +
+                    "at " + DateUtils.getCurrentTime());
+            userHistoryService.save(userHistory);
             red.addFlashAttribute("lastNameChanged","Last Name changed successfully");
             return "redirect:/settings";
         }
@@ -108,7 +131,12 @@ public class SettingsController {
                 return "redirect:/settings";
             }
             else{
-                userService.changePassword(authentication,newPassword);
+                UserEntity userEntity = userService.changePassword(authentication,newPassword);
+                UserHistory userHistory = userHistoryService.converUserToHistory(userEntity);
+
+                userHistory.setAction("Changed my password at " + DateUtils.getCurrentTime());
+                userHistoryService.save(userHistory);
+
                 red.addFlashAttribute("passwordChanged","Password changed successfully");
                 return "redirect:/settings";
             }
@@ -118,9 +146,13 @@ public class SettingsController {
             return "redirect:/settings";
         }
         else{
-            companyService.changePassword(authentication,newPassword);
+            CompanyEntity companyEntity = companyService.changePassword(authentication,newPassword);
+            CompanyHistory companyHistory = companyHistoryService.convertCompanyToHistory(companyEntity);
+            companyHistory.setAction("Changed my password at " + DateUtils.getCurrentTime());
+            companyHistoryService.save(companyHistory);
             red.addFlashAttribute("passwordChanged","Password changed successfully");
             return "redirect:/settings";
         }
     }
+
 }

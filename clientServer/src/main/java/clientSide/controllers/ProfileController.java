@@ -3,10 +3,14 @@ package clientSide.controllers;
 import clientSide.dto.JobTitle;
 import clientSide.dto.PostDto;
 import clientSide.dto.PostSearchDto;
+import clientSide.entities.CompanyEntity;
+import clientSide.entities.CompanyHistory;
 import clientSide.search.PostSearch;
+import clientSide.services.CompanyHistoryService;
 import clientSide.services.PostService;
 import clientSide.entities.PostEntity;
 
+import clientSide.utils.DateUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +30,9 @@ import java.util.List;
 public class ProfileController {
 
     private final PostService postService;
-    public ProfileController(PostService postService) {
+    private final CompanyHistoryService companyHistoryService;
+    public ProfileController(PostService postService,CompanyHistoryService companyHistoryService) {
+        this.companyHistoryService = companyHistoryService;
         this.postService = postService;
     }
 
@@ -69,7 +75,14 @@ public class ProfileController {
 
     @PostMapping(value = "/del")
     public String deletePost(@RequestParam("jobId") long id){
-        postService.deletePost(id);
+        PostEntity postEntity = postService.deletePost(id);
+
+        CompanyEntity companyEntity = postEntity.getUser();
+        CompanyHistory companyHistory = companyHistoryService.convertCompanyToHistory(companyEntity);
+        companyHistory.setAction("Deleted " + "\""+postEntity.getTitle()+"\""+" post" + "at" +
+                DateUtils.getCurrentTime());
+        companyHistoryService.save(companyHistory);
+
         return "redirect:/profile";
     }
 

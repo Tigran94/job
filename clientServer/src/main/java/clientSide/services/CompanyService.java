@@ -46,10 +46,10 @@ public class CompanyService implements UserDetailsService {
                 );
     }
 
-    public void changePassword(Authentication authUser, String newPassword){
+    public CompanyEntity changePassword(Authentication authUser, String newPassword){
         CompanyEntity companyEntity = companyRepository.findByCompanyName(authUser.getName()).orElse(null);
         companyEntity.setPassword(passwordEncoder.encode(newPassword));
-        companyRepository.save(companyEntity);
+        return companyRepository.save(companyEntity);
     }
 
     public CompanyEntity getUser(String username) {

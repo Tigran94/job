@@ -20,12 +20,10 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final CompanyRepository companyRepository;
-    private final CompanyHistoryRepository companyHistoryRepository;
 
     public PostService(PostRepository postRepository, CompanyRepository companyRepository, CompanyHistoryRepository companyHistoryRepository) {
         this.postRepository = postRepository;
         this.companyRepository = companyRepository;
-        this.companyHistoryRepository = companyHistoryRepository;
     }
 
     public PostEntity addPost(PostEntity postEntity, Authentication authUser) {
@@ -33,28 +31,14 @@ public class PostService {
         postEntity.setUser(companyEntity);
         postEntity.setCompany(companyEntity.getCompanyName());
         postEntity.setEmail(companyEntity.getEmail());
-
-        CompanyHistory companyHistory = new CompanyHistory();
-        companyHistory.setCompanyName(companyEntity.getCompanyName());
-        companyHistory.setUsername(companyEntity.getUsername());
-        companyHistory.setAction("I have added " + "\""+postEntity.getTitle()+"\""+" post");
-        companyHistory.setCompanyEntity(companyEntity);
-        companyHistoryRepository.save(companyHistory);
         postRepository.save(postEntity);
         return postEntity;
     }
 
-    public void deletePost(long id){
+    public PostEntity deletePost(long id){
         PostEntity postEntity =  postRepository.findById(id).orElse(null);
-
-        CompanyHistory companyHistory = new CompanyHistory();
-        companyHistory.setCompanyName(postEntity.getUser().getCompanyName());
-        companyHistory.setUsername(postEntity.getUser().getUsername());
-        companyHistory.setAction("I have deleted " + "\""+postEntity.getTitle()+"\""+" post");
-        companyHistory.setCompanyEntity(postEntity.getUser());
-        companyHistoryRepository.save(companyHistory);
-
         postRepository.delete(postEntity);
+        return postEntity;
     }
 
     public List<JobTitle> getJobTitles() {

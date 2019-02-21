@@ -27,13 +27,11 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
-    private final UserHistoryRepository userHistoryRepository;
 
     public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, CompanyRepository companyRepository, UserHistoryRepository userHistoryRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
-        this.userHistoryRepository = userHistoryRepository;
     }
 
     public void registerUser(UserEntity userEntityForReg){
@@ -59,42 +57,26 @@ public class UserService implements UserDetailsService {
                 );
     }
 
-    public void changePassword(Authentication authUser, String newPassword){
+    public UserEntity changePassword(Authentication authUser, String newPassword){
         UserEntity userEntity = userRepository.findByUsername(authUser.getName()).orElse(null);
-        UserHistory userHistory = new UserHistory();
-        userHistory.setUserName(userEntity.getUsername());
-        userHistory.setUserEntity(userEntity);
-        userHistory.setAction("I have change my password");
 
         userEntity.setPassword(passwordEncoder.encode(newPassword));
-        userHistoryRepository.save(userHistory);
-        userRepository.save(userEntity);
+        return userRepository.save(userEntity);
+
     }
 
-    public void changeFirstName(Authentication authUser,String firstName){
+    public UserEntity changeFirstName(Authentication authUser,String firstName){
         UserEntity userEntity = userRepository.findByUsername(authUser.getName()).orElse(null);
-        UserHistory userHistory = new UserHistory();
-        userHistory.setUserName(userEntity.getUsername());
-        userHistory.setUserEntity(userEntity);
-        userHistory.setAction("I have change my first name from "+userEntity.getFirstName()+ " to "+ firstName);
-
         userEntity.setFirstName(firstName);
 
-
-        userHistoryRepository.save(userHistory);
-        userRepository.save(userEntity);
+       return userRepository.save(userEntity);
     }
 
     public void changeLastName(Authentication authUser,String lastName){
         UserEntity userEntity = userRepository.findByUsername(authUser.getName()).orElse(null);
-        UserHistory userHistory = new UserHistory();
-        userHistory.setUserName(userEntity.getUsername());
-        userHistory.setUserEntity(userEntity);
-        userHistory.setAction("I have change my last name from "+userEntity.getLastName()+ " to "+ lastName);
 
         userEntity.setLastName(lastName);
         userRepository.save(userEntity);
-        userHistoryRepository.save(userHistory);
     }
 
     public String checkIfUserExists(String username, String email){
